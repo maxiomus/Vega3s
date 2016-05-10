@@ -1,0 +1,97 @@
+.fabric-inventory-viewer
+{
+  width: 100% !important;
+}
+
+.fabric-inventory-viewer .top-header
+{
+  //width: 100% !important;
+  text-shadow: 2px 1px 2px #c0c0c0;
+  padding: 0px;
+}
+
+.top-header .header-row
+{
+  display: inline-block;
+  font-size: 0.9em;
+  text-decoration: underline;
+  font-weight: bold;
+  border: none;
+}
+
+.top-header .info-row
+{
+  display: inline-block;
+  font-size: 0.9em;
+  text-decoration: underline;
+  font-weight: bold;
+  border: none;
+}
+
+.fabric-inventory-viewer .group-row
+{
+  display: inline-block;
+  font-size: 0.9em;
+  font-weight: bold;
+  margin-top: 3px;
+  margin-bottom: 3px;
+  border: none;
+}
+
+.fabric-inventory-viewer .header-row
+{
+  display: inline-block;
+  font-size: 0.9em;
+  text-decoration: underline;
+  font-weight: bold;
+  border: none;
+}
+
+.fabric-inventory-viewer .item-row
+{
+  display: inline-block;
+  margin-top: 2px;
+  margin-left: 0px;
+  border: none;
+}
+
+.fabric-inventory-viewer .item-row div {
+  /* border-bottom : 1px solid #99bbe8; */
+  cursor : pointer;
+  background : transparent url(/extjs/resources/images/default/grid/group-expand-sprite-gif/ext.axd) no-repeat 0px -42px;
+  margin-bottom : 1px;
+}
+
+.fabric-inventory-viewer .clear-row
+{
+  clear: left;
+}
+
+.fabric-inventory-viewer .header
+{
+  background-color: #F0F4F5;
+}
+
+.fabric-inventory-viewer .content
+{
+  background-color:#E1F5A9;
+  padding: 0px;
+  font-size: 0.9em;
+}
+
+.fabric-inventory-viewer .footer
+{
+  font-weight:bold;
+  margin-bottom: 8px;
+  margin-top: 5px;
+}
+
+.fabric-inventory-viewer .x-view-over {
+  cursor : pointer;
+  font-weight: bold;
+  background-color : #efefef;
+}
+
+.fabric-inventory-viewer .x-view-selected {
+  background-color : #dddddd;
+}

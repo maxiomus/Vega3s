@@ -1,0 +1,24 @@
+.drag-over:before {
+  content: "Drop Files";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  border: dashed 4px #929292;
+  color: #929292;
+  z-index: 9999;
+  background: #fff;
+  text-align: center;
+  font-size: 30px;
+  padding: 20px;
+}
+
+.drop-target {
+  background: #e3e3e3 url('images/default-app-icon.png') no-repeat bottom;
+  background-size: 128px 146px;
+  /*background-color: #e3e3e3;*/
+  width: 128px;
+  height: 160px;
+
+}

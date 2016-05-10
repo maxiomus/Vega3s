@@ -1,0 +1,92 @@
+
+#header .row
+{
+    font-size: 0.9em;
+    font-weight: bold;
+    border: none;
+}
+
+#header .row div
+{
+    float: left;
+    text-decoration: underline;
+}
+
+#header .clear-row
+{
+  clear: left;
+}
+
+#items-ct table
+{
+  width: 100% !important;
+}
+
+#items-ct th
+{
+  //background  : #F0F4F5 url(/extjs/resources/themes/images/default/toolbar/toolbar-default-bg-gif/ext.axd) repeat-x scroll left top;
+  font-weight : bold;
+  padding     : 8px 5px;
+}
+
+#items-ct .roll-record div
+{
+  display: block;
+  float: left;
+}
+
+#items-ct td
+{
+  padding : 2px;
+  border-bottom : 1px solid silver;
+}
+
+#items-ct .lot-row
+{
+    font-size: 0.9em;
+    font-weight: bold;
+    border-bottom : 2px solid #99bbe8;
+    cursor        : pointer;
+    //background    : transparent url(/extjs/resources/themes/images/default/grid/group-expand-sprite-gif/ext.axd) no-repeat 0px -42px;
+    margin-bottom : 5px;
+    //border: none;
+}
+
+#items-ct .lot-row div
+{
+
+    display: block;
+    float: left;
+}
+
+#items-ct .lot-row div.collapsed
+{
+  background-position : 0px 8px;
+}
+
+#items-ct tr.collapsed
+{
+  display: none;
+}
+
+#items-ct .clear-row
+{
+  clear: left;
+}
+
+.received-viewer .footer
+{
+    font-weight:bold;
+    margin-bottom: 8px;
+    margin-top: 5px;
+}
+
+.received-viewer .x-item-over {
+    cursor : pointer;
+    font-weight: bold;
+    background-color : #efefef;
+}
+
+.received-viewer .x-item-selected {
+    background-color : #dddddd;
+}

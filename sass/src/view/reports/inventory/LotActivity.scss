@@ -1,0 +1,86 @@
+.activity-viewer
+{
+  width: 100% !important;
+}
+
+.activity-viewer .activity-header
+{
+    //width: 100% !important;
+    text-shadow: 2px 1px 2px #c0c0c0;
+    padding: 0px;
+}
+
+.activity-header .header-row
+{
+    display: inline-block;
+    font-size: 0.9em;
+    text-decoration: underline;
+    font-weight: bold;
+    border: none;
+}
+
+.activity-header .info-row
+{
+    display: inline-block;
+    font-size: 0.9em;
+    text-decoration: underline;
+    font-weight: bold;
+    border: none;
+}
+
+.activity-viewer .group-row
+{
+    display: inline-block;
+    font-size: 0.9em;
+    font-weight: bold;
+    margin-top: 3px;
+    margin-bottom: 3px;
+    border: none;
+}
+
+.activity-viewer .item-row
+{
+    display: inline-block;
+    margin-left: 0px;
+    border: none;
+}
+
+.activity-viewer .item-row div {
+    /* border-bottom : 1px solid #99bbe8; */
+    cursor : pointer;
+    background : transparent url(/extjs/resources/images/default/grid/group-expand-sprite-gif/ext.axd) no-repeat 0px -42px;
+    margin-bottom : 1px;
+}
+
+.activity-viewer .clear-row
+{
+    clear: left;
+}
+
+.activity-viewer .header
+{
+    background-color: #F0F4F5;
+}
+
+.activity-viewer .content
+{
+    padding: 0px;
+    font-size: 0.9em;
+}
+
+.activity-viewer .footer
+{
+    font-weight:bold;
+    margin-bottom: 8px;
+    margin-top: 5px;
+}
+
+.activity-viewer .x-view-over {
+    cursor : pointer;
+    font-weight: bold;
+    background-color : #efefef;
+}
+
+.activity-viewer .x-view-selected {
+    background-color : #dddddd;
+}

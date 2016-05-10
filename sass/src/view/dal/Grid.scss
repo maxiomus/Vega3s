@@ -1,0 +1,71 @@
+/**
+ *
+ **/
+
+ .x-grid-cell {
+   //text-align: center !important;
+   vertical-align: middle;
+}
+
+ .media-wrapper {
+  //padding-bottom: 2px;
+}
+
+.x-quirks .media-wrapper {
+  //padding-bottom: 2px;
+}
+
+ .media-wrapper div.true
+{
+  visibility: hidden;
+  position: absolute;
+  top: 25px; left: 7px;
+  z-index: 7;
+}
+ .media-wrapper div.false
+{
+  position: absolute;
+  top: 25px; left: 7px;
+  z-index: 7;
+}
+
+ .media-wrapper .false
+{
+  color: red;
+  font-size: 1.2em;
+  font-weight: bolder;
+  opacity:0.4;
+  -moz-opacity:0.4;
+  -khtml-opacity:0.4;
+  filter:alpha(opacity=40); /* For IE8 and earlier */
+}
+
+.media-data {
+  //float: right;
+  //padding-top: 4px;
+}
+
+.media-data .media-picture {
+  float: left;
+  margin-right: 10px;
+}
+
+.media-data .media-picture img{
+  height: 36px;
+  width: 36px;
+}
+
+.media-data .media-content {
+  padding-top: 3px;
+}
+
+.media-data .media-content .media-title {
+  color: $main-font-dark-color;
+  font-weight: $main-font-bold;
+}
+
+.media-data .media-content .media-small {
+  color: $main-font-color;
+  font-size: $main-font-size-small-content;
+  font-weight: $main-font-semibold;
+}

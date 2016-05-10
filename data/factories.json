@@ -1,0 +1,23 @@
+[{
+  label: 'China/Hengfu',
+  id: 1,
+  checked: true
+}, {
+  label: 'China/Moon Heart',
+  id: 2
+}, {
+  label: 'China/Themis',
+  id: 3
+}, {
+  label: 'China/Wintop',
+  id: 4
+}, {
+  label: 'Puebla-TPL',
+  id: 5
+}, {
+  label: 'Puebla-NAFTA-D',
+  id: 6
+}, {
+  label: 'Puebla-NAFTA-I',
+  id: 7
+}]

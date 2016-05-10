@@ -1,0 +1,120 @@
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,700);
+@import "iconColors";
+
+//$base-color: #317040 !default;
+//$grid-row-cell-focus-border-width: 0px;
+.icon-default
+{
+  background: transparent no-repeat;
+  background-image: url('../resources/images/switch.png');
+  background-position: 0 0 !important;
+}
+.icon-medium
+{
+  background: transparent no-repeat;
+  background-image: url('../resources/images/switch.png');
+  background-position: -16px 0 !important;
+}
+.icon-tile
+{
+  background: transparent no-repeat;
+  background-image: url('../resources/images/switch.png');
+  background-position: -32px 0 !important;
+}
+
+.cbo-list{
+  width:100%
+}
+
+// Combo list
+.cbo-list th{
+  height:30px;
+  font-weight:bold;
+  text-align:left
+}
+
+.cbo-list td,th{
+  border:1px solid #ccc;
+  padding:1px 0 0 5px
+}
+
+.x-boundlist-item{
+  zoom:1
+}
+
+.x-boundlist-item strong{
+  color:#777;
+  font-size:11px;
+  font-style:normal;
+  float:left
+}
+
+.x-boundlist-item em{
+  color:#222;
+  font-size:12px;
+  font-style:normal;
+  float:left;
+  width:325px
+}
+
+@mixin btn-border($background-color){
+  background-color: $background-color;
+  border-color: $background-color !important;
+  .x-btn-inner-default-toolbar-small{
+    color: $lightest-color;
+  }
+  &:hover{
+    .x-btn-inner-default-toolbar-small,.x-btn-inner-default-small{
+      color: $background-color;
+    }
+    .x-btn-icon-el-default-small,.x-btn-icon-el-default-toolbar-small{
+      color: $background-color;
+    }
+    background-color: transparent;
+  }
+}
+
+@mixin border-radius($radius) {
+  -webkit-border-radius: $radius;
+  -moz-border-radius: $radius;
+  -ms-border-radius: $radius;
+  border-radius: $radius;
+}
+
+@mixin box-shadow($h-shadow,$v-shadow,$blur,$spread,$shadow-color) {
+  -webkit-box-shadow: $h-shadow $v-shadow $blur $spread $shadow-color;
+  -moz-box-shadow: $h-shadow $v-shadow $blur $spread $shadow-color;
+  -ms-box-shadow: $h-shadow $v-shadow $blur $spread $shadow-color;
+  box-shadow: $h-shadow $v-shadow $blur $spread $shadow-color;
+}
+
+*:focus {
+  outline:0 !important;
+}
+
+.shadow-panel, .x-menu-header {
+  z-index: 0 !important;
+}
+
+.shadow-panel{
+  @include box-shadow(0, 1px, 2px, 0, rgba(0,0,0,0.2));
+
+}
+
+.x-css-shadow{
+  box-shadow:none !important;
+}
+
+.x-fa {
+  display: inline-block;
+  font: normal normal normal 14px/1 $font-family;
+}
+
+.alignRight {
+  float: right;
+}
+
+.boldFont {
+  font-weight: bold;
+}
+

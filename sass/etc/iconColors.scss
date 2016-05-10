@@ -1,0 +1,16 @@
+$vega-button-icon-color: #fff;
+$vega-tab-icon-color: rgb(11, 103, 196);
+$vega-view-icon-color: #f1f2f4;
+
+.tabIcon {
+  color: $vega-tab-icon-color;
+}
+
+.buttonIcon {
+  color: $vega-button-icon-color;
+  padding-top: 2px;
+}
+
+.viewIcon {
+  color: $vega-view-icon-color;
+}

@@ -1,0 +1,162 @@
+
+/**
+* view focus border
+**/
+.x-view-item-focused {
+  outline: 0px !important;
+}
+
+.not-visited {
+  visibility: hidden;
+  //color: #157fcc;
+}
+
+.visited {
+  visibility: visible;
+  color: #cc3300;
+  text-decoration: none !important;
+}
+
+/*
+.visited:after {
+    content: ' (Seen)';
+}*/
+
+
+/* ---------------------------------- DataView ------------------------------------- */
+
+.multi-view {
+  background: white;
+  font: 11px Arial, Helvetica, sans-serif;
+  padding: 4px 0 4px 8px;
+  //margin: 10px 0 10px 10px;
+}
+
+//.multi-view .images-view
+//{
+//  padding: 4px 0 4px 4px;
+//}
+
+.multi-view .thumb-wrap {
+  -moz-border-radius:.3em;
+  -webkit-border-radius:.3em;
+  border-radius:.3em;
+  background: #ffffff;
+  border: 1px solid #dddddd;
+  float: left;
+  padding: 3px;
+  margin: 0 10px 10px 0;
+  width: 200px;
+  height: 184px;
+}
+
+.multi-view .thumb-wrap span
+{
+  display: block;
+  overflow: hidden;
+  text-align: left;
+  padding: 4px;
+  font-size: 10px;
+  border-bottom: 1px solid #dadadb;
+}
+
+.multi-view .thumb {
+  float: left;
+  margin: 1px;
+  padding: 2px;
+}
+
+.multi-view .thumb img
+{
+  //padding: 3px 5px 2px 3px;
+  margin: 2px 0 0 2px;
+  //float:left;
+  //width: 64px;
+  //height: 64px;
+}
+
+.multi-view .post-data {
+  background:#f1f2f4;
+  padding: 2px 0px 2px 6px;
+  border:1px solid #dadadb;
+  margin-bottom: 4px;
+
+}
+
+.multi-view .post-title
+{
+  font-size: 12px;
+  font-weight: bold;
+  color: #157fcc;
+  padding: 2px 0px 4px 0px;
+  /*   background: transparent url(../../../POWS/2012_07 POW/07_06/thumbs/1461f6d6-58c7-4404-8ef8-e2854dcb703f_thumb.png) no-repeat 0 1px; */
+  /*   background:transparent url(../../../Resources/images/CrystalClear/22x22/actions/news_subscribe.png) no-repeat 0 1px; */
+}
+
+.multi-view .post-date {
+  //font-weight:normal;
+  color:#555;
+  padding-bottom: 1px;
+  font-size:11px;
+}
+
+.multi-view .post-author {
+  //font-weight:lighter;
+  color:#555;
+  padding-bottom: 4px;
+  font-size:11px;
+}
+
+.multi-view a.link:link
+{
+  color: #555;
+  text-decoration: none !important;
+}
+
+.multi-view a.link:active
+{
+  text-decoration: none !important;
+}
+
+.multi-view a.link:visited
+{
+  color: red;
+  text-decoration: none !important;
+}
+
+.multi-view .x-item-over {
+  border: 1px solid #6593cf;
+  background: #E2EFF8 url("images/row-over.gif") repeat-x left top;
+  //padding: 1px;
+  -moz-border-radius:.3em;
+  -webkit-border-radius:.3em;
+  border-radius:.3em;
+}
+
+.multi-view .x-item-over .thumb {
+  //background: transparent;
+}
+
+.multi-view .x-item-selected {
+  //border: 1px solid #6593cf;
+  //background: #C1DDF2;
+  border: 1px solid #6593cf;
+  background: #DFEDFF;
+  //padding: 1px;
+  -moz-border-radius:.3em;
+  -webkit-border-radius:.3em;
+  border-radius:.3em;
+}
+
+.multi-view .x-item-selected span {
+  //color:#1A4D8F;
+}
+
+.multi-view .loading-indicator {
+  font-size:11px;
+  background-image: url("loading.gif");
+  background-repeat: no-repeat;
+  background-position: left;
+  padding-left:20px;
+  margin:10px;
+}
