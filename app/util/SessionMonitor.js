@@ -11,7 +11,7 @@ Ext.define('Vega.util.SessionMonitor', {
 
     interval: 1000 * 10,  // run every 10 seconds.
     lastActive: null,
-    maxInactive: 1000 * 60 * 60,  // 15 minutes of inactivity allowed; set it to 1 for testing.
+    maxInactive: 1000 * 60 * 480,  // 15 minutes of inactivity allowed; set it to 1 for testing.
     remaining: 0,
     ui: Ext.getBody(),
 
@@ -29,7 +29,7 @@ Ext.define('Vega.util.SessionMonitor', {
         items: [{
             xtype: 'container',
             frame: true,
-            html: 'Your session will automatically expires after 60 minutes of inactivity. If your session expires, any unsaved data will be lost and you will be automatically logged out. </br></br>If you want  to continue working, click the "Continue Working"  button.</br></br>'
+            html: 'Your session will automatically expires after 6 hours of inactivity. If your session expires, any unsaved data will be lost and you will be automatically logged out. </br></br>If you want  to continue working, click the "Continue Working"  button.</br></br>'
         },{
             xtype: 'label',
             text: ''
@@ -42,7 +42,7 @@ Ext.define('Vega.util.SessionMonitor', {
                 Vega.util.SessionMonitor.start();
                 // 'poke' the server-side to update your session.
                 Ext.Ajax.request({
-                    url: 'KeepSessionAlive.ashx'
+                    url: '/services/KeepSessionAlive.ashx'
                 });
             }
         },{

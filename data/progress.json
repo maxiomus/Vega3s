@@ -1,0 +1,16 @@
+[{
+  "id": "INITIATED",
+  "text": "INITIATED"
+},{
+  "id": "ACCEPTED",
+  "text": "ACCEPTED"
+},{
+  "id": "PENDING",
+  "text": "PENDING"
+},{
+  "id": "REJECTED",
+  "text": "REJECTED"
+},{
+  "id": "APPROVED",
+  "text": "APPROVED"
+}]

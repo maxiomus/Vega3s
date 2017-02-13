@@ -21,17 +21,13 @@ Ext.define("Vega.view.inventory.fabric.Allocation", {
     },
 
     config: {
-        activeState: null,
-        defaultActiveState: "default"
+        //activeState: null,
+        //defaultActiveState: "default"
     },
 
     cls: "shadow-panel",
     header: false,
     margin: 8,
-
-    listeners: {
-
-    },
 
     initComponent: function(){
         var me = this;

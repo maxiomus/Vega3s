@@ -22,13 +22,6 @@ Ext.define("Vega.view.reports.inventory.LotActivity", {
     border: false,
     margin: 8,
 
-    renderTip: function (d, c) {
-        if (d != undefined) {
-            c.tdAttr = 'data-qtip="' + d + '"'
-        }
-        return d;
-    },
-
     bbar: [{
         xtype: "pagingtoolbar",
         bind: {
@@ -71,7 +64,7 @@ Ext.define("Vega.view.reports.inventory.LotActivity", {
                 '<div class="group-row" style="width: 120px;">{status}</div>',
                 '<div class="group-row" style="width: 120px;">{memo}</div>',
                 '<div class="clear-row"></div>',
-                    "</div>",
+                    '</div>',
                     '<tpl for="detail">',
                     '<div class="content">',
                     '<div class="item-row" style="margin-left: 28px;width: 80px;">{logdate:this.DateRenderer}</div>',
@@ -82,14 +75,14 @@ Ext.define("Vega.view.reports.inventory.LotActivity", {
                 '<div class="item-row" style="width: 60px;">{uom}</div>',
                 '<div class="item-row" style="width: 100px;">{wareHouse}</div>',
                 '<div class="item-row" style="width: 100px;">{vendor}</div>',
-                '<div class="item-row" style="width: 100px;"><a href="" target="_blank">{pono}</a></div>',
-                '<div class="item-row" style="width: 100px;">{pino}</div>',
+                '<div class="item-row" style="width: 100px;"><a href="#receiving/{pono}">{pono}</a></div>',
+                '<div class="item-row" style="width: 100px;"><a href="#physical/edit/{pino}">{pino}</a></div>',
                 '<div class="item-row" style="width: 100px;">{poclStyle}</div>',
                 '<div class="item-row" style="width: 100px;">{poclColor}</div>',
                 '<div class="item-row" style="width: 100px;">{actual_yn:this.ActualRenderer}</div>',
                 '<div class="clear-row"></div>',
-                    "</div>",
-                    "</tpl>",
+                    '</div>',
+                    '</tpl>',
                     '<div class="footer">',
                     '<div class="item-row" style="margin-left: 28px;width: 80px;"></div>',
                 '<div class="item-row" style="text-decoration:underline;width:100px;">Lot Total:</div>',
@@ -122,7 +115,7 @@ Ext.define("Vega.view.reports.inventory.LotActivity", {
                     ExtPriceRenderer: function (d) {
                         var a = Ext.util.Format;
                         if (d < 0) {
-                            return '<span style="color:#ff0000;">' + a.usMoney(d) + "</span>"
+                            return '<span style="color:#ff0000;">' + a.usMoney(d) + '</span>'
                         } else {
                             return a.usMoney(d)
                         }
@@ -139,11 +132,11 @@ Ext.define("Vega.view.reports.inventory.LotActivity", {
                         return Ext.String.format(f, a, h.number(g, "0,0.00"))
                     },
                     ActualRenderer: function (a) {
-                        var d = '<input type="checkbox" name="actual_yn" {0}></input>';
+                        var d = '<input type="checkbox" name="actual_yn" {0} />';
                         if (a == "Y") {
                             return Ext.String.format(d, "checked")
                         } else {
-                            return d
+                            return d;
                         }
                     }
                 }],
@@ -165,10 +158,14 @@ Ext.define("Vega.view.reports.inventory.LotActivity", {
     },
 
     buildDockedItems: function(){
+        var me = this;
+
+        /*
         var fabricStore = Ext.create('Vega.store.Components'),
             proxy = fabricStore.getProxy();
 
         proxy.setUrl(proxy.url + '/fabrics');
+        */
 
         return [{
             xtype: "toolbar",
@@ -178,27 +175,31 @@ Ext.define("Vega.view.reports.inventory.LotActivity", {
                 align: "bottom"
             },
             items: [{
-                xtype: "combo",
+                xtype: "memorycombo",
                 itemId: "cboFabric",
                 labelAlign: "top",
                 fieldLabel: "Fabric",
                 labelWidth: 50,
                 width: 160,
-                store: fabricStore,
-                valueField: "id",
-                displayField: "id",
+                store: 'memComponents',
+                valueField: "label",
+                displayField: "label",
                 forceSelection: false,
                 selectOnFocus: false,
-                pageSize: 100,
+                pageSize: 50,
                 matchFieldWidth: false,
-                queryMode: "remote",
-                queryParam: "filter",
+                queryMode: "local",
+                //queryParam: "filter",
                 minChars: 1,
                 listConfig: {
                     loadindText: "Searching...",
                     emptyText: "No matching items found.",
                     width: 340
                 },
+                plugins: [{
+                    ptype: "cleartrigger"
+                }],
+                /*
                 triggers: {
                     clear: {
                         weight: -1,
@@ -211,30 +212,55 @@ Ext.define("Vega.view.reports.inventory.LotActivity", {
                             this.focus(10);
                         }
                     }
+                },
+                */
+                listeners: {
+                    triggerClear: function(combo){
+
+                        var cboColor = combo.ownerCt.query('combo[itemId="cboColor"]')[0];
+                        cboColor.getStore().clearFilter();
+                        cboColor.setValue('');
+                    },
+                    beforequery: {
+                        fn: function(qe){
+                            var store = qe.combo.getStore();
+                            console.log(qe.combo, qe.combo.getValue())
+                            store.clearFilter();
+                            store.filter([{
+                                property: 'text',
+                                value: 'FABRICS',
+                                operator: '='
+                            }]);
+                        }
+                    }
                 }
             },
             {
-                xtype: "combo",
+                xtype: "memorycombo",
                 itemId: "cboColor",
                 labelAlign: "top",
                 fieldLabel: "Color",
                 labelWidth: 50,
                 width: 160,
-                store: "Colors",
-                valueField: "id",
-                displayField: "id",
+                store: 'memColors',
+                valueField: "label",
+                displayField: "label",
                 forceSelection: false,
                 selectOnFocus: false,
-                pageSize: 100,
+                pageSize: 50,
                 matchFieldWidth: false,
-                queryMode: "remote",
-                queryParam: "filter",
+                queryMode: "local",
+                //queryParam: "filter",
                 minChars: 1,
                 listConfig: {
                     loadindText: "Searching...",
                     emptyText: "No matching items found.",
-                    width: 385
+                    width: 340
                 },
+                plugins: [{
+                    ptype: "cleartrigger"
+                }],
+                /*
                 triggers: {
                     clear: {
                         weight: -1,
@@ -245,47 +271,60 @@ Ext.define("Vega.view.reports.inventory.LotActivity", {
                             this.clearValue();
                             this.collapse();
                             this.focus(10);
+                        }
+                    }
+                },
+                */
+                listeners: {
+                    triggerClear: function(combo){
+
+                    },
+                    beforequery: {
+                        fn: function(qe){
+                            var cboStyle = qe.combo.ownerCt.query('combo[itemId="cboFabric"]')[0],
+                                store = qe.combo.getStore();
+
+                            console.log(cboStyle, cboStyle.getValue())
+                            store.clearFilter();
+
+                            if(!Ext.isEmpty(cboStyle.getValue())){
+
+                                store.filter([{
+                                    property: 'descript',
+                                    value: cboStyle.getValue().toUpperCase(),
+                                    operator: '='
+                                }]);
+                            }
+                            //delete qe.combo.lastQuery;
                         }
                     }
                 }
             },
             {
-                xtype: "combo",
+                xtype: "memorycombo",
                 itemId: "cboLotno",
                 labelAlign: "top",
                 fieldLabel: "Lot #",
-                labelWidth: 50,
+                //labelWidth: 50,
                 width: 160,
-                bind: {
-                    store: "{lotnos}"
-                },
-                valueField: "id",
-                displayField: "id",
+                store: 'memLotnos',
+                valueField: "label",
+                displayField: "label",
                 forceSelection: false,
                 selectOnFocus: false,
-                pageSize: 100,
+                pageSize: 50,
                 matchFieldWidth: false,
-                queryMode: "remote",
-                queryParam: "filter",
+                queryMode: 'local',
+                //queryParam: "filter",
                 minChars: 1,
                 listConfig: {
                     loadindText: "Searching...",
                     emptyText: "No matching items found.",
-                    width: 345
+                    width: 340
                 },
-                triggers: {
-                    clear: {
-                        weight: -1,
-                        cls: "x-form-clear-trigger",
-                        tooltip: "Clear",
-                        hidden: true,
-                        handler: function (b) {
-                            this.clearValue();
-                            this.collapse();
-                            this.focus(10);
-                        }
-                    }
-                }
+                plugins: [{
+                    ptype: "cleartrigger"
+                }]
             },
             {
                 xtype: "combo",
@@ -393,6 +432,13 @@ Ext.define("Vega.view.reports.inventory.LotActivity", {
                 '</div>'
             }]
         }]
+    },
+
+    renderTip: function (d, c) {
+        if (d != undefined) {
+            c.tdAttr = 'data-qtip="' + d + '"'
+        }
+        return d;
     }
 });
 

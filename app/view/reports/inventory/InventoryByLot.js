@@ -24,225 +24,19 @@ Ext.define('Vega.view.reports.inventory.InventoryByLot', {
         type: "fit"
     },
 
-    dockedItems: [{
-        xtype: 'toolbar',
-        dock: "top",
-        layout: {
-            type: 'hbox',
-            align: 'bottom'
+    bbar: [{
+        xtype: "pagingtoolbar",
+        bind: {
+            store: "{inventories}"
         },
-        items: [{
-            xtype: "combo",
-            itemId: "cboFabric",
-            labelAlign: "top",
-            fieldLabel: "Fabric",
-            labelWidth: 50,
-            width: 160,
-            store: "Components",
-            valueField: "id",
-            displayField: "id",
-            forceSelection: false,
-            selectOnFocus: false,
-            pageSize: 100,
-            matchFieldWidth: false,
-            queryMode: "remote",
-            queryParam: "filter",
-            minChars: 1,
-            listConfig: {
-                loadindText: 'Searching...',
-                emptyText: 'No matching items found.',
-                width: 380
-            },
-            triggers: {
-                clear: {
-                    weight: -1,
-                    cls: "x-form-clear-trigger",
-                    tooltip: "Clear",
-                    hidden: true,
-                    handler: function (b) {
-                        this.clearValue();
-                        this.collapse();
-                        this.focus(10);
-                    }
-                }
-            }
-        },{
-            xtype: "combo",
-            itemId: "cboColor",
-            labelAlign: "top",
-            fieldLabel: "Color",
-            labelWidth: 50,
-            width: 160,
-            store: "Colors",
-            valueField: "id",
-            displayField: "id",
-            forceSelection: false,
-            selectOnFocus: false,
-            pageSize: 100,
-            matchFieldWidth: false,
-            queryMode: "remote",
-            queryParam: "filter",
-            minChars: 1,
-            listConfig: {
-                loadindText: 'Searching...',
-                emptyText: 'No matching items found.',
-                width: 380
-            },
-            triggers: {
-                clear: {
-                    weight: -1,
-                    cls: "x-form-clear-trigger",
-                    tooltip: "Clear",
-                    hidden: true,
-                    handler: function (b) {
-                        this.clearValue();
-                        this.collapse();
-                        this.focus(10);
-                    }
-                }
-            }
-        },{
-            xtype: "combo",
-            itemId: "cboLotno",
-            labelAlign: "top",
-            fieldLabel: "Lot #",
-            labelWidth: 50,
-            width: 160,
-            bind: {
-                store: "{lotnos}"
-            },
-            valueField: "id",
-            displayField: "id",
-            forceSelection: false,
-            selectOnFocus: false,
-            pageSize: 100,
-            matchFieldWidth: false,
-            queryMode: "remote",
-            queryParam: "filter",
-            minChars: 1,
-            listConfig: {
-                loadindText: 'Searching...',
-                emptyText: 'No matching items found.',
-                width: 345
-            },
-            triggers: {
-                clear: {
-                    weight: -1,
-                    cls: "x-form-clear-trigger",
-                    tooltip: "Clear",
-                    hidden: true,
-                    handler: function (b) {
-                        this.clearValue();
-                        this.collapse();
-                        this.focus(10);
-                    }
-                }
-            }
-        },{
-            xtype: "combo",
-            itemId: "cboWH",
-            labelAlign: "top",
-            fieldLabel: "WH",
-            width: 80,
-            store: "Warehouses",
-            value: "00",
-            valueField: "id",
-            displayField: "id",
-            editable: false,
-            selectOnTab: false,
-            selectOnFocus: false,
-            queryMode: "remote",
-            minChars: 1
-        },{
-            xtype: 'combo',
-            itemId: 'cboRawMat',
-            labelAlign: 'top',
-            fieldLabel: 'Comp. Type',
-            labelWidth: 50,
-            width: 160,
-            store: 'RawMatTypes',
-            value: 'FABRICS',
-            valueField: "id",
-            displayField: "id",
-            selectOnFocus: false,
-            //pageSize: 10,
-            //matchFieldWidth: false,
-            queryMode: 'remote',
-            minChars: 1
-        },
-            {
-                xtype: "checkbox",
-                itemId: "chkOnHand",
-                boxLabel: "Include Zero On Hand"
-            },
-            {
-                xtype: "button",
-                ui: "default",
-                text: "Search",
-                width: 85,
-                scale: "small",
-                iconAlign: "left",
-                action: "search",
-                iconCls: "fa fa-search"
-            },
-            "->",
-            {
-                xtype: "button",
-                ui: "default",
-                text: "Print",
-                width: 85,
-                scale: "small",
-                iconAlign: "left",
-                action: "print",
-                iconCls: "fa fa-print"
-            },
-            {
-                xtype: "button",
-                ui: "default",
-                width: 85,
-                text: "Export",
-                scale: "small",
-                iconAlign: "left",
-                action: "export",
-                glyph: "xf045@FontAwesome"
-            }]
-    },{
-        xtype: 'toolbar',
-        dock: 'top',
-        border: 1,
-        style: {
-            borderTop: '1px solid #c0c0c0'
-        },
-        items: [{
-            xtype: 'container',
-            html: '<div class="top-header">' +
-                '<div>' +
-                '<div class="header-row" style="width: 120px;">Style</div>' +
-                '<div class="header-row" style="width: 120px;">Color</div>' +
-                '<div class="header-row" style="width: 240px;">Description</div>' +
-                '<div class="header-row" style="width: 120px;">Division</div>' +
-                '<div class="header-row" style="width: 80px;">UOM</div>' +
-                '<div class="header-row" style="width: 120px;">Comp. Type</div>' +
-                '<div class="header-row" style="width: 120px;">Status</div>' +
-                '<div class="header-row" style="width: 120px;">Memo</div>' +
-                '</div>' +
-                '</div>'
-        }]
+        defaultButtonUI: "default",
+        displayInfo: true
     }],
-
-    bbar: [
-        {
-            xtype: "pagingtoolbar",
-            bind: {
-                store: "{inventories}"
-            },
-            defaultButtonUI: "default",
-            displayInfo: true
-        }
-    ],
 
     initComponent: function() {
         var me = this;
+
+        me.dockedItems = me.buildDockedItems();
 
         Ext.applyIf(me, {
             items: {
@@ -423,5 +217,256 @@ Ext.define('Vega.view.reports.inventory.InventoryByLot', {
         });
 
         me.callParent(arguments);
+    },
+
+    buildDockedItems: function(){
+        var me = this;
+
+        return [{
+            xtype: 'toolbar',
+            dock: "top",
+            layout: {
+                type: 'hbox',
+                align: 'bottom'
+            },
+            items: [{
+                xtype: "memorycombo",
+                itemId: "cboComp",
+                labelAlign: "top",
+                fieldLabel: "FABRICS",
+                bind: {
+                    fieldLabel: '{RawMatType}'
+                },
+                //labelWidth: 50,
+                width: 160,
+                store: 'memComponents',
+                valueField: "label",
+                displayField: "label",
+                forceSelection: false,
+                selectOnFocus: false,
+                pageSize: 50,
+                matchFieldWidth: false,
+                queryMode: "local",
+                //queryParam: "filter",
+                minChars: 1,
+                listConfig: {
+                    loadindText: 'Searching...',
+                    emptyText: 'No matching items found.',
+                    width: 340
+                },
+                plugins: [{
+                    ptype: "cleartrigger"
+                }],
+                listners: {
+                    triggerClear: function (combo) {
+
+                        var cboColor = combo.ownerCt.query('combo[itemId="cboColor"]')[0];
+                        cboColor.getStore().clearFilter();
+                        cboColor.setValue('');
+                    },
+                    beforequery: {
+                        fn: function(qe){
+                            var cboRawMat = combo.ownerCt.query('combo[itemId="cboRawMat"]')[0],
+                                store = qe.combo.getStore();
+
+                            console.log(qe.combo, qe.combo.getValue())
+                            store.clearFilter();
+                            store.filter([{
+                                property: 'text',
+                                value: cboRawMat.getValue().toUpperCase(),
+                                operator: '='
+                            }]);
+                        }
+                    }
+                }
+            },{
+                xtype: "memorycombo",
+                itemId: "cboColor",
+                labelAlign: "top",
+                fieldLabel: "Color",
+                //labelWidth: 50,
+                width: 160,
+                store: 'memColors',
+                valueField: "label",
+                displayField: "label",
+                forceSelection: false,
+                selectOnFocus: false,
+                pageSize: 50,
+                matchFieldWidth: false,
+                queryMode: "local",
+                //queryParam: "filter",
+                minChars: 1,
+                listConfig: {
+                    loadindText: 'Searching...',
+                    emptyText: 'No matching items found.',
+                    width: 340
+                },
+                plugins: [{
+                    ptype: "cleartrigger"
+                }],
+                listeners: {
+                    triggerClear: function(combo){
+
+                    },
+                    beforequery: {
+                        fn: function(qe){
+                            var cboStyle = qe.combo.ownerCt.query('combo[itemId="cboComp"]')[0],
+                                store = qe.combo.getStore();
+
+                            console.log(cboStyle, cboStyle.getValue())
+                            store.clearFilter();
+
+                            if(!Ext.isEmpty(cboStyle.getValue())){
+
+                                store.filter([{
+                                    property: 'descript',
+                                    value: cboStyle.getValue().toUpperCase(),
+                                    operator: '='
+                                }]);
+                            }
+                            //delete qe.combo.lastQuery;
+                        }
+                    }
+                }
+            },{
+                xtype: "memorycombo",
+                itemId: "cboLotno",
+                labelAlign: "top",
+                fieldLabel: "Lot #",
+                //labelWidth: 50,
+                width: 160,
+                store: 'memLotnos',
+                valueField: "label",
+                displayField: "label",
+                forceSelection: false,
+                selectOnFocus: false,
+                pageSize: 50,
+                matchFieldWidth: false,
+                queryMode: "local",
+                //queryParam: "filter",
+                minChars: 1,
+                listConfig: {
+                    loadindText: 'Searching...',
+                    emptyText: 'No matching items found.',
+                    width: 340
+                },
+                plugins: [{
+                    ptype: "cleartrigger"
+                }],
+                listners: {
+                    triggerClear: function (combo) {
+
+                    }
+                }
+            },{
+                xtype: "combo",
+                itemId: "cboWH",
+                labelAlign: "top",
+                fieldLabel: "WH",
+                width: 80,
+                store: "Warehouses",
+                value: "00",
+                valueField: "id",
+                displayField: "id",
+                editable: false,
+                selectOnTab: false,
+                selectOnFocus: false,
+                queryMode: "remote",
+                minChars: 1
+            },{
+                xtype: 'combo',
+                itemId: 'cboRawMat',
+                labelAlign: 'top',
+                fieldLabel: 'Comp. Type',
+                labelWidth: 50,
+                width: 160,
+                store: 'RawMatTypes',
+                value: 'FABRICS',
+                valueField: "id",
+                displayField: "id",
+                editable: false,
+                selectOnTab: false,
+                selectOnFocus: false,
+                //pageSize: 10,
+                //matchFieldWidth: false,
+                queryMode: 'remote',
+                minChars: 1,
+                listeners: {
+                    select: {
+                        fn: function(c){
+                            var cboComp = c.ownerCt.query('combo[itemId="cboComp"]')[0],
+                                store = cboComp.getStore();
+
+                            store.clearFilter();
+                            store.filter([{
+                                property: 'text',
+                                value: c.getValue().toUpperCase(),
+                                operator: '='
+                            }]);
+
+                            me.getViewModel().set('RawMatType', c.getValue().toUpperCase())
+                        }
+                    }
+                }
+            },
+            {
+                xtype: "checkbox",
+                itemId: "chkOnHand",
+                boxLabel: "Include Zero On Hand"
+            },
+            {
+                xtype: "button",
+                ui: "default",
+                text: "Search",
+                width: 85,
+                scale: "small",
+                iconAlign: "left",
+                action: "search",
+                iconCls: "fa fa-search"
+            },
+            "->",
+            {
+                xtype: "button",
+                ui: "default",
+                text: "Print",
+                width: 85,
+                scale: "small",
+                iconAlign: "left",
+                action: "print",
+                iconCls: "fa fa-print"
+            },
+            {
+                xtype: "button",
+                ui: "default",
+                width: 85,
+                text: "Export",
+                scale: "small",
+                iconAlign: "left",
+                action: "export",
+                glyph: "xf045@FontAwesome"
+            }]
+        },{
+            xtype: 'toolbar',
+            dock: 'top',
+            border: 1,
+            style: {
+                borderTop: '1px solid #c0c0c0'
+            },
+            items: [{
+                xtype: 'container',
+                html: '<div class="top-header">' +
+                '<div>' +
+                '<div class="header-row" style="width: 120px;">Style</div>' +
+                '<div class="header-row" style="width: 120px;">Color</div>' +
+                '<div class="header-row" style="width: 240px;">Description</div>' +
+                '<div class="header-row" style="width: 120px;">Division</div>' +
+                '<div class="header-row" style="width: 80px;">UOM</div>' +
+                '<div class="header-row" style="width: 120px;">Comp. Type</div>' +
+                '<div class="header-row" style="width: 120px;">Status</div>' +
+                '<div class="header-row" style="width: 120px;">Memo</div>' +
+                '</div>' +
+                '</div>'
+            }]
+        }]
     }
 })

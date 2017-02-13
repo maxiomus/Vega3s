@@ -22,7 +22,10 @@ Ext.define("Vega.view.notice.edit.Form",{
     },
 
     bodyPadding: 5,
+    hasUpload: true,
+    //enctype: 'multipart/form-data',
 
+    /*
     buttons: [{
         action: 'save',
         //itemId:'btnSave',
@@ -47,11 +50,11 @@ Ext.define("Vega.view.notice.edit.Form",{
             }
         }
     }],
-
+    */
     initComponent: function(){
         var me = this,
             padding = 0,
-            fieldHeight = 17,
+            fieldHeight = 20,
             remainingHeight = padding + fieldHeight * 3;
 
         Ext.applyIf(me, {
@@ -66,17 +69,63 @@ Ext.define("Vega.view.notice.edit.Form",{
                 },
                 items: [{
                     xtype: 'textfield',
-                    dataIndex: 'Title',
+                    name: 'Title',
+                    bind: {
+                        value: '{thePost.Title}'
+                    },
                     fieldLabel: 'Title',
+                    allowBlank: false,
                     anchor: '100%'
                 },{
+                    xtype: 'textfield',
+                    name: 'Link',
+                    fieldLabel: 'Link',
+                    anchor: '100%',
+                    hidden: true,
+                    bind: {
+                        value: '{thePost.Link}'
+                    }
+                },{
+                    xtype: 'textfield',
+                    name: 'Author',
+                    fieldLabel: 'Author',
+                    anchor: '100%',
+                    hidden: true,
+                    bind: {
+                        value: '{thePost.Author}'
+                    }
+                },{
+                    xtype: 'datefield',
+                    name: 'CreatedOn',
+                    fieldLabel: 'Created',
+                    anchor: '100%',
+                    hidden: true,
+                    bind: {
+                        value: '{thePost.CreatedOn}'
+                    }
+                },{
+                    xtype: 'datefield',
+                    name: 'UpdatedOn',
+                    fieldLabel: 'Updated',
+                    anchor: '100%',
+                    hidden: true,
+                    bind: {
+                        value: '{thePost.UpdatedOn}'
+                    }
+                },{
                     xtype: 'htmleditor',
-                    dataIndex: 'Description',
+                    name: 'Description',
+                    bind: {
+                        value: '{thePost.Description}'
+                    },
                     fieldLabel: 'Description',
                     anchor: '100% -' + remainingHeight
                 }]
             },{
                 xtype: 'notice-edit-upload',
+                bind: {
+                    store: '{thePost.filesInArticles}'
+                },
                 anchor: '100% 50%'
             }]
         });

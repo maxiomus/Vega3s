@@ -1,0 +1,126 @@
+/* ---------------------------------- DataView ------------------------------------- */
+
+.city-climate {
+  background: white;
+  font: 11px Arial, Helvetica, sans-serif;
+  padding: 8px 0 8px 8px;
+  //margin: 10px 0 10px 10px;
+}
+
+//.city-climate .images-view
+//{
+//  padding: 4px 0 4px 4px;
+//}
+
+.city-climate .thumb-wrap {
+  -moz-border-radius:.3em;
+  -webkit-border-radius:.3em;
+  border-radius:.3em;
+  //background: #ffffff;
+  border: 1px solid transparent;
+  float: left;
+  padding: 4px;
+  margin: 0 10px 10px 0;
+  cursor: pointer;
+  //width: 220px;
+  //height: 144px;
+}
+
+.city-climate .thumb-wrap span
+{
+  display: block;
+  overflow: hidden;
+  //text-align: left;
+  //padding: 4px;
+  //font-size: 10px;
+  //border-bottom: 1px solid #dadadb;
+}
+
+.city-climate .thumb-wrap h2
+{
+  margin-left: 6px;
+  /*   background: transparent url(../../../POWS/2012_07 POW/07_06/thumbs/1461f6d6-58c7-4404-8ef8-e2854dcb703f_thumb.png) no-repeat 0 1px; */
+  /*   background:transparent url(../../../Resources/images/CrystalClear/22x22/actions/news_subscribe.png) no-repeat 0 1px; */
+}
+
+.city-climate .location {
+  margin: 4px 0 0 4px;
+  font-size: 1.3em;
+  font-weight: bold;
+}
+
+.city-climate .thumb {
+  float: left;
+  margin: 1px;
+  //padding: 2px;
+}
+
+.city-climate .thumb img
+{
+  //padding: 3px 5px 2px 3px;
+  margin: 0px 0 0 4px;
+  //float:left;
+  //width: 64px;
+  //height: 64px;
+}
+
+.city-climate .description {
+  font-size: 14px;
+  background: #f1f2f4;
+  padding: 2px 0px 2px 6px;
+  margin-bottom: 4px;
+  border:1px solid #dadadb;
+}
+
+.city-climate a.link:link
+{
+  color: #555;
+  text-decoration: none !important;
+}
+
+.city-climate a.link:active
+{
+  color: purple;
+  text-decoration: none !important;
+}
+
+.city-climate a.link:visited
+{
+  color: purple;
+  text-decoration: none !important;
+}
+
+.city-climate .x-item-over {
+  border:1px solid #6593cf;
+  background: #DFEDFF url(images/row-over.gif) repeat-x left top;
+  //padding: 1px;
+  -moz-border-radius:.3em;
+  -webkit-border-radius:.3em;
+  border-radius:.3em;
+}
+
+.city-climate .x-item-over .thumb {
+  //background: transparent;
+}
+
+.city-climate .x-item-selected {
+  //background: #DFEDFF;
+  //border: 1px solid #6593cf;
+  //padding: 1px;
+  //-moz-border-radius:.3em;
+  //-webkit-border-radius:.3em;
+  //border-radius:.3em;
+}
+
+.city-climate .x-item-selected span {
+  //color:#1A4D8F;
+}
+
+.city-climate .loading-indicator {
+  font-size:11px;
+  background-image:url(loading.gif);
+  background-repeat: no-repeat;
+  background-position: left;
+  padding-left:20px;
+  margin:10px;
+}

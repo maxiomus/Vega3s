@@ -26,7 +26,7 @@ Ext.define("Vega.view.notice.Grid", {
     border: false,
 
     bind:{
-        store:"{notices}"
+        store: "{notices}"
     },
 
     config: {
@@ -51,7 +51,7 @@ Ext.define("Vega.view.notice.Grid", {
                 pruneRemoved:false
             },
             viewConfig:{
-                itemId:"view",
+                //itemId:"view",
                 loadMask:true,
                 stripeRows:true,
                 trackOver:true,
@@ -62,10 +62,10 @@ Ext.define("Vega.view.notice.Grid", {
                     pluginId:"preview",
                     ptype:"preview",
                     bodyField:"Description",
-                    previewExpanded:true
+                    previewExpanded: true
                 }],
                 listeners:{
-                    refresh:"onRefreshView"
+                    //refresh:"onRefreshView"
                 }
             },
 
@@ -77,7 +77,7 @@ Ext.define("Vega.view.notice.Grid", {
 
         me.callParent(arguments);
 
-        me.relayEvents(me.getStore(),["beforeload"]);
+        //me.relayEvents(me.getStore(),["beforeload"]);
     },
 
     buildColumns:function(){
@@ -93,9 +93,11 @@ Ext.define("Vega.view.notice.Grid", {
             hidden:true,
             width:200
         },{
+            xtype: 'datecolumn',
             text:"Date",
             dataIndex:"CreatedOn",
-            renderer:this.formatDate,
+            format: 'Y-m-d h:i:s a',
+            //renderer:this.formatDate,
             width:200,
             filter:{
                 type:"date"
@@ -115,6 +117,11 @@ Ext.define("Vega.view.notice.Grid", {
                 iconCls:"fa fa-edit",
                 scope:this,
                 handler:"onCtxMnuEditClick"
+            },{
+                text: "Delete",
+                iconCls: "fa fa-remove",
+                scope: this,
+                handler: "onCtxMnuDeleteClick"
             },{
                 text:"Refresh",
                 iconCls:"fa fa-refresh",
@@ -145,6 +152,11 @@ Ext.define("Vega.view.notice.Grid", {
         this.fireEvent("ctxmnueditclick",e,d)
     },
 
+    onCtxMnuDeleteClick: function(d,f){
+        var e = this.getSelectionModel().selected.items[0];
+        this.fireEvent("ctxmnudeleteclick", e, d);
+    },
+
     onCtxMnuBookmarkClick:function(d,f){
         var e = this.getSelectionModel().selected.items[0];
         this.fireEvent("ctxmnubookmarkclick",e,d);
@@ -154,7 +166,7 @@ Ext.define("Vega.view.notice.Grid", {
         this.getStore().load()
     },
 
-    formatTitle:function(d,f,e){
-        return Ext.String.format('<div class="topic"><b>{0}</b><span class="author">{1}</span></div>',d,e.get("Author")||"Unknown");
+    formatTitle:function(value, f, rec){
+        return Ext.String.format('<div class="topic"><b>{0}</b><i style="float: right" class="fa fa-paperclip fa-lg {1}"></i><span class="author">Posted by {2}</span></div>', value, rec.get('hasAttach') ? '': 'hidden', rec.get("Author")||"Unknown");
     }
 });

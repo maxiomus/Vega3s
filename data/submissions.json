@@ -1,34 +1,34 @@
 [{
-  label: 'AD Sample',
-  id: 1
+  "label": "AD Sample",
+  "id": "1"
 }, {
-  label: 'Buyer Sample',
-  id: 2
+  "label": "Buyer Sample",
+  "id": "2"
 }, {
-  label: 'Ecom Sample',
-  id: 3
+  "label": "Ecom Sample",
+  "id": "3"
 }, {
-  label: 'Fabric Testing',
-  id: 4
+  "label": "Fabric Testing",
+  "id": "4"
 }, {
-  label: 'Fit Sample',
-  id: 5
+  "label": "Fit Sample",
+  "id": "5"
 }, {
-  label: 'Garment Testing',
-  id: 6
+  "label": "Garment Testing",
+  "id": "6"
 }, {
-  label: 'Marketing Sample',
-  id: 7
+  "label": "Marketing Sample",
+  "id": "7"
 }, {
-  label: 'Panel Sample',
-  id: 8
+  "label": "Panel Sample",
+  "id": "8"
 }, {
-  label: 'PP Sample',
-  id: 9
+  "label": "PP Sample",
+  "id": "9"
 }, {
-  label: 'Thrid Party Inspection',
-  id: 10
+  "label": "Third Party Inspection",
+  "id": "10"
 }, {
-  label: 'TOP Sample',
-  id: 11
+  "label": "TOP Sample",
+  "id": "11"
 }]

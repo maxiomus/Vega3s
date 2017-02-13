@@ -35,125 +35,6 @@ Ext.define("Vega.view.inventory.fabric.panel.Detail", {
         dock: "bottom"
     }],
 
-    dockedItems: [{
-        xtype: "toolbar",
-        dock: "top",
-        items: [{
-            xtype: "combo",
-            itemId: "cboFabric",
-            labelAlign: "left",
-            fieldLabel: "Fabric",
-            labelWidth: 40,
-            width: 200,
-            store: "Components",
-            valueField: "id",
-            displayField: "id",
-            selectOnFocus: false,
-            pageSize: 100,
-            matchFieldWidth: false,
-            queryMode: "remote",
-            minChars: 1,
-            disabled: true,
-            listConfig: {
-                loadindText: "Searching...",
-                emptyText: "No matching items found.",
-                width: 385
-            }
-        },
-        {
-            xtype: "tbspacer"
-        },
-        {
-            xtype: "combo",
-            itemId: "cboColor",
-            labelAlign: "left",
-            fieldLabel: "Color",
-            labelWidth: 38,
-            width: 200,
-            store: "Colors",
-            valueField: "id",
-            displayField: "id",
-            selectOnFocus: false,
-            pageSize: 100,
-            matchFieldWidth: false,
-            queryMode: "remote",
-            minChars: 1,
-            disabled: true,
-            listConfig: {
-                loadindText: "Searching...",
-                emptyText: "No matching items found.",
-                width: 385
-            }
-        },
-        {
-            xtype: "tbspacer"
-        },
-        {
-            xtype: "combo",
-            itemId: "cboLotno",
-            labelAlign: "left",
-            fieldLabel: "Lot #",
-            labelWidth: 38,
-            width: 200,
-            bind: {
-                store: "{lotnos}"
-            },
-            valueField: "id",
-            displayField: "id",
-            selectOnFocus: true,
-            pageSize: 100,
-            matchFieldWidth: false,
-            queryMode: "remote",
-            queryParam: "filter",
-            minChars: 1,
-            triggers: {
-                clear: {
-                    weight: -1,
-                    cls: "x-form-clear-trigger",
-                    tooltip: "Clear",
-                    hidden: true,
-                    handler: function (b) {
-                        this.clearValue();
-                        this.collapse();
-                        this.ownerCt.ownerCt.getStore().clearFilter();
-                        this.focus(10);
-                    }
-                }
-            },
-            tpl: '<tpl for="."><tpl if="[xindex] == 1"><table class="cbo-list"><tr><th width="60%">Lot #</th><th width="40%">On Hand</th></tr></tpl><tr class="x-boundlist-item"><td>{id}</td><td>{text}</td></tr><tpl if="[xcount-xindex]==0"></table></tpl></tpl>',
-            listConfig: {
-                loadindText: "Searching...",
-                emptyText: "No matching items found.",
-                width: 385
-            }
-        },
-        {
-            xtype: "tbspacer"
-        },
-        {
-            xtype: "button",
-            ui: "soft-blue",
-            text: "Select",
-            width: 90,
-            iconCls: "fa fa-refresh",
-            action: "refresh",
-            tooltip: "Refresh"
-        },
-        {
-            xtype: "button",
-            ui: "soft-blue",
-            text: "Check All",
-            iconCls: "fa fa-check-square-o",
-            action: "checkall"
-        },
-        {
-            xtype: "button",
-            ui: "soft-blue",
-            text: "Uncheck All",
-            iconCls: "fa fa-square-o",
-            action: "uncheckall"
-        }]
-    }],
     columns: [{
         xtype: "checkcolumn",
         text: "",
@@ -335,11 +216,132 @@ Ext.define("Vega.view.inventory.fabric.panel.Detail", {
 
     initComponent: function () {
         var b = this;
+        b.dockedItems = b.buildDockedItems();
+
         Ext.applyIf(b, {
 
         });
 
         this.callParent(arguments);
+    },
+
+    buildDockedItems: function(){
+        var me = this;
+
+        return [{
+            xtype: "toolbar",
+            dock: "top",
+            items: [{
+                xtype: "combo",
+                itemId: "cboFabric",
+                labelAlign: "left",
+                fieldLabel: "Fabric",
+                labelWidth: 40,
+                width: 200,
+                store: "Components",
+                valueField: "id",
+                displayField: "id",
+                selectOnFocus: false,
+                pageSize: 100,
+                matchFieldWidth: false,
+                queryMode: "remote",
+                minChars: 1,
+                disabled: true,
+                listConfig: {
+                    loadindText: "Searching...",
+                    emptyText: "No matching items found.",
+                    width: 340
+                }
+            },
+            {
+                xtype: "tbspacer"
+            },
+            {
+                xtype: "combo",
+                itemId: "cboColor",
+                labelAlign: "left",
+                fieldLabel: "Color",
+                labelWidth: 38,
+                width: 200,
+                store: "Colors",
+                valueField: "id",
+                displayField: "id",
+                selectOnFocus: false,
+                pageSize: 100,
+                matchFieldWidth: false,
+                queryMode: "remote",
+                minChars: 1,
+                disabled: true,
+                listConfig: {
+                    loadindText: "Searching...",
+                    emptyText: "No matching items found.",
+                    width: 340
+                }
+            },
+            {
+                xtype: "tbspacer"
+            },
+            {
+                xtype: "combo",
+                itemId: "cboLotno",
+                labelAlign: "left",
+                fieldLabel: "Lot #",
+                labelWidth: 38,
+                width: 200,
+                //store: 'memLotnos',
+                bind: {
+                    store: '{lotnos}'
+                },
+                valueField: "label",
+                displayField: "label",
+                selectOnFocus: true,
+                pageSize: 50,
+                matchFieldWidth: false,
+                queryMode: "remote",
+                queryParam: "filter",
+                minChars: 1,
+                plugins: [{
+                    ptype: "cleartrigger"
+                }],
+                tpl: '<tpl for="."><tpl if="[xindex] == 1"><table class="cbo-list"><tr><th width="50%">Lot #</th><th width="10%">WH</th><th width="40%">On Hand</th></tr></tpl><tr class="x-boundlist-item"><td>{label}</td><td>{descript}</td><td>{text}</td></tr><tpl if="[xcount-xindex]==0"></table></tpl></tpl>',
+                listConfig: {
+                    loadindText: "Searching...",
+                    emptyText: "No matching items found.",
+                    width: 340
+                },
+                listeners: {
+                    triggerClear: function(c){
+                        me.getStore().clearFilter();
+                    }
+                }
+            },
+            {
+                xtype: "tbspacer"
+            },
+            {
+                xtype: "button",
+                ui: "soft-blue",
+                text: "Select",
+                width: 90,
+                iconCls: "fa fa-refresh",
+                action: "refresh",
+                tooltip: "Refresh"
+            },
+            {
+                xtype: "button",
+                ui: "soft-blue",
+                text: "Check All",
+                iconCls: "fa fa-check-square-o",
+                action: "checkall"
+            },
+            {
+                xtype: "button",
+                ui: "soft-blue",
+                text: "Uncheck All",
+                iconCls: "fa fa-square-o",
+                action: "uncheckall"
+            }]
+        }]
     }
 });
 

@@ -1,3 +1,7 @@
+.my-body-class .hidden {
+
+}
+
 .sort-direction-desc {
   background-image: url(images/grid/sort_desc.png);
   background-position: 4px center;
@@ -70,9 +74,11 @@
 }
 
 @media screen and (orientation: portrait) {
-  img { max-width: 90%; }
+  .x-img { max-width: 99%; }
 }
 
 @media screen and (orientation: landscape) {
-  img { max-height: 90%; }
+  .display .x-img {
+    max-height: 99%;
+  }
 }

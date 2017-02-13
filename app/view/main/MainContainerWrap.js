@@ -39,6 +39,7 @@ Ext.define('Vega.view.main.MainContainerWrap', {
             'min-height': height + 'px'
         });
 
+
         me.callParent(arguments);
     }
 });

@@ -1,8 +1,5 @@
 Ext.define('Vega.view.development.sample.GridModel', {
     extend: 'Ext.app.ViewModel',
-    alias: 'viewmodel.sample-grid',
-    data: {
-
-    }
+    alias: 'viewmodel.sample-grid'
 
 });

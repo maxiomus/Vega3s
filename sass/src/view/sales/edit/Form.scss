@@ -1,3 +1,7 @@
+.thumbnail{
+  vertical-align: middle;
+}
+
 .drag-over:before {
   content: "Drop Files";
   position: absolute;
@@ -16,9 +20,9 @@
 
 .drop-target {
   background: #e3e3e3 url('images/default-app-icon.png') no-repeat bottom;
-  background-size: 128px 146px;
+  background-size: 128px 140px;
   /*background-color: #e3e3e3;*/
   width: 128px;
-  height: 160px;
+  height: 140px;
 
 }

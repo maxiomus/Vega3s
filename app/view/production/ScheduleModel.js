@@ -49,6 +49,22 @@ Ext.define('Vega.view.production.ScheduleModel', {
             }
         },
 
+        customer: {
+            fields: ["id", "text"],
+            //storeId: 'customer',
+            autoLoad: false,
+            proxy: {
+                type: "ajax",
+                url: "/api/Options/customers",
+                reader: {
+                    type: "json",
+                    rootProperty: "data",
+                    totalProperty: "total",
+                    successProperty: "success"
+                }
+            }
+        },
+
         category: {
             fields: ["label", "field"],
             data: [{

@@ -6,10 +6,6 @@ Ext.define('Vega.view.development.sample.SampleModel', {
         'Vega.model.Sample'
     ],
 
-    data: {
-
-    },
-
     stores: {
         samples: {
             model: 'Sample',
@@ -17,9 +13,10 @@ Ext.define('Vega.view.development.sample.SampleModel', {
             storeId: 'samples',
             autoLoad: false,
 
+            session: true,
             remoteFilter: true,
             remoteSort: true,
-            pageSize: 99,
+            pageSize: 50,
 
             proxy: {
                 type: 'rest',
@@ -31,36 +28,140 @@ Ext.define('Vega.view.development.sample.SampleModel', {
                     //totalProperty: 'total',
                     //successProperty: 'success'
                 }
-
-                //simpleSortMode: true,
-                // Parameter name to send  filtering information in
-                //startParam: undefined
-                //filterParam: 'cutno',
-
-                //encodeFilters: function(filters) {
-                //    return filters[0].value;
-                //}
             }
-
-
         },
 
-        category: {
-            fields: [
-                'label', 'field'
-            ],
-            data: [
-                {label: 'Style #', field: 'style'},
-                {label: 'Body #', field: 'user2'},
-                {label: 'Fabric', field: 'fabrics'},
-                {label: 'Print', field: 'prints'},
-                {label: 'Designer', field: 'designer'},
-                {label: 'Stone Vendor', field: 'stone'},
-                {label: 'Memo', field: 'memo'}
-            ],
+        categories: {
+            fields: ['label', 'field'],
+            autoLoad: true,
+            proxy: {
+                type: 'ajax',
+                url: 'data/development/sample/categories.json',
+                reader: {
+                    type: 'json',
+                    rootProperty: 'data'
+                }
+            }
+        },
 
-            listeners: {
+        bodies: {
+            fields: ['id', 'text'],
+            //pageSize: 100,
+            //remoteFilter: true,
+            autoLoad: true,
 
+            proxy: {
+                type: 'ajax',
+                url: '/api/Combos/bodies',
+                pageParam: '',
+                startParam: '',
+                limitParam: '',
+                reader: {
+                    type: 'json',
+                    rootProperty: 'data'
+                }
+            }
+        },
+
+        styles: {
+            fields: ['id', 'text'],
+            //pageSize: 100,
+            //remoteFilter: true,
+            autoLoad: false,
+
+            proxy: {
+                type: 'ajax',
+                url: '/api/Combos/styles',
+                /*
+                 pageParam: '',
+                 startParam: '',
+                 limitParam: '',
+                 */
+                reader: {
+                    type: 'json',
+                    rootProperty: 'data'
+                }
+            }
+        },
+
+        prints: {
+            fields: ['id', 'text'],
+
+            autoLoad: true,
+            //pageSize: 25,
+            proxy: {
+                type: 'ajax',
+                url: '/api/Combos/components',
+
+                pageParam: '',
+                startParam: '',
+                limitParam: '',
+
+                extraParams: {
+                    type: 'PRINTS'
+                },
+
+                reader: {
+                    type: 'json',
+                    rootProperty: 'data'
+                }
+            }
+        },
+
+        vendors: {
+            fields: ["id", "text"],
+            autoLoad: true,
+            //pageSize: 999,
+            proxy: {
+                type: "ajax",
+                url: "/api/Combos/vendors",
+
+                pageParam: '',
+                startParam: '',
+                limitParam: '',
+
+                reader: {
+                    type: "json",
+                    rootProperty: 'data'
+                }
+            }
+        },
+
+        designers: {
+            fields: ["id", "text"],
+            //storeId: 'customer',
+            autoLoad: true,
+            remoteFilter: false,
+            proxy: {
+                type: "ajax",
+                url: "/api/Combos/designers",
+                pageParam: '',
+                startParam: '',
+                limitParam: '',
+                reader: {
+                    type: "json",
+                    rootProperty: "data"
+                }
+            }
+        }
+    },
+
+    formulas: {
+        currentSample: {
+            bind: {
+                bindTo: '{sample-grid.selection}',
+                deep: true
+            },
+
+            get: function(sample){
+                return sample;
+            },
+
+            set: function(sample){
+                if(!sample.isModel){
+                    sample = this.get('samples').getById(sample);
+                }
+                this.set('currentSample', sample);
             }
         }
     }

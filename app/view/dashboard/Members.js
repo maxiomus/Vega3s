@@ -48,7 +48,7 @@ Ext.define('Vega.view.dashboard.Members', {
                 },
                 {
                     xtype: 'button',
-                    iconCls: 'x-fa fa-close'
+                    iconCls: 'x-fa fa-close red-txt'
                 }
             ],
             cls: 'dashboard-member-header-background',

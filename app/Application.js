@@ -5,35 +5,36 @@
  */
 Ext.define('Vega.Application', {
     extend: 'Ext.app.Application',
-    
-    name: 'Vega',
 
     stores: [
         // TODO: add global / shared stores here
-        'NavigationTree' , 'Components', 'Colors', 'Vendors', 'RawMatTypes', 'Warehouses'
+        'NavigationTree', 'Styles', 'Components', 'Colors', 'Vendors', 'RawMatTypes', 'Warehouses'
     ],
 
     controllers: [
-        'Root'
+        'Root', 'Progress'
     ],
 
     views: [
-        'authentication.Login', 'main.Main'
+        'pages.Error404Window', 'authentication.Login', 'main.Main'
     ],
 
-    appready: true,
-    user: {name: 'user'},
-
+    name: 'Vega',
     defaultToken: 'dashboard',
     enableQuickTips: true,
+    glyphFontFamily: 'Pictos',
+
+    config: {
+        appready: false,
+        user: null,
+        prevNode: null
+    },
 
     init: function(){
         var me = this;
-        console.log('Application.js - init method');
-
+        Ext.tip.QuickTipManager.init();
         //this.setGlyphFontFamily('Pictos');
 
-        /*
         me.splashscreen = Ext.getBody().mask(
             'Loading application, Please wait...', 'splashscreen'
         );
@@ -43,21 +44,19 @@ Ext.define('Vega.Application', {
         Ext.DomHelper.insertFirst(Ext.query('.x-mask-msg')[0], {
             cls: 'x-splash-icon'
         });
-        */
+
+        console.log('Application.js - init method');
     },
 
     launch: function () {
         // TODO - Launch the application
-        console.log('Application.js - launch method');
+        var me = this;
 
         Ext.Ajax.timeout = 3600000;
         //Ext.tip.QuickTipManager.init();
-
-        var me = this;
-
         //Ext.GlobalEvents.fireEvent('beforemainviewrender');
 
-        /*Ext.Ajax.request({
+        Ext.Ajax.request({
             //url: '/api/Sessions',
             url: '/security/checkLogin.ashx',
             scope: this,
@@ -71,31 +70,32 @@ Ext.define('Vega.Application', {
                     //Vega.LoggedInUser = Ext.create( 'Vega.model.security.User', result.data );
                     //Ext.util.Cookies.set('loggedInUser', result.data);
                     this.onUser(
-                        me.user = result.data
+                        Vega.user = Ext.create('Vega.model.authentication.User', result.data)
                     );
+
                     Vega.util.SessionMonitor.start();
-                    console.log('login success', Vega.app.user, me.user);
                 }
                 // couldn't login...show error
                 else {
-                    console.log('login failed', me.user, Vega.app.user);
+                    console.log('login failed', me.user, Vega.user);
                     this.onUser();
                 }
             },
             failure: function(response, options) {
-                console.log(response);
+                //console.log(response);
                 Ext.Msg.alert(response.status.toString(), response.statusText + ', an error occurred during your request. Please try again.' );
             },
             callback: function(response, opotions) {
-
+                //console.log('checkLogin - callback', response);
             }
-        });*/
+        });
 
+        console.log('Application.js - launch method');
         //var loggedIn = Ext.util.Cookies.get('loggedInUser');
     },
 
     onUser: function(user){
-        this.appready = true;
+        Vega.app.setAppready(true);
         this.fireEvent('appready', this, user);
         //Ext.getBody().unmask();
     },

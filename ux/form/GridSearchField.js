@@ -55,26 +55,27 @@ Ext.define('Ext.ux.form.GridSearchField', {
             me.grid = grid;
         }
 
-        //        if(!!typeof(me.store.isStore)){
-        //            me.store = Ext.data.StoreManager.get(me.store);
-        //        }
+        /*
+        if(!!typeof(me.store.isStore)){
+            me.store = Ext.data.StoreManager.get(me.store);
+        }
 
-        //        // We're going to use filtering
-        //        me.store.remoteFilter = true;
+        // We're going to use filtering
+        me.store.remoteFilter = true;
 
-        //        // Set up the proxy to encode the filter in the simplest way as a name/value pair
-        //        if (!me.store.proxy.hasOwnProperty('encodeFilters')) {
-        //            me.store.proxy.encodeFilters = function (filters) {
-        //                return filters[0].value;
-        //            }
-        //        }
+        // Set up the proxy to encode the filter in the simplest way as a name/value pair
+        if (!me.store.proxy.hasOwnProperty('encodeFilters')) {
+            me.store.proxy.encodeFilters = function (filters) {
+                return filters[0].value;
+            }
+        }
 
-        //        // If the Store has not been *configured* with a filterParam property, then use our filter parameter name
+        // If the Store has not been *configured* with a filterParam property, then use our filter parameter name
 
-        //        if (!me.store.proxy.hasOwnProperty('filterParam')) {
-        //            me.store.proxy.filterParam = me.paramName;
-        //        }
-
+        if (!me.store.proxy.hasOwnProperty('filterParam')) {
+            me.store.proxy.filterParam = me.paramName;
+        }
+        */
     },
 
     onClearClick: function () {
@@ -93,7 +94,8 @@ Ext.define('Ext.ux.form.GridSearchField', {
             });
             me.setValue('');
             filter.setValue('');
-            filter.setActive(false);
+            //filter.setActive(false);
+
             //grid.filters.clearFilters();
             me.hasSearch = false;
             me.getTrigger('clear').hide();
@@ -112,6 +114,7 @@ Ext.define('Ext.ux.form.GridSearchField', {
             Ext.each(cols, function(col){
                 if(col.dataIndex === me.paramName){
                     filter = col.filter;
+                    console.log('inside search', filter, filter.grid)
                     //filter.options = ['Avenue', 'Cjbanks'];
                     //filter.menu = filter.createMenu();
                     return false;
@@ -119,7 +122,7 @@ Ext.define('Ext.ux.form.GridSearchField', {
             });
 
             filter.setValue(value);
-            filter.setActive(true);
+            //filter.setActive(true);
             me.hasSearch = true;
             me.getTrigger('clear').show();
             me.updateLayout();

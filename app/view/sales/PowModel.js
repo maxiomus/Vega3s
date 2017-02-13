@@ -53,51 +53,12 @@ Ext.define("Vega.view.sales.PowModel", {
             }
         },
 
-        previews: {
-
-        },
-
-        category: {
-            fields: ["label", "field"],
-            data: [{
-                label: "P.O.W #",
-                field: "PowNo"
-            },
-            {
-                label: "Customer",
-                field: "Customer"
-            },
-            {
-                label: "Status",
-                field: "Status"
-            },
-            {
-                label: "Type",
-                field: "Type"
-            },
-            {
-                label: "Division",
-                field: "Division"
-            },
-            {
-                label: "Desc",
-                field: "Descript"
-            },
-            {
-                label: "User",
-                field: "UserID"
-            }],
-            listeners: {
-
-            }
-        },
-
         factories: {
-            fields: ['value', 'label'],
-            storeId: 'sales',
+            fields: ['id', 'label'],
+            //storeId: 'factories',
             proxy: {
                 type: 'ajax',
-                url: 'data/sales.json'
+                url: 'data/factories.json'
             },
             autoLoad: false
         },
@@ -120,77 +81,6 @@ Ext.define("Vega.view.sales.PowModel", {
                 url: 'data/submissions.json'
             },
             autoLoad: true
-        },
-
-        status: {
-            fields: ["id", "label"],
-            storeId: 'powStatus',
-            proxy: {
-                type: 'ajax',
-                url: 'data/powStatus.json'
-            }
-        },
-
-        customer: {
-            fields: ["id", "text"],
-            storeId: 'customer',
-            autoLoad: false,
-            proxy: {
-                type: "ajax",
-                url: "/api/Options/customers",
-                reader: {
-                    type: "json",
-                    rootProperty: "data",
-                    totalProperty: "total",
-                    successProperty: "success"
-                }
-            }
-        },
-
-        type: {
-            fields: ["id", "text"],
-            storeId: 'type',
-            autoLoad: false,
-            proxy: {
-                type: "ajax",
-                url: "/api/Options/ordertypes",
-                reader: {
-                    type: "json",
-                    rootProperty: "data",
-                    totalProperty: "total",
-                    successProperty: "success"
-                }
-            }
-        },
-
-        division: {
-            fields: ["id", "text"],
-            storeId: 'division',
-            autoLoad: false,
-            proxy: {
-                type: "ajax",
-                url: "/api/Options/divisions",
-                reader: {
-                    type: "json",
-                    rootProperty: "data",
-                    totalProperty: "total",
-                    successProperty: "success"
-                }
-            }
-        },
-
-        sizeCat: {
-            fields: ["id", "text"],
-            storeId: 'sizeCat',
-            autoLoad: false,
-            proxy: {
-                type: 'ajax',
-                url: '/api/Options/sizes',
-                reader: {
-                    type: 'json',
-                    rootProperty: 'data'
-                }
-            }
         },
 
         powsChained: {

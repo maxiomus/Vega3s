@@ -5,25 +5,25 @@ Ext.define('Vega.model.Pow', {
     extend: 'Vega.model.Base',
 
     fields: [
-        { name: 'PID', type: 'int'},
-        { name: 'PowNo', type: 'string'},
-        { name: 'Type', type: 'string'},
-        { name: 'Customer', type: 'string'},
-        { name: 'Division', type: 'string'},
-        { name: 'Descript', type: 'string'},
-        { name: 'Link', type: 'string'},
-        { name: 'Status', type: 'string'},
-        { name: 'UserID', type: 'string'},
-        { name: 'CreateOn', type: 'date'},
-        { name: 'UpdaterID', type: 'string'},
-        { name: 'UpdateOn', type: 'date'},
-        { name: 'ConfirmOn', type: 'date'},
-        { name: 'ReviseOn', type: 'date'},
-        { name: 'CancelOn', type: 'date'},
-        { name: 'ParentID', type: 'int'},
-        { name: 'Submits', type: 'string'},
+        { name: 'powhId', type: 'int'},
+        { name: 'powno', type: 'string'},
+        { name: 'revision', type: 'string'},
+        { name: 'ordertype', type: 'string'},
+        { name: 'customer', type: 'string'},
+        { name: 'division', type: 'string'},
+        { name: 'comments', type: 'string'},
+        { name: 'link', type: 'string'},
+        { name: 'status', type: 'string'},
+        { name: 'userId', type: 'string'},
+        { name: 'createdon', type: 'date'},
+        { name: 'updatedby', type: 'string'},
+        { name: 'updatedon', type: 'date'},
+        { name: 'confirmon', type: 'date'},
+        { name: 'reviseon', type: 'date'},
+        { name: 'cancelon', type: 'date'},
+        { name: 'submits', type: 'string'},
         { name: 'visited', type: 'string', persist: false}
     ],
 
-    idProperty: 'PID'
+    idProperty: 'powhId'
 });

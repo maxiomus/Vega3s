@@ -2,53 +2,761 @@ Ext.define('Vega.view.sales.edit.FormController', {
     extend: 'Ext.app.ViewController',
 
     requires: [
-        'Vega.model.sales.Powh',
-        'Vega.model.sales.Powd'
+        'Vega.model.Powh',
+        'Vega.model.Powd',
+        'Vega.model.Powm',
+        'Vega.model.Powlog',
+        'Vega.model.Powdtag',
+        'Vega.model.Tnap',
+        'Vega.model.sales.TnaOrder',
+        'Vega.view.sales.edit.Window',
+        'Vega.view.sales.edit.TnaOrderWindow'
     ],
 
     alias: 'controller.sales-edit-form',
 
+    listen: {
+        component: {
+            'edit-window': {
+                close: function(w){
+                    var form = this.getView();
+                    if(form.imagesQueue && form.imagesQueue.length != 0){
+                        form.imagesQueue.length = 0;
+                    }
+                }
+            }
+        },
+        store: {
+            '#tnaOrders': {
+                beforeload: {
+                    fn: 'onStoreLoad'
+                }
+            }
+        }
+    },
+
     init: function(){
-
-        //this.getViewModel().set('powds', this.getViewModel().getLinks().header.powds);
+        //console.log('Form - init')
+        console.log('init', this.getReferences().details);
     },
 
-    onMerchandExpand: function(panel){
-
-        this.setBtnVisible(panel);
-    },
-
-    onMerchandCollapse: function(panel){
-        this.setBtnVisible(panel);
+    initViewModel: function(vm){
+        //this.fireEvent("viewmodelready", this, vm);
 
     },
 
-    onAttachExpand: function(panel){
+    onAfterRender: function(p){
 
-        this.setBtnVisible(panel);
+        /*
+        var btnTna = this.getView().getDockedItems('toolbar[dock="top"] > button[text="T&A"]')[0];
+
+        var powh = this.getViewModel().get('header');
+        //console.log(powh, this.getViewModel().linkData.header)
+        if(powh != null){
+            var powds = powh.powds();
+
+            btnTna.setDisabled(powds.getCount() == 0);
+
+            powds.on('datachanged', function(s){
+                var total = 0;
+                s.each(function(p){
+                    total += p.tnaps().getCount();
+                });
+                btnTna.setDisabled(s.getCount() == 0 || total != 0);
+            })
+        }
+        */
+
     },
 
-    onAttachCollapse: function(panel){
-        this.setBtnVisible(panel)
+    onAdded: function(c, p){
+        //console.log(c, p)
     },
 
-    setBtnVisible: function(panel){
-        var me = this,
-            view = me.getView(),
-            refs = view.getReferences(),
-            btn = refs.add;
+    onStoreLoad: function(store, op){
+        var me = this;
+            //combo = me.tna.query('combo')[0],
+            //cycle = me.tna.query('cycle')[0];
 
-        if(panel.reference == 'attachments'){
-            btn = refs.attach;
+        //store.getProxy().setExtraParam('planId', 0);
+        //store.filter('planId', cycle.getActiveItem().type);
+
+    },
+
+    onStoreDataChanged: function(store, e){
+
+    },
+
+    showWindow: function(comp, record){
+        var view = this.getView(),
+            viewer = view.up('viewer');
+
+        //console.log(window.innerWidth, window.innerHeight)
+        this.isEdit = !!record;
+        this.win = view.add({
+            xtype: 'edit-window',
+            reference: 'editWindow',
+
+            //alignTarget: '',
+            width: window.innerWidth < 1360 ? (view.getWidth() * 0.98) : 1260,
+            //maxWidth: 1366,
+            height: window.innerHeight < 760 ? (view.getHeight() * 0.94) : 580,
+
+            viewModel: {
+                data: {
+                    title: !record ? 'Add New Style' : ('Edit Style: ' + record.get('bodyref') + (record.get('style') && record.get('color') ? ' (' + record.get('style') + ' / ' + record.get('color') + ')' : ''))
+                },
+
+                links: {
+                    // If we are passed a record, a copy of it will be created in the newly spawned session.
+                    // Otherwise, create a new phantom customer in the child.
+                    theStyle: record || {
+                        type: 'Powd',
+                        create: {
+                            userId: Vega.user.data.Userid,
+                            factory: view.getViewModel().get('header').data.factory
+                        }
+                    }
+                },
+
+                formulas: {
+                    isStyleValid: {
+                        bind: {
+                            bindTo: '{theStyle}',
+                            deep: true
+                        },
+                        get: function(powd){
+                            return powd.isValid();
+                        }
+                    },
+
+                    statusValue: {
+                        bind: '{header.status}',
+                        get: function(value) {
+                            return value == 'approved' ? true : false;
+                        },
+                        set: function(value) {
+                            this.set('header.status', value == true ? 'approved' : 'pending');
+                        }
+                    },
+
+                    bodyimg: {
+                        bind: {
+                            bindTo: '{theStyle}',
+                            deep: true
+                        },
+                        get: function(value) {
+                            var src = '';
+                            if(value.data.bodyimgsrc != null){
+                                src = '../' + value.data.bodyimgsrc + '?w=128&h=140';
+                            }
+                            return value.data.bodyimg.indexOf('blob:') !== -1 ? value.data.bodyimg : src
+                        }
+                    },
+                    printimg: {
+                        bind: {
+                            bindTo: '{theStyle}',
+                            deep: true
+                        },
+                        get: function(value) {
+                            //var src = 'resources/images/default.png';
+                            var src = '';
+                            if(value.data.printimgsrc != null){
+                                src = '../' + value.data.printimgsrc + '?w=128&h=140';
+                            }
+                            return value.data.printimg.indexOf('blob:') !== -1 ? value.data.printimg : src
+                        }
+                    }
+
+                }
+            },
+
+            // Creates a child session that will spawn from the current session
+            // of this view.
+            session: true,
+
+            buttons: [{
+                text: 'Save',
+                bind: {
+                    disabled: '{!isStyleValid}'
+                },
+                handler: 'onSaveStyleClick'
+            }, {
+                text: 'Cancel',
+                handler: 'onCancelStyleClick',
+                scope: this
+            }]
+        });
+
+
+        var rec = this.win.getViewModel().get('theStyle');
+
+        //matStore.sort('lineseq', 'ASC');
+
+        if(!this.isEdit){
+
+            rec.powms().add({
+                lineseq: 1,
+                matcategory: 'SELF',
+                mattype: 'FABRICS',
+                matcode: view.getViewModel().get('header').data.mainfabric
+            },{
+                lineseq: 2,
+                matcategory: 'PRINTS',
+                mattype: 'PRINTS'
+            },{
+                lineseq: 3,
+                matcategory: 'STONE',
+                mattype: 'STONE'
+            },{
+                lineseq: 4,
+                matcategory: 'CONTRAST1',
+                mattype: 'FABRICS'
+            },{
+                lineseq: 5,
+                matcategory: 'TRIMS',
+                mattype: 'TRIMS'
+            });
+
+            var data = [];
+            rec.powms(function(powms){
+                powms.each(function(item){
+                    data.push(item.data);
+                })
+            });
+            rec.set('mats', data);
+        }
+        else {
+            /*
+            var upload = this.win.down('multiimageupload'),
+                body = upload.down('image[canvas="' + upload.id + '-canvas-' + 'body' + '"]'),
+                print = upload.down('image[canvas="' + upload.id + '-canvas-' + 'prints' + '"]');
+
+            body.setSrc(!Ext.isEmpty(record.data._bodyimgsrc) ? record.get('_bodyimgsrc') : '../DLIB/BLU-ILLUSTRATIONS/' + record.get('bodyimgsrc') + '?w=128&h=140');
+            print.setSrc(!Ext.isEmpty(record.data._printimgsrc) ? record.get('_printimgsrc') : '../DLIB/BLU-PRINTCAD/' + record.get('printimgsrc') + '?w=128&h=140');
+            */
+            rec.set('updatedby', Vega.user.data.Userid);
         }
 
-        btn.setHidden(panel.collapsed);
+
+        this.win.on('close', function(p){
+            view.up('viewer').up('maincontainerwrap').unmask();
+        });
+
+        this.win.show('', function(){
+            view.up('viewer').up('maincontainerwrap').mask();
+        });
+    },
+
+    onGridRowDblclick: function(grid, rec, tr, idx, e){
+        var btn = this.lookupReference('edit');
+
+        this.showWindow(btn, rec);
+        //console.log(rec)
+    },
+
+    onAddStyleClick: function(btn){
+        this.showWindow(btn, null);
+    },
+
+    onCopyStyleClick: function(btn){
+        var me = this,
+            session = me.getViewModel().getSession(),
+            grid = me.lookupReference('details'),
+            d = grid.getSelection()[0];
+
+        var nd = d.copy(null, session);
+        //console.log('onCopyStyleClick - before', d);
+
+        var mat = grid.getStore().add(nd);
+
+        Ext.Object.each(session.data.Powm, function(key, value, self){
+            var rec = value.record;
+            if(rec.get('powdId') == d.id){
+                nd.powms().add(rec.copy(null, session));
+            }
+        });
+
+        Ext.Object.each(session.data.Tnap, function(key, value, self){
+            var rec = value.record;
+            if(rec.get('powdId') == d.id){
+                nd.tnaps().add(rec.copy(null, session));
+            }
+        });
+
+        /*
+        d.powms().each(function (m) {
+            nd.powms().add(m.copy(null, session));
+            console.log('materials',m)
+        });
+
+        d.tnaps().each(function (p) {
+            nd.tnaps().add(p.copy(null, session));
+            console.log('tnaps', m)
+        });
+        */
+        //console.log('onCopyStyleClick', d, nd);
+
+        grid.getView().refresh();
+    },
+
+    onEditStyleClick: function(btn){
+        var me = this,
+            rec = me.lookupReference('details').getSelection()[0];
+
+        this.showWindow(btn, rec);
+        //console.log('onEditStyleClick', me.lookupReference('details').getSelection()[0], me.getViewModel().getSession().peekRecord('Powd', rec.id))
+        //this.showWindow(btn, rec);
+        console.log('editstyle', rec)
+    },
+
+    onDeleteStyleClick: function(btn){
+        var me = this,
+            grid = me.lookupReference('details'),
+            selection = grid.getSelectionModel().getSelection()[0],
+            store = grid.getStore();
+
+        //store.remove(grid.getSelection()[0]);
+        selection.drop();
+        grid.getSelectionModel().deselectAll();
+
+    },
+
+    onSaveStyleClick: function(){
+        // Save the changes pending in the win's child session back to the
+        // parent session.
+        var me = this,
+            session = me.getSession(),
+            win = me.win,
+            view = me.getView(),
+            form = me.lookupReference('form-edit'),
+            grid = me.lookupReference('details'),
+            isEdit = this.isEdit,
+            id, rec;
+
+        if (form.isValid()) {
+            if (!isEdit) {
+                // Since we're not editing, we have a newly inserted record. Grab the id of
+                // that record that exists in the child session
+            }
+            id = win.getViewModel().get('theStyle').id;
+            win.getSession().save();
+
+            if (!isEdit) {
+                // Use the id of that child record to find the phantom in the parent session,
+                // we can then use it to insert the record into our store
+                rec = session.getRecord('Powd', id);
+                grid.getStore().add(rec);
+
+            }
+            else {
+                rec = session.peekRecord('Powd', id);
+            }
+
+            var data = [];
+            win.getViewModel().get('theStyle').powms(function(powms){
+                powms.each(function(item){
+                    data.push(item.data);
+                })
+            });
+            rec.set('mats', data);
+
+            if(view.imagesQueue && view.imagesQueue.length > 0){
+                Ext.each(view.imagesQueue, function(item, idx, self){
+                    console.log('FormController', item);
+                    view.getViewModel().getStore('fileStore').add({
+                        FID: item.imageKey == ('bodyimg' + '-' + rec.id) ? 1 : 2,
+                        F_NAME: item.imageFile.name,
+                        F_TYPE: item.imageFile.type,
+                        F_SIZE: item.imageFile.size,
+                        F_LINK: item.imageKey == ('bodyimg' + '-' + rec.id) ? 'DLIB/BLU-ILLUSTRATIONS/' : 'DLIB/BLU-PRINTCAD/',
+                        F_CATEGORY: item.imageKey == ('bodyimg' + '-' + rec.id) ? 'Body' : 'Prints',
+                        F_EXT: '.' + item.imageFile.type.split('/').pop(),
+                        F_BFLAG: true,
+                        F_APPLICATION: 'POW',
+                        F_LOCATION: item.imageFile.name + '_' + item.imageFile.size,
+                        F_USERID: Vega.user.data.Userid,
+                        F_CREATED_ON: new Date()
+                    });
+                });
+                //console.log(view.imagesQueue, view.getViewModel().getStore('fileStore'));
+
+                view.getViewModel().getStore('fileStore').sync({
+                    success: function(batch, opt){
+                        var response = JSON.parse(batch.operations[0].getResponse().responseText);
+                        //console.log(batch.operations[0].getResponse().responseText)
+
+                        if(view.imagesQueue && view.imagesQueue.length > 0){
+                            view.send({
+                                url: '/api/Files/Powd/upload',
+                                success: function(resp){
+                                    //console.log(response);
+                                    var d = new Date(),
+                                        path = d.getFullYear() + '/' + (d.getMonth() + 1) + '/' + d.getDate();
+
+                                    Ext.each(response.data, function(item, idx, self){
+                                        var fieldId = item.FID == 1 ? 'bodyimgsrc' : 'printimgsrc';
+                                        rec.set(fieldId, item.F_LINK + path + "/" + item.ID + "/" + item.F_NAME);
+                                    })
+
+                                    grid.getView().refresh();
+                                    me.onCancelStyleClick();
+                                    //Ext.Msg.alert('Success', resp);
+                                },
+                                failure: function(response) {
+                                    Ext.Msg.alert('Failure', resp);
+                                }
+                            }, {
+                                Media: JSON.stringify(response.data)
+                            });
+                        }
+
+                    },
+                    failure: function(batch, opt){
+
+                    },
+                    callback: function(batch, opt){
+
+                    }
+                });
+            }
+            else {
+                grid.getView().refresh();
+                me.onCancelStyleClick();
+            }
+        }
+    },
+
+    onCancelStyleClick: function (btn) {
+        //this.win = Ext.destroy(this.win);
+        this.win.close();
+    },
+
+    showTNAWindow: function(comp, rec){
+        var me = this;
+
+        console.log('TNA', rec);
+        me.tna = me.getView().add({
+            xtype: 'window',
+            reference: 'tnaWindow',
+            width: me.getView().getWidth() - 160,
+            minHeight: 560,
+
+            //modal: true,
+            monitorResize: true,
+            maximizable: true,
+            //alwaysOnTop: true,
+            constrain: true,
+            //maximized: true,
+            closable: true,
+            scrollable: true,
+            padding: 4,
+
+            bind: {
+                title: '{title}'
+            },
+
+            session: true,
+
+            viewModel: {
+                data: {
+                    title: 'T & A - ' + rec.get('bodyref') + (rec.get('style') && rec.get('color') ? ' (' + rec.get('style') + ' / ' + rec.get('color') + ')' : '')
+                },
+
+                links: {
+                    otherStyle: rec
+                },
+
+                stores: {
+                    tnaOrders: {
+                        model: 'sales.TnaOrder',
+                        storeId: 'tnaOrders',
+                        autoLoad: true
+                        //remoteFilter: true
+                    },
+
+                    planTypes: {
+                        fields: ['planId', 'name'],
+                        data: [{
+                            planId: '1',
+                            name: 'Type A'
+                        },{
+                            planId: '2',
+                            name: 'Type B'
+                        }]
+                    }
+                }
+            },
+
+            items: [{
+                xtype: 'tna-grid',
+                reference: 'tnapsgrid',
+                bind: '{otherStyle.tnaps}',
+                layout: {
+                    type: 'fit'
+                },
+                tbar: [{
+                    xtype: 'button',
+                    text: 'Add',
+                    width: 70,
+                    iconCls: 'fa fa-plus',
+                    handler: 'onAddActivityClick'
+                },{
+                    xtype: "button",
+                    //ui: "default",
+                    text: 'Add All',
+                    iconCls: "fa fa-gear",
+                    //scope: this.controller,
+                    menu: {
+                        items: [{
+                            text: "T&A - A",
+                            iconCls: "fa fa-gear",
+                            type: '1',
+                            itemId: "a"
+                        },{
+                            text: "T&A - B",
+                            iconCls: "fa fa-gear",
+                            type: '2',
+                            itemId: "b"
+                        }],
+                        listeners: {
+                            click: {
+                                fn: 'onAddAllMenuClick'
+                            }
+                        }
+                    }
+                },{
+                    xtype: 'button',
+                    text: 'Remove',
+                    iconCls: 'fa fa-remove',
+                    bind: {
+                        disabled: '{!tnapsgrid.selection}'
+                    },
+                    handler: 'onRemoveActivityClick'
+                },{
+                    xtype: 'button',
+                    text: 'Remove All',
+                    iconCls: 'fa fa-remove',
+                    handler: 'onRemoveAllActivityClick'
+                }]
+
+            }],
+
+            buttons: [{
+                text: 'Save',
+                handler: 'onSaveTNAClick',
+                scope: this
+            }, {
+                text: 'Cancel',
+                handler: 'onCancelTNAClick',
+                scope: this
+            }]
+        });
+
+        me.tna.on('close', function(p){
+            me.getView().up('viewer').up('maincontainerwrap').unmask();
+        });
+
+        this.tna.show('', function(){
+            me.getView().up('viewer').up('maincontainerwrap').mask();
+        });
+    },
+
+    onAddAllMenuClick: function(menu, item, e){
+        var me = this,
+            win = me.win,
+            style = win.getViewModel().get('theStyle'),
+
+            store = Ext.create('Ext.data.Store', {
+                model: 'sales.TnaOrder',
+                autoLoad: true
+            });
+
+        store.load({
+            callback: function(){
+                store.filter({
+                    operator: "eq",
+                    value: item.type,
+                    property: "planId",
+                    type: "string"
+                });
+
+                //console.log(store, style);
+                if(style.tnaps().getCount() > 0){
+                    style.tnaps().removeAll();
+                }
+
+                store.each(function(r){
+                    var rec = r.copy();
+                    style.tnaps().add(rec.data);
+                });
+            }
+        })
+    },
+
+    onGridWidgetClick: function(comp, rec){
+        this.showTNAWindow(comp, rec);
+    },
+
+    onTNAClick: function(btn, e){
+        this.showTNAWindow(btn, null);
+    },
+
+    onSaveTNAClick: function(btn){
+
+        var win = this.tna,
+            style = win.getViewModel().get('otherStyle'),
+            srcStore = win.getViewModel().getStore('tnaOrders');
+            //destStore = this.lookupReference('activities').getStore();
+
+        /*
+        this.getViewModel().get('header').powds(function(powds){
+            powds.each(function(item){
+
+                if(style == null || style == item){
+                    srcStore.each(function(r){
+                        var rec = r.copy();
+                        item.tnaps().add(rec.data);
+                    });
+                }
+            })
+        });
+        */
+
+        win.getSession().save();
+        win.close();
+    },
+
+    onCancelTNAClick: function(btn){
+        this.tna.close();
+    },
+
+    onAddActivityClick: function(btn){
+        //var store = this.lookupReference('planactivities').getStore();
+        var store = btn.up('tna-grid').getStore();
+
+        store.add({
+            priority: (store.getCount() + 1) * 10
+        });
+    },
+
+    onRemoveActivityClick: function(btn){
+        var grid = btn.up('tna-grid'),
+            //grid = this.lookupReference('planactivities'),
+            sm = grid.getSelectionModel(),
+            selected = sm.getSelection();
+
+        Ext.Array.each(selected, function(rec, index, self){
+            rec.drop();
+        })
+    },
+
+    onRemoveAllActivityClick: function(btn){
+        var grid = btn.up('tna-grid'),
+            //grid = this.lookupReference('planactivities'),
+            sm = grid.getSelectionModel(),
+            selected = sm.getSelection();
+
+        grid.getStore().removeAll();
+    },
+
+    // Materials...
+    onAddMaterialClick: function(btn){
+        //var selection = this.lookupReference('details').getSelection()[0];
+        var powd = this.win.getViewModel().get('theStyle'),
+            store = powd.powms();
+        //var store = this.lookupReference('materials').getStore(),
+
+        var rec = store.add({
+            lineseq: store.getCount() + 1
+        });
+
+        var data = [];
+        if(powd.get('mats') != undefined){
+            data = powd.get('mats');
+        }
+        data.push(rec[0].data);
+        powd.set('mats', data);
+
+        //console.log(store, rec[0])
+        //detail.powms().add(rec);
+    },
+
+    onRemoveMaterialClick: function(btn){
+        var grid = this.lookupReference('materials'),
+            selection = grid.getSelection()[0],
+            store = grid.getStore();
+
+        selection.getPowd(function(powd,i){
+            var data = [];
+            if(powd.get('mats') != undefined){
+                //var idx = powd.get('mats').indexOf(selection.data);
+                if(i != -1){
+                    powd.get('mats').splice(i,1);
+                }
+            }
+        });
+
+        selection.drop();
+        //store.remove(selection);
+    },
+
+    onPositionChange: function(btn, active){
+        var tabpanel = this.lookupReference('panels');
+
+        tabpanel.setBind({
+            tabPosition: active.itemId
+        });
+    },
+
+    onTabChange: function(t, n, o, e){
+        var refs = this.getView().getReferences(),
+            btn = refs.groupCrud;
+
+        btn.setHidden(n.reference != 'merchandise')
+    },
+
+    onAddLogClick: function(btn){
+        var me = this,
+            view = me.getView(),
+            vm = view.getViewModel(),
+            logview = this.lookupReference('logview'),
+            input = logview.down('textarea'),
+            store = logview.down('dataview').getStore(),
+            rec = new Ext.create('Vega.model.Powlog', {
+                powdId: 0,
+                powno: vm.get('header').data.powno,
+                content: input.getValue(),
+                userId: Vega.user.data.Userid
+            });
+
+        if(input.getValue().length > 0){
+            store.add(rec);
+            input.setValue('');
+        }
+        else {
+            //Vega.util.Util.showErrorMsg('Please input first!');
+            Vega.util.Utils.showNotification('It cannot be empty.' +
+                ' Please input value.');
+        }
+    },
+
+    onRemoveLogClick: function(btn){
+        var dataview = this.lookupReference('logview').down('dataview'),
+            store = dataview.getStore();
+
+        if(Vega.user.data.Userid === dataview.selection.data.userId){
+            store.remove(dataview.selection);
+        }
+        else{
+            Vega.util.Utils.showNotification("You can't delete this post.");
+        }
+
     },
 
     onToogleAttach: function(btn, pressed){
 
         var me = this,
-            view = me.getView(),
             refs = me.getReferences();
 
         if(refs.attachments){
@@ -68,49 +776,511 @@ Ext.define('Vega.view.sales.edit.FormController', {
         }
     },
 
-    onAddStyle: function(btn ,e){
+    onHandleAction: function(btn, e){
         var me = this,
             view = me.getView(),
-            refs = me.getReferences();
+            vm = view.getViewModel(),
+            action = btn.nextStep,
+            msg = 'To <strong>' + Ext.String.capitalize(action) + '</strong> this, please enter a justification below.';
 
+        /*
+        switch(action){
+            case 'submit':
+                msg = 'To <strong>' + Ext.String.capitalize(action) + '</strong> this, please enter a justification below.';
+                break;
+            case 'audit':
+                msg = 'To <strong>' + Ext.String.capitalize(action) + '</strong> this for record, please enter a justification below.';
+                break;
+        }
+        */
 
-        if(refs.merchandise){
-            var panel = refs.merchandise;
+        if(action != 'save'){
+            var win = view.add({
+                xtype: 'window',
+                title: 'Confirmation',
+                width: 520,
+                minHeight: 260,
+                alignTarget: view.up('viewer').up('maincontainerwrap').ownerCt,
+                //defaultAlign: 'c-c',
+                //animateTarget: btn.id,
 
-            panel.add({
-                xtype: 'edit-lineitem'
+                layout: {
+                    type: 'vbox',
+                    align: 'stretch'
+                },
+
+                bodyPadding: 10,
+                referenceHolder:  true,
+
+                items: [{
+                    xtype: 'displayfield',
+                    value: msg
+                },{
+                    xtype: 'textarea',
+                    //reference: 'txtNote',  // component's name in the ViewModel
+                    publishes: ['value'], // value is not published by default
+                    flex: 1
+                }],
+                // Creates a child session that will spawn from the current session
+                // of this view.
+                buttons: [{
+                    text: 'Save',
+                    bind: {
+                        //disabled: '{!txtNote.value}'
+                    },
+                    handler: function(btn){
+
+                        var input = btn.up('window').down('textarea');
+                        if(input.getValue()){
+                            var logview = me.lookupReference('logview'),
+                                store = logview.down('dataview').getStore(),
+                                log = Ext.create('Vega.model.Powlog', {
+                                    powno: vm.get('header').data.powno,
+                                    powhId: vm.get('header').data.powhId,
+                                    powdId: 0,
+                                    status: 'open',
+                                    content: input.getValue(),
+                                    userId: Vega.user.data.Userid
+                                });
+
+                            store.add(log);
+                        }
+
+                        win.close();
+                        me.onSave(action);
+                        //return false;
+                    },
+                    scope: this
+                }, {
+                    text: 'Cancel',
+                    handler: function(btn){
+                        win.close();
+                    },
+                    scope: this
+                }]
             });
 
-            panel.updateLayout();
+            win.on('close', function(p){
+                view.up('viewer').up('maincontainerwrap').unmask();
+            });
+
+            win.show('', function(){
+                view.up('viewer').up('maincontainerwrap').mask();
+            });
+        }
+        else {
+            me.onSave(action);
+        }
+
+        /*
+        Ext.Msg.show({
+            title: 'Attention!',
+            width: 400,
+            message: msg,
+            prompt: true,
+            //icon: Ext.Msg.QUESTION,
+            multiline: true,
+            buttons: Ext.Msg.OKCANCEL,
+            fn: function(button, text, opt){
+                if(button === 'ok'){
+                    if(Ext.isEmpty(text)){
+
+                        Ext.create('Ext.ux.window.Notification', {
+                            position: 'br',
+                            useXAxis: true,
+                            cls: 'ux-notification-light',
+                            iconCls: 'ux-notification-icon-information',
+                            closable: false,
+                            title: 'Warning!',
+                            padding: '0 5px 0 5px',
+                            html: '<p>Please enter a justification for your action.</p>',
+                            slideInDuration: 800,
+                            slideBackDuration: 1500,
+                            autoCloseDelay: 4000,
+                            slideInAnimation: 'elasticIn',
+                            slideBackAnimation: 'elasticIn'
+                        }).show();
+                        return false;
+                    }
+
+                    this.onSave(action);
+                }
+            }
+        })
+        */
+    },
+
+    onSave: function(action){
+        var me = this,
+            view = me.getView(),
+            vm = me.getViewModel(),
+            rec = vm.get('header'),
+            session = vm.getSession(),
+            changes = session.getChanges();
+
+        //console.log('onSave', action, changes);
+
+        /*
+         if(refs.merchandise){
+         var panel = refs.merchandise,
+         lineItems = panel.items.items;
+         }
+
+         for(var i = 0; i < lineItems.length; i++){
+         //console.log(lineItems[i].getForm());
+         }
+
+         console.log(view.getForm().getValues(), lineItems);
+         */
+
+        if(view.isValid()){
+            if(changes && changes.Powh && changes.Powh.C){
+                var saving = action == 'save' ? true : false;
+                //submitting = action == 'submit' ? true : false;
+
+                /*
+                 switch (view.up('viewer').getXType()){
+                 case 'pow':
+                 break;
+                 case 'request':
+                 progress = 'review';
+                 break;
+                 case 'review':
+                 if(!saving){
+                 //powStatus = 'PENDING';
+                 progress = 'pending';
+                 }
+                 break;
+                 case 'pending':
+                 progress = submitting ? 'approved' : 'review';
+                 powStatus = submitting ? 'CONFIRMED NEW' : 'PENDING';
+                 break;
+                 }
+                 */
+
+                var powStatus = rec.data.status;
+                if(!saving){
+
+                    switch(action){
+                        case 'review':
+                            //powStatus = 'PRE-ADVISE';
+                            rec.set('confirmon', Ext.Date.format(new Date(), 'Y-m-d'));
+                            break;
+                        case 'pending':
+                            powStatus = 'REVISED';
+                            break;
+                        case 'approved':
+                            powStatus = 'CONFIRMED NEW';
+                            break;
+                        case 'audit':
+                            powStatus = 'PENDING';
+                            break;
+                    }
+
+                    rec.set('progress', action == 'audit' ? 'review' : action);
+                    rec.set('status', powStatus);
+                }
+                else {
+                    if(rec.data.progress == 'review' && rec.data.revision == 0){
+                        rec.set('confirmon', Ext.Date.format(new Date(), 'Y-m-d'));
+                    }
+
+                    if(rec.data.progress == 'approved' && powStatus == 'CONFIRMED NEW'){
+                        rec.set('status', 'REVISED');
+                    }
+                }
+            }
+
+            if(changes && changes.Powh && changes.Powh.U){
+                rec.set('updatedby', Vega.user.data.Userid);
+            }
+
+            if(Vega.user.inRole('sales')){
+
+            }
+
+            var batch = session.getSaveBatch(),
+                field = view.lookupReference('attachments').down('multiupload').getDockedItems('toolbar[dock="top"] > uploadfiles')[0];
+
+            //changes = session.getChanges();
+            //console.log(changes, batch);
+
+            me.processBatch(batch, field, {
+                url: '/api/Files/Powh/upload',
+                success: function(response){
+                    //console.log(response);
+                    Ext.Msg.alert('Success', response);
+                },
+                failure: function(response) {
+                    Ext.Msg.alert('Failure', response);
+                }
+            });
+
+            /*
+             var headerRec = session.peekRecord('Powh', vm.get('header').id);
+             //var detailRec = this.win.getViewModel().get('theStyle');
+             var newRec = session.createRecord('Powh', headerRec.copy(null).getData());
+
+             headerRec.powds(function(powds){
+             powds.each(function(detail){
+             session.createRecord('Powd', detail.copy(null).getData());
+             detail.powms(function(powms){
+             powms.each(function(mat){
+             session.createRecord('Powm', mat.copy(null).getData());
+             })
+             })
+             })
+             });
+             */
+
+            /*
+             if(batch !== undefined){
+             batch.on({
+             complete: function(batch, op){
+
+             //var response = JSON.parse(op.getResponse().responseText);
+             //console.log(response);
+
+             var viewer = view.up('viewer'),
+             tab = viewer.lookupReference(viewer.getXType() + '-' + vm.get('header').id);
+
+             // refresh review tab...
+             if(tab){
+             var iframe = tab.getComponent('contentIframe');
+             if(iframe){
+             iframe.getEl().dom.contentWindow.location.reload();
+             }
+             }
+             //refresh In-Review
+             viewer.getViewModel().getStore(viewer.getXType() + 's').reload();
+
+             me.onClose();
+
+             new Ext.window.Window({
+             autoShow: true,
+             title: 'Session Changes',
+             modal: true,
+             width: 600,
+             height: 400,
+             layout: 'fit',
+             items: {
+             xtype: 'textarea',
+             value: JSON.stringify(changes, null, 4)
+             }
+             });
+             },
+             exception: function(){
+             Ext.Msg.alert('Error', 'Error occurred');
+             }
+             });
+             //console.log(batch, changes);
+             //batch.start();
+             }
+             else {
+             Ext.Msg.alert('No Changes', 'There are no changes to the session.');
+             }
+
+             //var changes = me.getView().getSession().getChanges();
+             if (changes !== null) {
+             new Ext.window.Window({
+             autoShow: true,
+             title: 'Session Changes',
+             modal: true,
+             width: 600,
+             height: 400,
+             layout: 'fit',
+             items: {
+             xtype: 'textarea',
+             value: JSON.stringify(changes, null, 4)
+             }
+             });
+             } else {
+             Ext.Msg.alert('No Changes', 'There are no changes to the session.');
+             }
+             */
         }
     },
 
-    onCopyStyle: function(btn, e){
+    processBatch: function(batch, field, options){
         var me = this,
             view = me.getView(),
-            refs = me.getReferences();
+            viewer = view.up('viewer'),
+            changes = view.getSession().getChanges();
 
-        if(refs.merchandise){
+        var processMask = new Ext.LoadMask({
+            msg: 'Saving... Please wait',
+            target: viewer
+        });
 
+        if(batch !== undefined){
+            batch.on({
+                operationcomplete: function(batch, op){
+                    //console.log(op.getResultSet());
+                    var response = JSON.parse(op.getResponse().responseText);
+                    if(!Ext.isEmpty(response) && response.data.hasOwnProperty('powhId') && !response.data.hasOwnProperty('powdId')){
+                        if(field && field.getFilesQueue().length > 0){
+                            field.send(options, {
+                                Pow: JSON.stringify(response.data)
+                            });
+                        }
+                    }
+                },
+                complete: function(batch, op){
+                    var response = JSON.parse(op.getResponse().responseText);
+                    //console.log(op.getResponse());
+
+                    var powhId = me.getViewModel().get('srcPowhId');
+                    if(Ext.isEmpty(id)){
+                        powhId =  me.getViewModel().get('header').id;
+                    }
+
+                    var tab = viewer.lookupReference(viewer.getXType() + '-' + powhId);
+
+                    // refresh review tab...
+                    if(tab){
+                        /*
+                        var iframe = tab.getComponent('contentIframe');
+                        if(iframe){
+                            iframe.getEl().dom.contentWindow.location.reload();
+                        }
+                        */
+                        viewer.remove(tab);
+                    }
+                    me.onClose();
+
+                    //refresh In-Review
+                    viewer.getViewModel().getStore(viewer.getXType() + 's').reload();
+
+                    processMask.hide('', function() {
+                        Ext.Msg.alert('Status', 'Changes saved successfully.');
+                    });
+
+                    /*
+                    new Ext.window.Window({
+                        autoShow: true,
+                        title: 'Session Changes',
+                        modal: true,
+                        width: 600,
+                        height: 400,
+                        layout: 'fit',
+                        items: {
+                            xtype: 'textarea',
+                            value: JSON.stringify(changes, null, 4)
+                        }
+                    });
+                    */
+                },
+                exception: function(batch, op){
+                    processMask.hide('', function(){
+                        Ext.Msg.alert('Error', 'Error occurred');
+                    });
+                }
+            });
+
+            processMask.show();
+            batch.start();
         }
+        else {
+            Ext.Msg.alert('No Changes', 'There are no changes to the session.');
+        }
+
+        /*
+        if (changes !== null) {
+            new Ext.window.Window({
+                autoShow: true,
+                title: 'Session Changes',
+                modal: true,
+                width: 600,
+                height: 400,
+                layout: 'fit',
+                items: {
+                    xtype: 'textarea',
+                    value: JSON.stringify(changes, null, 4)
+                }
+            });
+        } else {
+            Ext.Msg.alert('No Changes', 'There are no changes to the session.');
+        }
+        */
     },
 
-    onSave: function(btn, e){
+    onClose: function(btn, e){
         var me = this,
-            view = me.getView(),
-            vm  = me.getViewModel(),
-            refs = me.getReferences();
+            viewer = me.getView().up('viewer');
 
-        if(refs.merchandise){
-            var panel = refs.merchandise,
-                lineItems = panel.items.items;
-        }
-
-        for(var i = 0; i < lineItems.length; i++){
-            console.log(lineItems[i].getForm());
-        }
-
-        console.log(view.getForm().getValues())
+        viewer.remove(me.getView());
     }
+
+    /*
+     onMerchandRender: function(panel){
+
+     },
+
+     onMerchandExpand: function(panel){
+     this.setBtnVisible(panel);
+     },
+
+     onMerchandCollapse: function(panel){
+     this.setBtnVisible(panel);
+     },
+
+     onAttachExpand: function(panel){
+     this.setBtnVisible(panel);
+     },
+
+     onAttachCollapse: function(panel){
+     this.setBtnVisible(panel);
+     },
+
+     setBtnVisible: function(panel){
+     var me = this,
+     view = me.getView(),
+     refs = view.getReferences(),
+     btn = refs.groupCrud;
+
+     if(panel.reference == 'attachments'){
+     btn = refs.attach;
+     }
+
+     btn.setHidden(panel.collapsed);
+     },
+
+     */
+    /*
+     onGridSelectionChange: function(sm, rec, e){
+     var me =  this,
+     refs = me.getView().getReferences();
+
+     refs.edit.setDisabled(sm.selected.length == 0);
+     refs.remove.setDisabled(sm.selected.length == 0);
+     },
+
+     onAddStyle: function(btn ,e){
+     var me = this,
+     view = me.getView(),
+     refs = me.getReferences();
+
+
+     if(refs.merchandise){
+     var panel = refs.merchandise;
+
+     panel.add({
+     xtype: 'edit-lineitem'
+     });
+
+     panel.updateLayout();
+     }
+     },
+
+     onCopyStyle: function(btn, e){
+     var me = this,
+     view = me.getView(),
+     refs = me.getReferences();
+
+     if(refs.merchandise){
+
+     }
+     },
+     */
     
 });

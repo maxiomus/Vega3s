@@ -1,16 +1,16 @@
 [{
-  label: 'PRE-ADVISE',
-  id: 1
-}, {
-  label: 'REVISED',
-  id: 2
-}, {
-  label: 'CONFIRMED NEW',
-  id: 3
-}, {
-  label: 'CANCELLED',
-  id: 4
-}, {
-  label: 'COMPLETE',
-  id: 5
+  "text": "PRE-ADVISE",
+  "id": "PRE-ADVISE"
+},
+{
+  "text": "REVISED",
+  "id": "REVISED"
+},
+{
+  "text": "CONFIRMED NEW",
+  "id": "CONFIRMED NEW"
+},
+{
+  "text": "CANCELLED",
+  "id": "CANCELLED"
 }]

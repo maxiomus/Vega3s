@@ -210,7 +210,7 @@ Ext.define('Ext.ux.form.ImageUploadField', {
                                                                        });
  */
 
-Ext.override(Ext.FormPanel, {
+Ext.override(Ext.form.Panel, {
     submitWithImage: function (options) {
         var url = options.url,
             success = options.success,
@@ -263,8 +263,6 @@ Ext.override(Ext.FormPanel, {
         }, false);
  
         xhr.send(formData);
- 
- 
     }
  
 });

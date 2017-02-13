@@ -11,10 +11,12 @@ Ext.define('Vega.view.authentication.LockingWindow', {
 
     closable: false,
     resizable: false,
+    scrollable: false,
     autoShow: true,
     titleAlign: 'center',
     maximized: true,
     modal: true,
+    frame: true,
     frameHeader: false,
 
     layout: {

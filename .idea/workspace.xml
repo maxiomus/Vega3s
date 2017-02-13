@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="BookmarkManager">
+    <bookmark url="file://$PROJECT_DIR$/app/model/authentication/User.js" line="36" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="7da4f304-2115-4225-9fc2-574121507a45" name="Default" comment="" />
     <ignored path="Vega3s.iws" />
@@ -21,103 +24,219 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="Form.js" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/app/view/sales/edit/Form.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-6.6530147">
-              <caret line="25" column="0" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Grid.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/view/sales/Grid.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="159" column="6" selection-start-line="69" selection-start-column="4" selection-end-line="159" selection-end-column="6" />
-              <folding>
-                <marker date="1458607477510" expanded="true" signature="1092:1103" placeholder="..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Detail.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/view/sales/edit/Detail.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="152" column="9" selection-start-line="152" selection-start-column="9" selection-end-line="152" selection-end-column="9" />
-              <folding>
-                <marker date="1462900579501" expanded="true" signature="1074:1085" placeholder="..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="FormController.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/view/sales/edit/FormController.js">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="12" column="88" selection-start-line="12" selection-start-column="88" selection-end-line="12" selection-end-column="88" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="FormModel.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/view/sales/edit/FormModel.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="20" column="24" selection-start-line="20" selection-start-column="24" selection-end-line="20" selection-end-column="24" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Root.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/controller/Root.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="568" column="0" selection-start-line="568" selection-start-column="0" selection-end-line="568" selection-end-column="0" />
+              <caret line="102" column="79" selection-start-line="102" selection-start-column="79" selection-end-line="102" selection-end-column="79" />
               <folding>
-                <element signature="e#2042#3839#0" expanded="false" />
-                <element signature="e#3882#4778#0" expanded="false" />
-                <element signature="e#4816#5078#0" expanded="false" />
+                <element signature="e#1211#1845#0" expanded="false" />
+                <element signature="e#7259#7863#0" expanded="false" />
+                <element signature="e#9248#9539#0" expanded="false" />
+                <element signature="e#20445#20827#0" expanded="false" />
+                <element signature="e#25594#26001#0" expanded="false" />
+                <element signature="e#28793#30142#0" expanded="false" />
+                <element signature="e#30452#30761#0" expanded="false" />
+                <element signature="e#30995#31618#0" expanded="false" />
+                <element signature="e#33790#34423#0" expanded="false" />
+                <element signature="e#34437#36461#0" expanded="false" />
+                <element signature="e#38693#39199#0" expanded="false" />
+                <element signature="e#39629#40167#0" expanded="false" />
+                <element signature="e#40327#40977#0" expanded="false" />
+                <element signature="e#40982#41657#0" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ReceivingModel.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/view/inventory/fabric/ReceivingModel.js">
+      <file leaf-file-name="DalController.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/view/dal/DalController.js">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="74" column="16" selection-start-line="74" selection-start-column="16" selection-end-line="74" selection-end-column="16" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="LineItemModel.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/view/sales/edit/LineItemModel.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="30" column="32" selection-start-line="30" selection-start-column="32" selection-end-line="30" selection-end-column="32" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="LineItem.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/view/sales/edit/LineItem.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="484" column="43" selection-start-line="484" selection-start-column="43" selection-end-line="484" selection-end-column="43" />
+              <caret line="603" column="21" selection-start-line="603" selection-start-column="21" selection-end-line="603" selection-end-column="21" />
               <folding>
-                <element signature="e#882#1297#0" expanded="false" />
-                <element signature="e#1356#1774#0" expanded="false" />
-                <element signature="e#2631#3834#0" expanded="false" />
+                <element signature="e#8106#8830#0" expanded="false" />
+                <element signature="e#9080#9268#0" expanded="false" />
+                <element signature="e#9556#9838#0" expanded="false" />
+                <element signature="e#12724#13695#0" expanded="false" />
+                <element signature="e#13705#14304#0" expanded="false" />
+                <marker date="1486778135179" expanded="true" signature="29677:29693" placeholder="..." />
+                <marker date="1486778135179" expanded="true" signature="45080:45096" placeholder="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Form.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/view/inventory/pi/Form.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="342" column="25" selection-start-line="342" selection-start-column="25" selection-end-line="342" selection-end-column="25" />
+              <folding>
+                <element signature="e#593#3915#0" expanded="false" />
+                <marker date="1487006819582" expanded="true" signature="14621:14634" placeholder="..." />
+                <marker date="1487006819582" expanded="true" signature="14747:14758" placeholder="..." />
+                <marker date="1487006819582" expanded="true" signature="14832:14844" placeholder="..." />
+                <marker date="1487006819582" expanded="true" signature="15009:15020" placeholder="..." />
+                <marker date="1487006819582" expanded="true" signature="15083:15094" placeholder="..." />
+                <marker date="1487006819582" expanded="true" signature="15157:15168" placeholder="..." />
+                <marker date="1487006819582" expanded="true" signature="15231:15242" placeholder="..." />
+                <marker date="1487006819582" expanded="true" signature="15305:15316" placeholder="..." />
+                <marker date="1487006819582" expanded="true" signature="15379:15390" placeholder="..." />
+                <marker date="1487006819582" expanded="true" signature="15453:15464" placeholder="..." />
+                <marker date="1487006819582" expanded="true" signature="15527:15538" placeholder="..." />
+                <marker date="1487006819582" expanded="true" signature="15676:15687" placeholder="..." />
+                <marker date="1487006819582" expanded="true" signature="15760:15772" placeholder="..." />
+                <marker date="1487006819582" expanded="true" signature="15849:15861" placeholder="..." />
+                <marker date="1487006819582" expanded="true" signature="16039:16051" placeholder="..." />
+                <marker date="1487006819582" expanded="true" signature="16129:16141" placeholder="..." />
+                <marker date="1487006819582" expanded="true" signature="16208:16220" placeholder="..." />
+                <marker date="1487006819582" expanded="true" signature="16434:16445" placeholder="..." />
+                <marker date="1487006819582" expanded="true" signature="16515:16527" placeholder="..." />
+                <marker date="1487006819582" expanded="true" signature="16692:16703" placeholder="..." />
+                <marker date="1487006819582" expanded="true" signature="16766:16777" placeholder="..." />
+                <marker date="1487006819582" expanded="true" signature="16840:16851" placeholder="..." />
+                <marker date="1487006819582" expanded="true" signature="16914:16925" placeholder="..." />
+                <marker date="1487006819582" expanded="true" signature="16988:16999" placeholder="..." />
+                <marker date="1487006819582" expanded="true" signature="17062:17073" placeholder="..." />
+                <marker date="1487006819582" expanded="true" signature="17136:17147" placeholder="..." />
+                <marker date="1487006819582" expanded="true" signature="17210:17221" placeholder="..." />
+                <marker date="1487006819582" expanded="true" signature="17359:17370" placeholder="..." />
+                <marker date="1487006819582" expanded="true" signature="17449:17461" placeholder="..." />
+                <marker date="1487006819582" expanded="true" signature="17536:17548" placeholder="..." />
+                <marker date="1487006819582" expanded="true" signature="17729:17741" placeholder="..." />
+                <marker date="1487006819582" expanded="true" signature="17817:17829" placeholder="..." />
+                <marker date="1487006819582" expanded="true" signature="17894:17906" placeholder="..." />
+                <marker date="1487006819582" expanded="true" signature="18205:18218" placeholder="..." />
+                <marker date="1487006819582" expanded="true" signature="18324:18335" placeholder="..." />
+                <marker date="1487006819582" expanded="true" signature="18407:18419" placeholder="..." />
+                <marker date="1487006819582" expanded="true" signature="18601:18612" placeholder="..." />
+                <marker date="1487006819582" expanded="true" signature="18687:18698" placeholder="..." />
+                <marker date="1487006819582" expanded="true" signature="18773:18784" placeholder="..." />
+                <marker date="1487006819582" expanded="true" signature="18859:18870" placeholder="..." />
+                <marker date="1487006819582" expanded="true" signature="18945:18956" placeholder="..." />
+                <marker date="1487006819582" expanded="true" signature="19031:19042" placeholder="..." />
+                <marker date="1487006819582" expanded="true" signature="19117:19128" placeholder="..." />
+                <marker date="1487006819582" expanded="true" signature="19203:19214" placeholder="..." />
+                <marker date="1487006819582" expanded="true" signature="19357:19368" placeholder="..." />
+                <marker date="1487006819582" expanded="true" signature="19441:19453" placeholder="..." />
+                <marker date="1487006819582" expanded="true" signature="19532:19544" placeholder="..." />
+                <marker date="1487006819582" expanded="true" signature="19630:19642" placeholder="..." />
+                <marker date="1487006819582" expanded="true" signature="19794:19805" placeholder="..." />
+                <marker date="1487006819582" expanded="true" signature="19868:19880" placeholder="..." />
+                <marker date="1487006819582" expanded="true" signature="20061:20072" placeholder="..." />
+                <marker date="1487006819582" expanded="true" signature="20148:20159" placeholder="..." />
+                <marker date="1487006819582" expanded="true" signature="20235:20246" placeholder="..." />
+                <marker date="1487006819582" expanded="true" signature="20322:20333" placeholder="..." />
+                <marker date="1487006819582" expanded="true" signature="20409:20420" placeholder="..." />
+                <marker date="1487006819582" expanded="true" signature="20496:20507" placeholder="..." />
+                <marker date="1487006819582" expanded="true" signature="20583:20594" placeholder="..." />
+                <marker date="1487006819582" expanded="true" signature="20670:20681" placeholder="..." />
+                <marker date="1487006819582" expanded="true" signature="20825:20836" placeholder="..." />
+                <marker date="1487006819582" expanded="true" signature="20910:20922" placeholder="..." />
+                <marker date="1487006819582" expanded="true" signature="20997:21009" placeholder="..." />
+                <marker date="1487006819582" expanded="true" signature="21187:21199" placeholder="..." />
+                <marker date="1487006819582" expanded="true" signature="21275:21287" placeholder="..." />
+                <marker date="1487006819582" expanded="true" signature="21356:21368" placeholder="..." />
+                <marker date="1487006819582" expanded="true" signature="21609:21620" placeholder="..." />
+                <marker date="1487006819582" expanded="true" signature="21680:21692" placeholder="..." />
+                <marker date="1487006819582" expanded="true" signature="21861:21872" placeholder="..." />
+                <marker date="1487006819582" expanded="true" signature="21946:21957" placeholder="..." />
+                <marker date="1487006819582" expanded="true" signature="22031:22042" placeholder="..." />
+                <marker date="1487006819582" expanded="true" signature="22116:22127" placeholder="..." />
+                <marker date="1487006819582" expanded="true" signature="22201:22212" placeholder="..." />
+                <marker date="1487006819582" expanded="true" signature="22286:22297" placeholder="..." />
+                <marker date="1487006819582" expanded="true" signature="22371:22382" placeholder="..." />
+                <marker date="1487006819582" expanded="true" signature="22456:22467" placeholder="..." />
+                <marker date="1487006819582" expanded="true" signature="22609:22620" placeholder="..." />
+                <marker date="1487006819582" expanded="true" signature="22688:22700" placeholder="..." />
+                <marker date="1487006819582" expanded="true" signature="22778:22790" placeholder="..." />
+                <marker date="1487006819582" expanded="true" signature="22981:22993" placeholder="..." />
+                <marker date="1487006819582" expanded="true" signature="23066:23078" placeholder="..." />
+                <marker date="1487006819582" expanded="true" signature="23154:23166" placeholder="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="FormModel.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/view/inventory/pi/FormModel.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.32082325">
+              <caret line="20" column="33" selection-start-line="20" selection-start-column="33" selection-end-line="20" selection-end-column="33" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="LotActivityModel.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/view/reports/inventory/LotActivityModel.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="30" column="13" selection-start-line="11" selection-start-column="12" selection-end-line="30" selection-end-column="13" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Window.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/view/dal/edit/Window.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="21" column="13" selection-start-line="21" selection-start-column="13" selection-end-line="21" selection-end-column="13" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Window.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/view/notice/edit/Window.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="23" column="4" selection-start-line="23" selection-start-column="4" selection-end-line="23" selection-end-column="20" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Body.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/view/dal/edit/Body.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="42" column="52" selection-start-line="42" selection-start-column="52" selection-end-line="42" selection-end-column="52" />
+              <folding>
+                <marker date="1486773332593" expanded="true" signature="768:821" placeholder="..." />
+                <marker date="1486773332593" expanded="true" signature="979:992" placeholder="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Component.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/view/dal/edit/Component.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="15" column="24" selection-start-line="15" selection-start-column="24" selection-end-line="15" selection-end-column="24" />
+              <folding>
+                <marker date="1486773332562" expanded="true" signature="1012:1065" placeholder="..." />
+                <marker date="1486773332562" expanded="true" signature="1220:1239" placeholder="..." />
+                <marker date="1486773332562" expanded="true" signature="1310:1329" placeholder="..." />
+                <marker date="1486773332562" expanded="true" signature="1404:1443" placeholder="..." />
+                <marker date="1486773332562" expanded="true" signature="1517:1530" placeholder="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MultiUpload.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ux/form/MultiUpload.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="204" column="30" selection-start-line="204" selection-start-column="30" selection-end-line="204" selection-end-column="30" />
+              <folding>
+                <element signature="e#199#352#0" expanded="false" />
+                <element signature="e#868#2992#0" expanded="false" />
+                <element signature="e#3015#3476#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -135,57 +254,57 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/sass/src/view/sales/View.scss" />
-        <option value="$PROJECT_DIR$/app/view/notice/edit/FormController.js" />
-        <option value="$PROJECT_DIR$/app/view/notice/edit/FormModel.js" />
-        <option value="$PROJECT_DIR$/ux/form/multiimageupload.js" />
-        <option value="$PROJECT_DIR$/ux/form/imageuploadfield.js" />
-        <option value="$PROJECT_DIR$/app/store/Components.js" />
+        <option value="$PROJECT_DIR$/app/view/development/request/WorkModel.js" />
+        <option value="$PROJECT_DIR$/app/model/Inventorypi.js" />
+        <option value="$PROJECT_DIR$/app/model/InventoryPI.js" />
+        <option value="$PROJECT_DIR$/app/model/Physical.js" />
+        <option value="$PROJECT_DIR$/app/model/PI.js" />
+        <option value="$PROJECT_DIR$/app/view/development/sample/windows/Labeltag.js" />
+        <option value="$PROJECT_DIR$/app/view/development/sample/SampleController.js" />
+        <option value="$PROJECT_DIR$/app/view/dal/edit/Photo.js" />
+        <option value="$PROJECT_DIR$/app/view/development/sample/edit/Form.js" />
+        <option value="$PROJECT_DIR$/app/view/inventory/pi/PhysicalModel.js" />
+        <option value="$PROJECT_DIR$/app/view/inventory/pi/FormController.js" />
+        <option value="$PROJECT_DIR$/app/view/inventory/pi/PhysicalController.js" />
+        <option value="$PROJECT_DIR$/app/model/PIH.js" />
+        <option value="$PROJECT_DIR$/sass/src/view/inventory/pi/Physical.scss" />
+        <option value="$PROJECT_DIR$/sass/var/view/main/Main.scss" />
+        <option value="$PROJECT_DIR$/app.json" />
         <option value="$PROJECT_DIR$/app/view/reports/inventory/LotActivity.js" />
-        <option value="$PROJECT_DIR$/app/view/reports/inventory/LotActivityController.js" />
-        <option value="$PROJECT_DIR$/app/view/reports/inventory/LotActivityModel.js" />
-        <option value="$PROJECT_DIR$/app/view/dal/Dal.js" />
-        <option value="$PROJECT_DIR$/app/view/dal/DalModel.js" />
-        <option value="$PROJECT_DIR$/app/model/Media.js" />
-        <option value="$PROJECT_DIR$/ux/form/MultiImageUpload.js" />
-        <option value="$PROJECT_DIR$/app/view/sales/edit/MerchandiseModel.js" />
-        <option value="$PROJECT_DIR$/data/sales.json" />
-        <option value="$PROJECT_DIR$/data/submissions.json" />
-        <option value="$PROJECT_DIR$/app/view/main/Main.js" />
-        <option value="$PROJECT_DIR$/app/view/dal/edit/Form.js" />
-        <option value="$PROJECT_DIR$/ux/panel/HAccordion.js" />
-        <option value="$PROJECT_DIR$/app/store/Style.js" />
-        <option value="$PROJECT_DIR$/app/store/Colors.js" />
-        <option value="$PROJECT_DIR$/app/store/Styles.js" />
-        <option value="$PROJECT_DIR$/app/store/stColor.js" />
-        <option value="$PROJECT_DIR$/app/store/Vendors.js" />
-        <option value="$PROJECT_DIR$/ux/form/field/DDFileUpload.js" />
-        <option value="$PROJECT_DIR$/sass/src/view/sales/edit/Form.scss" />
         <option value="$PROJECT_DIR$/app/view/Multiview.js" />
-        <option value="$PROJECT_DIR$/ux/form/DDFileUpload.js" />
         <option value="$PROJECT_DIR$/overrides/app/route/Base.js" />
+        <option value="$PROJECT_DIR$/app/view/sales/Review.js" />
+        <option value="$PROJECT_DIR$/app/controller/Base.js" />
+        <option value="$PROJECT_DIR$/app/util/SessionMonitor.js" />
+        <option value="$PROJECT_DIR$/app/view/TopBar.js" />
+        <option value="$PROJECT_DIR$/app/view/sales/Request.js" />
         <option value="$PROJECT_DIR$/app/view/sales/RequestController.js" />
+        <option value="$PROJECT_DIR$/app/view/dal/Dal.js" />
+        <option value="$PROJECT_DIR$/app/view/sales/ReviewController.js" />
         <option value="$PROJECT_DIR$/app/view/sales/RequestModel.js" />
         <option value="$PROJECT_DIR$/app/controller/Root.js" />
-        <option value="$PROJECT_DIR$/app/view/sales/Request.js" />
-        <option value="$PROJECT_DIR$/app/view/sales/View.js" />
-        <option value="$PROJECT_DIR$/app/view/sales/PowController.js" />
-        <option value="$PROJECT_DIR$/app/view/sales/Pow.js" />
-        <option value="$PROJECT_DIR$/app/model/fabric/PoDetail.js" />
-        <option value="$PROJECT_DIR$/ux/form/CheckboxStoreGroup.js" />
-        <option value="$PROJECT_DIR$/app/model/sales/Powd.js" />
-        <option value="$PROJECT_DIR$/app/model/sales/Powm.js" />
-        <option value="$PROJECT_DIR$/app/model/sales/Powsm.js" />
-        <option value="$PROJECT_DIR$/app/model/Poh.js" />
-        <option value="$PROJECT_DIR$/app/model/sales/Powh.js" />
-        <option value="$PROJECT_DIR$/data/powStatus.json" />
-        <option value="$PROJECT_DIR$/app/view/sales/PowModel.js" />
+        <option value="$PROJECT_DIR$/app/model/authentication/User.js" />
+        <option value="$PROJECT_DIR$/app/util/Utils.js" />
+        <option value="$PROJECT_DIR$/ux/form/MultiImageUpload.js" />
+        <option value="$PROJECT_DIR$/app/view/sales/edit/TnaOrder.js" />
+        <option value="$PROJECT_DIR$/app/view/Viewer.js" />
         <option value="$PROJECT_DIR$/app/view/sales/edit/Form.js" />
-        <option value="$PROJECT_DIR$/app/view/sales/edit/LineItem.js" />
+        <option value="$PROJECT_DIR$/app/view/sales/edit/Window.js" />
+        <option value="$PROJECT_DIR$/app/view/development/request/WorkController.js" />
+        <option value="$PROJECT_DIR$/app/view/development/request/FabricController.js" />
+        <option value="$PROJECT_DIR$/app/view/development/request/edit/Fabric.js" />
+        <option value="$PROJECT_DIR$/app/view/development/request/edit/Work.js" />
+        <option value="$PROJECT_DIR$/app/view/notice/edit/Window.js" />
+        <option value="$PROJECT_DIR$/app/view/notice/NoticeController.js" />
+        <option value="$PROJECT_DIR$/ux/form/MultiUpload.js" />
+        <option value="$PROJECT_DIR$/app/view/dal/edit/Body.js" />
+        <option value="$PROJECT_DIR$/app/view/dal/edit/Component.js" />
+        <option value="$PROJECT_DIR$/ux/form/ImageUpload.js" />
         <option value="$PROJECT_DIR$/app/view/sales/edit/FormController.js" />
-        <option value="$PROJECT_DIR$/app/view/sales/edit/FormModel.js" />
-        <option value="$PROJECT_DIR$/app/view/sales/edit/LineItemModel.js" />
-        <option value="$PROJECT_DIR$/app/view/sales/edit/Detail.js" />
+        <option value="$PROJECT_DIR$/app/view/dal/edit/Window.js" />
+        <option value="$PROJECT_DIR$/app/view/dal/DalController.js" />
+        <option value="$PROJECT_DIR$/app/view/inventory/pi/Form.js" />
+        <option value="$PROJECT_DIR$/app/view/inventory/pi/FormModel.js" />
       </list>
     </option>
   </component>
@@ -197,10 +316,10 @@
     <order />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="1964" />
-    <option name="y" value="32" />
-    <option name="width" value="1878" />
-    <option name="height" value="1015" />
+    <option name="x" value="2043" />
+    <option name="y" value="42" />
+    <option name="width" value="1654" />
+    <option name="height" value="962" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -225,6 +344,8 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="Scratches" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -271,24 +392,6 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="panel" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Vega3s" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Vega3s" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ux" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
               <option name="myItemId" value="form" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -303,56 +406,6 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="overrides" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Vega3s" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Vega3s" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="overrides" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="route" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Vega3s" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Vega3s" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="data" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Vega3s" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Vega3s" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
               <option name="myItemId" value="app" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -393,7 +446,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="sales" />
+              <option name="myItemId" value="reports" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -415,29 +468,11 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="sales" />
+              <option name="myItemId" value="reports" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="edit" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Vega3s" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Vega3s" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="model" />
+              <option name="myItemId" value="inventory" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -455,11 +490,15 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="model" />
+              <option name="myItemId" value="view" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="sales" />
+              <option name="myItemId" value="inventory" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="pi" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -477,14 +516,34 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="controller" />
+              <option name="myItemId" value="view" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="inventory" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Vega3s" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Vega3s" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="util" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scratches" />
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -494,17 +553,18 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="E:\inetpub\Ext6WS\Vega3s\resources\images" />
-      <recent name="E:\inetpub\Ext6WS\Vega3s\ux\form" />
-      <recent name="E:\inetpub\Ext6WS\Vega3s\app\model" />
-      <recent name="E:\inetpub\Ext6WS\Vega3s\sass\src\view" />
+      <recent name="E:\inetpub\Ext6WS\Vega3s\data\development\request\fabric" />
+      <recent name="E:\inetpub\Ext6WS\Vega3s\app\view\dashboard" />
+      <recent name="E:\inetpub\Ext6WS\Vega3s\app\model\sample" />
+      <recent name="E:\inetpub\Ext6WS\Vega3s\app\view\development\sample\windows" />
+      <recent name="E:\inetpub\Ext6WS\Vega3s\app\view\development\sample" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="E:\inetpub\Ext6WS\Vega3s\ux\form" />
-      <recent name="E:\inetpub\Ext6WS\Vega3s\resources\images" />
-      <recent name="E:\inetpub\Ext6WS\Vega3s\resources" />
-      <recent name="E:\inetpub\Ext6WS\Vega3s\app\data" />
-      <recent name="E:\inetpub\Ext6WS\Vega3s\ux" />
+      <recent name="E:\inetpub\Ext6WS\Vega3s\sass\src\view\inventory\pi" />
+      <recent name="E:\inetpub\Ext6WS\Vega3s\app\view\inventory\pi" />
+      <recent name="E:\inetpub\Ext6WS\Vega3s\sass\src\view\inventory" />
+      <recent name="E:\inetpub\Ext6WS\Vega3s\app\model" />
+      <recent name="E:\inetpub\Ext6WS\Vega3s\app\model\sample" />
     </key>
   </component>
   <component name="RunManager">
@@ -546,18 +606,18 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1964" y="32" width="1878" height="1015" extended-state="0" />
+    <frame x="2043" y="42" width="1654" height="962" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24973147" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.1923077" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3296582" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.30718085" sideWeight="0.502809" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2587822" sideWeight="0.497191" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -581,31 +641,12 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="3" />
+      <option name="time" value="25" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/../../Design/app/view/windows/Upload.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="123" column="25" selection-start-line="123" selection-start-column="24" selection-end-line="123" selection-end-column="25" />
-          <folding>
-            <marker date="1415217002575" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1415217002575" expanded="true" signature="-1:-1" placeholder="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../../Design/app/controller/Uploads.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="140" column="42" selection-start-line="140" selection-start-column="42" selection-end-line="140" selection-end-column="42" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ux/FileDownload.js">
+    <entry file="file://$PROJECT_DIR$/app/view/sales/Grid.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -613,18 +654,67 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/view/sales/RequestModel.js">
+    <entry file="file://$PROJECT_DIR$/sass/src/view/inventory/pi/Physical.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-9.846154">
+          <caret line="31" column="20" selection-start-line="31" selection-start-column="20" selection-end-line="31" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/view/TopBarController.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.28099173">
+          <caret line="10" column="8" selection-start-line="10" selection-start-column="8" selection-end-line="11" selection-end-column="38" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/view/development/sample/SampleController.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="4" column="20" selection-start-line="4" selection-start-column="20" selection-end-line="4" selection-end-column="20" />
+          <caret line="170" column="24" selection-start-line="170" selection-start-column="24" selection-end-line="170" selection-end-column="24" />
+          <folding>
+            <element signature="e#4649#4963#0" expanded="false" />
+            <element signature="e#9501#9721#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/view/reports/inventory/LotActivity.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="82" column="48" selection-start-line="82" selection-start-column="48" selection-end-line="82" selection-end-column="48" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/view/sales/RequestController.js">
+    <entry file="file://$PROJECT_DIR$/app/view/development/sample/Sample.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="2" column="26" selection-start-line="2" selection-start-column="26" selection-end-line="2" selection-end-column="26" />
+          <caret line="31" column="35" selection-start-line="31" selection-start-column="35" selection-end-line="31" selection-end-column="35" />
+          <folding>
+            <element signature="e#3932#4721#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/view/Multiview.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="41" column="36" selection-start-line="41" selection-start-column="36" selection-end-line="41" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/view/sales/ReviewModel.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="6" column="22" selection-start-line="6" selection-start-column="8" selection-end-line="6" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/view/dal/DalModel.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="272" column="10" selection-start-line="272" selection-start-column="10" selection-end-line="272" selection-end-column="10" />
           <folding />
         </state>
       </provider>
@@ -632,25 +722,198 @@
     <entry file="file://$PROJECT_DIR$/overrides/app/route/Base.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="92" column="27" selection-start-line="92" selection-start-column="27" selection-end-line="92" selection-end-column="27" />
+          <caret line="125" column="31" selection-start-line="125" selection-start-column="31" selection-end-line="125" selection-end-column="31" />
+          <folding>
+            <element signature="e#1000#1375#0" expanded="false" />
+            <element signature="e#1381#1845#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/view/Display.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="14" column="6" selection-start-line="14" selection-start-column="6" selection-end-line="14" selection-end-column="6" />
+          <folding>
+            <element signature="e#2205#2355#0" expanded="false" />
+            <element signature="e#2495#2665#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/view/sales/Pow.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/controller/Base.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.1646489">
+          <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/util/SessionMonitor.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.4527845">
+          <caret line="54" column="41" selection-start-line="54" selection-start-column="41" selection-end-line="54" selection-end-column="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/view/authentication/AuthenticateController.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="7" column="19" selection-start-line="7" selection-start-column="19" selection-end-line="7" selection-end-column="19" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/view/TopBar.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="36" column="32" selection-start-line="36" selection-start-column="32" selection-end-line="36" selection-end-column="32" />
+          <caret line="33" column="47" selection-start-line="33" selection-start-column="47" selection-end-line="33" selection-end-column="47" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/view/sales/View.js">
+    <entry file="file://$PROJECT_DIR$/app/view/sales/Review.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="15" column="0" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
+          <caret line="290" column="44" selection-start-line="290" selection-start-column="44" selection-end-line="290" selection-end-column="44" />
           <folding>
-            <marker date="1461978720696" expanded="true" signature="-1:-1" placeholder="..." />
+            <element signature="e#3466#7233#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/view/sales/ReviewController.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="386" column="0" selection-start-line="386" selection-start-column="0" selection-end-line="386" selection-end-column="0" />
+          <folding>
+            <element signature="e#2990#3370#0" expanded="false" />
+            <element signature="e#11759#12154#0" expanded="false" />
+            <element signature="e#13020#13198#0" expanded="false" />
+            <element signature="e#13394#13578#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/view/sales/RequestModel.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="63" column="29" selection-start-line="63" selection-start-column="29" selection-end-line="63" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/view/development/sample/Grid.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.3322314">
+          <caret line="67" column="28" selection-start-line="67" selection-start-column="28" selection-end-line="67" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/model/authentication/User.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.50605327">
+          <caret line="25" column="26" selection-start-line="25" selection-start-column="26" selection-end-line="25" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/overrides/ux/PreviewPlugin.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/util/Utils.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="5" column="34" selection-start-line="5" selection-start-column="34" selection-end-line="5" selection-end-column="34" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ux/form/field/UploadFile.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.74710745">
+          <caret line="209" column="0" selection-start-line="209" selection-start-column="0" selection-end-line="209" selection-end-column="0" />
+          <folding>
+            <element signature="e#5867#6203#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/view/notice/edit/Upload.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="84" column="27" selection-start-line="84" selection-start-column="27" selection-end-line="84" selection-end-column="27" />
+          <folding>
+            <element signature="e#317#472#0" expanded="false" />
+            <element signature="e#1329#1583#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ux/form/MultiImageUpload.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="105" column="68" selection-start-line="105" selection-start-column="68" selection-end-line="105" selection-end-column="68" />
+          <folding>
+            <element signature="e#3440#3974#0" expanded="false" />
+            <element signature="e#4798#6106#0" expanded="false" />
+            <element signature="e#12451#14835#0" expanded="false" />
+            <element signature="e#17821#19381#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/view/sales/edit/TnaOrder.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="25" column="15" selection-start-line="25" selection-start-column="15" selection-end-line="25" selection-end-column="15" />
+          <folding>
+            <element signature="e#232#464#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/controller/Root.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.5785124">
+          <caret line="1162" column="19" selection-start-line="1162" selection-start-column="19" selection-end-line="1162" selection-end-column="19" />
+          <folding>
+            <element signature="e#1325#1570#0" expanded="false" />
+            <element signature="e#9504#9673#0" expanded="false" />
+            <element signature="e#11041#12891#0" expanded="false" />
+            <element signature="e#12928#13430#0" expanded="false" />
+            <element signature="e#13484#13671#0" expanded="false" />
+            <element signature="e#18997#19164#0" expanded="false" />
+            <element signature="e#25067#25362#0" expanded="false" />
+            <element signature="e#30770#31016#0" expanded="false" />
+            <element signature="e#34297#34522#0" expanded="false" />
+            <element signature="e#35398#35632#0" expanded="false" />
+            <element signature="e#36242#36592#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/view/sales/RequestController.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="606" column="56" selection-start-line="606" selection-start-column="56" selection-end-line="606" selection-end-column="56" />
+          <folding>
+            <element signature="e#902#1238#0" expanded="false" />
+            <element signature="e#3123#3503#0" expanded="false" />
+            <element signature="e#5411#6577#0" expanded="false" />
+            <element signature="e#8756#8926#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -658,304 +921,160 @@
     <entry file="file://$PROJECT_DIR$/app/view/sales/Request.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="19" column="22" selection-start-line="19" selection-start-column="22" selection-end-line="19" selection-end-column="22" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/view/DisplayController.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/view/Display.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="15" column="0" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/view/sales/Pow.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="34" column="28" selection-start-line="34" selection-start-column="22" selection-end-line="34" selection-end-column="35" />
+          <caret line="270" column="11" selection-start-line="270" selection-start-column="11" selection-end-line="270" selection-end-column="11" />
           <folding>
-            <element signature="e#5233#5849#0" expanded="false" />
+            <element signature="e#3320#7087#0" expanded="false" />
+            <element signature="e#11696#12050#0" expanded="false" />
+            <marker date="1486518391948" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1486518391948" expanded="true" signature="-1:-1" placeholder="..." />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/view/inventory/fabric/panel/Detail.js">
+    <entry file="file://$PROJECT_DIR$/app/Application.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="1.0396694">
+          <caret line="37" column="31" selection-start-line="37" selection-start-column="31" selection-end-line="37" selection-end-column="31" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/view/Viewer.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="1.0115702">
+          <caret line="36" column="13" selection-start-line="36" selection-start-column="13" selection-end-line="36" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/view/sales/edit/Window.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/model/Pod.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/model/fabric/PoDetail.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="38" column="32" selection-start-line="38" selection-start-column="32" selection-end-line="38" selection-end-column="32" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../../wwwroot/Vega2/app/controller/reports/Transactions.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-6.360345">
-          <caret line="26" column="10" selection-start-line="26" selection-start-column="10" selection-end-line="26" selection-end-column="10" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../../wwwroot/Vega2/app/controller/reports/Inventories.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-3.0189655">
-          <caret line="23" column="9" selection-start-line="23" selection-start-column="9" selection-end-line="23" selection-end-column="9" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../../wwwroot/Vega2/app/controller/Receivings.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-3.3965516">
-          <caret line="23" column="10" selection-start-line="23" selection-start-column="10" selection-end-line="23" selection-end-column="10" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../../wwwroot/Vega2/app/controller/Rolls.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-1.8758621">
-          <caret line="23" column="9" selection-start-line="23" selection-start-column="9" selection-end-line="23" selection-end-column="9" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ux/panel/HAccordion.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="13" column="16" selection-start-line="13" selection-start-column="16" selection-end-line="13" selection-end-column="16" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/view/sales/PowController.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="78" column="31" selection-start-line="78" selection-start-column="31" selection-end-line="78" selection-end-column="31" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ux/form/DDFileUpload.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="262" column="27" selection-start-line="262" selection-start-column="27" selection-end-line="262" selection-end-column="27" />
+          <caret line="26" column="20" selection-start-line="26" selection-start-column="20" selection-end-line="26" selection-end-column="20" />
           <folding>
-            <element signature="e#7849#8976#0" expanded="false" />
-            <element signature="e#8983#9985#0" expanded="false" />
-            <element signature="e#10015#11716#0" expanded="false" />
+            <element signature="e#392#485#0" expanded="false" />
+            <element signature="e#916#1695#0" expanded="false" />
+            <element signature="e#2486#4815#0" expanded="false" />
+            <element signature="e#10560#10852#0" expanded="false" />
+            <element signature="e#11193#11389#0" expanded="false" />
+            <element signature="e#22915#23343#0" expanded="false" />
+            <element signature="e#37126#37852#0" expanded="false" />
+            <element signature="e#46539#46889#0" expanded="false" />
+            <element signature="e#48081#48920#0" expanded="false" />
+            <element signature="e#67015#67357#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ux/form/imageuploadfield.js">
+    <entry file="file://$PROJECT_DIR$/app/view/sales/edit/Form.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="264" column="20" selection-start-line="264" selection-start-column="20" selection-end-line="264" selection-end-column="20" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/model/Base.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/model/sales/Powsm.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.34812286">
-          <caret line="18" column="3" selection-start-line="18" selection-start-column="3" selection-end-line="18" selection-end-column="3" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/model/sales/Powm.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.17406143">
-          <caret line="9" column="29" selection-start-line="9" selection-start-column="29" selection-end-line="9" selection-end-column="29" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/model/Pow.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/model/Bookmark.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/model/Poh.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.7679181">
-          <caret line="163" column="29" selection-start-line="150" selection-start-column="8" selection-end-line="163" selection-end-column="29" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ux/form/MultiImageUpload.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="197" column="14" selection-start-line="197" selection-start-column="14" selection-end-line="197" selection-end-column="14" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/model/sales/Powd.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="23" selection-start-line="0" selection-start-column="23" selection-end-line="0" selection-end-column="23" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/data/powStatus.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0996483">
-          <caret line="5" column="7" selection-start-line="5" selection-start-column="7" selection-end-line="5" selection-end-column="7" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/data/sales.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-5.8846154">
-          <caret line="9" column="4" selection-start-line="9" selection-start-column="4" selection-end-line="9" selection-end-column="4" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/model/sales/Powh.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.34243459">
-          <caret line="18" column="26" selection-start-line="18" selection-start-column="26" selection-end-line="18" selection-end-column="26" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ux/form/CheckboxStoreGroup.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="38" column="34" selection-start-line="38" selection-start-column="34" selection-end-line="38" selection-end-column="34" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/view/inventory/fabric/Receiving.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/view/inventory/fabric/ReceivingController.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="86" column="16" selection-start-line="86" selection-start-column="16" selection-end-line="86" selection-end-column="16" />
+          <caret line="925" column="29" selection-start-line="925" selection-start-column="29" selection-end-line="925" selection-end-column="29" />
           <folding>
-            <element signature="e#2608#3673#0" expanded="false" />
-            <element signature="e#3803#4178#0" expanded="false" />
+            <element signature="e#1098#6132#0" expanded="false" />
+            <element signature="e#32142#32516#0" expanded="false" />
+            <element signature="e#36530#36898#0" expanded="false" />
+            <element signature="e#42009#42320#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/view/inventory/fabric/ReceivingModel.js">
+    <entry file="file://$PROJECT_DIR$/app/view/dal/Dal.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="74" column="16" selection-start-line="74" selection-start-column="16" selection-end-line="74" selection-end-column="16" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/controller/Root.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="568" column="0" selection-start-line="568" selection-start-column="0" selection-end-line="568" selection-end-column="0" />
+          <caret line="203" column="86" selection-start-line="203" selection-start-column="86" selection-end-line="203" selection-end-column="86" />
           <folding>
-            <element signature="e#2042#3839#0" expanded="false" />
-            <element signature="e#3882#4778#0" expanded="false" />
-            <element signature="e#4816#5078#0" expanded="false" />
+            <marker date="1486579211089" expanded="true" signature="-1:-1" placeholder="..." />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../../sencha/ext/6.0.0/examples/kitchensink/classic/samples/model/field/PhoneNumber.js">
+    <entry file="file://$PROJECT_DIR$/app/view/development/request/WorkController.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <caret line="186" column="76" selection-start-line="186" selection-start-column="76" selection-end-line="186" selection-end-column="76" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../../sencha/ext/6.0.0/examples/kitchensink/classic/samples/model/Customer.js">
+    <entry file="file://$PROJECT_DIR$/app/view/development/request/edit/Fabric.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="20" column="0" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../../sencha/ext/6.0.0/examples/kitchensink/classic/samples/data/Customer.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.2901024">
-          <caret line="15" column="27" selection-start-line="15" selection-start-column="27" selection-end-line="15" selection-end-column="27" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/view/sales/edit/LineItem.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="484" column="43" selection-start-line="484" selection-start-column="43" selection-end-line="484" selection-end-column="43" />
+          <caret line="29" column="20" selection-start-line="23" selection-start-column="3" selection-end-line="29" selection-end-column="20" />
           <folding>
-            <element signature="e#882#1297#0" expanded="false" />
-            <element signature="e#1356#1774#0" expanded="false" />
-            <element signature="e#2631#3834#0" expanded="false" />
+            <element signature="e#8778#9022#0" expanded="false" />
+            <element signature="e#9159#10338#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/view/sales/edit/LineItemModel.js">
+    <entry file="file://$PROJECT_DIR$/app/view/development/request/FabricController.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="30" column="32" selection-start-line="30" selection-start-column="32" selection-end-line="30" selection-end-column="32" />
+          <caret line="200" column="78" selection-start-line="199" selection-start-column="12" selection-end-line="200" selection-end-column="78" />
+          <folding>
+            <element signature="e#7337#8307#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/view/notice/NoticeController.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="211" column="21" selection-start-line="211" selection-start-column="21" selection-end-line="211" selection-end-column="21" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/view/development/request/edit/Work.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="18" column="4" selection-start-line="18" selection-start-column="4" selection-end-line="19" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ux/form/MultiUpload.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="204" column="30" selection-start-line="204" selection-start-column="30" selection-end-line="204" selection-end-column="30" />
+          <folding>
+            <element signature="e#199#352#0" expanded="false" />
+            <element signature="e#868#2992#0" expanded="false" />
+            <element signature="e#3015#3476#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/view/dal/edit/Component.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="15" column="24" selection-start-line="15" selection-start-column="24" selection-end-line="15" selection-end-column="24" />
+          <folding>
+            <marker date="1486773332562" expanded="true" signature="1012:1065" placeholder="..." />
+            <marker date="1486773332562" expanded="true" signature="1220:1239" placeholder="..." />
+            <marker date="1486773332562" expanded="true" signature="1310:1329" placeholder="..." />
+            <marker date="1486773332562" expanded="true" signature="1404:1443" placeholder="..." />
+            <marker date="1486773332562" expanded="true" signature="1517:1530" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/view/dal/edit/Body.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="42" column="52" selection-start-line="42" selection-start-column="52" selection-end-line="42" selection-end-column="52" />
+          <folding>
+            <marker date="1486773332593" expanded="true" signature="768:821" placeholder="..." />
+            <marker date="1486773332593" expanded="true" signature="979:992" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/view/notice/edit/Window.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="23" column="4" selection-start-line="23" selection-start-column="4" selection-end-line="23" selection-end-column="20" />
           <folding />
         </state>
       </provider>
@@ -963,59 +1082,163 @@
     <entry file="file://$PROJECT_DIR$/app/view/sales/edit/FormController.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="12" column="88" selection-start-line="12" selection-start-column="88" selection-end-line="12" selection-end-column="88" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/view/sales/GridModel.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/view/sales/PowModel.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.2320819">
-          <caret line="12" column="20" selection-start-line="12" selection-start-column="20" selection-end-line="12" selection-end-column="20" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/view/sales/edit/FormModel.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="20" column="24" selection-start-line="20" selection-start-column="24" selection-end-line="20" selection-end-column="24" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/view/sales/Grid.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="159" column="6" selection-start-line="69" selection-start-column="4" selection-end-line="159" selection-end-column="6" />
+          <caret line="102" column="79" selection-start-line="102" selection-start-column="79" selection-end-line="102" selection-end-column="79" />
           <folding>
-            <marker date="1458607477510" expanded="true" signature="1092:1103" placeholder="..." />
+            <element signature="e#1211#1845#0" expanded="false" />
+            <element signature="e#7259#7863#0" expanded="false" />
+            <element signature="e#9248#9539#0" expanded="false" />
+            <element signature="e#20445#20827#0" expanded="false" />
+            <element signature="e#25594#26001#0" expanded="false" />
+            <element signature="e#28793#30142#0" expanded="false" />
+            <element signature="e#30452#30761#0" expanded="false" />
+            <element signature="e#30995#31618#0" expanded="false" />
+            <element signature="e#33790#34423#0" expanded="false" />
+            <element signature="e#34437#36461#0" expanded="false" />
+            <element signature="e#38693#39199#0" expanded="false" />
+            <element signature="e#39629#40167#0" expanded="false" />
+            <element signature="e#40327#40977#0" expanded="false" />
+            <element signature="e#40982#41657#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/view/sales/edit/Detail.js">
+    <entry file="file://$PROJECT_DIR$/app/view/dal/edit/Window.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="152" column="9" selection-start-line="152" selection-start-column="9" selection-end-line="152" selection-end-column="9" />
+          <caret line="21" column="13" selection-start-line="21" selection-start-column="13" selection-end-line="21" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ux/form/ImageUpload.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.8232446">
+          <caret line="40" column="19" selection-start-line="40" selection-start-column="15" selection-end-line="40" selection-end-column="19" />
           <folding>
-            <marker date="1462900579501" expanded="true" signature="1074:1085" placeholder="..." />
+            <element signature="e#858#2574#0" expanded="false" />
+            <element signature="e#2646#3018#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/view/sales/edit/Form.js">
+    <entry file="file://$PROJECT_DIR$/app/view/dal/DalController.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-6.6530147">
-          <caret line="25" column="0" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="603" column="21" selection-start-line="603" selection-start-column="21" selection-end-line="603" selection-end-column="21" />
+          <folding>
+            <element signature="e#8106#8830#0" expanded="false" />
+            <element signature="e#9080#9268#0" expanded="false" />
+            <element signature="e#9556#9838#0" expanded="false" />
+            <element signature="e#12724#13695#0" expanded="false" />
+            <element signature="e#13705#14304#0" expanded="false" />
+            <marker date="1486778135179" expanded="true" signature="29677:29693" placeholder="..." />
+            <marker date="1486778135179" expanded="true" signature="45080:45096" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/view/reports/inventory/LotActivityModel.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="30" column="13" selection-start-line="11" selection-start-column="12" selection-end-line="30" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/view/inventory/pi/Form.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="342" column="25" selection-start-line="342" selection-start-column="25" selection-end-line="342" selection-end-column="25" />
+          <folding>
+            <element signature="e#593#3915#0" expanded="false" />
+            <marker date="1487006819582" expanded="true" signature="14621:14634" placeholder="..." />
+            <marker date="1487006819582" expanded="true" signature="14747:14758" placeholder="..." />
+            <marker date="1487006819582" expanded="true" signature="14832:14844" placeholder="..." />
+            <marker date="1487006819582" expanded="true" signature="15009:15020" placeholder="..." />
+            <marker date="1487006819582" expanded="true" signature="15083:15094" placeholder="..." />
+            <marker date="1487006819582" expanded="true" signature="15157:15168" placeholder="..." />
+            <marker date="1487006819582" expanded="true" signature="15231:15242" placeholder="..." />
+            <marker date="1487006819582" expanded="true" signature="15305:15316" placeholder="..." />
+            <marker date="1487006819582" expanded="true" signature="15379:15390" placeholder="..." />
+            <marker date="1487006819582" expanded="true" signature="15453:15464" placeholder="..." />
+            <marker date="1487006819582" expanded="true" signature="15527:15538" placeholder="..." />
+            <marker date="1487006819582" expanded="true" signature="15676:15687" placeholder="..." />
+            <marker date="1487006819582" expanded="true" signature="15760:15772" placeholder="..." />
+            <marker date="1487006819582" expanded="true" signature="15849:15861" placeholder="..." />
+            <marker date="1487006819582" expanded="true" signature="16039:16051" placeholder="..." />
+            <marker date="1487006819582" expanded="true" signature="16129:16141" placeholder="..." />
+            <marker date="1487006819582" expanded="true" signature="16208:16220" placeholder="..." />
+            <marker date="1487006819582" expanded="true" signature="16434:16445" placeholder="..." />
+            <marker date="1487006819582" expanded="true" signature="16515:16527" placeholder="..." />
+            <marker date="1487006819582" expanded="true" signature="16692:16703" placeholder="..." />
+            <marker date="1487006819582" expanded="true" signature="16766:16777" placeholder="..." />
+            <marker date="1487006819582" expanded="true" signature="16840:16851" placeholder="..." />
+            <marker date="1487006819582" expanded="true" signature="16914:16925" placeholder="..." />
+            <marker date="1487006819582" expanded="true" signature="16988:16999" placeholder="..." />
+            <marker date="1487006819582" expanded="true" signature="17062:17073" placeholder="..." />
+            <marker date="1487006819582" expanded="true" signature="17136:17147" placeholder="..." />
+            <marker date="1487006819582" expanded="true" signature="17210:17221" placeholder="..." />
+            <marker date="1487006819582" expanded="true" signature="17359:17370" placeholder="..." />
+            <marker date="1487006819582" expanded="true" signature="17449:17461" placeholder="..." />
+            <marker date="1487006819582" expanded="true" signature="17536:17548" placeholder="..." />
+            <marker date="1487006819582" expanded="true" signature="17729:17741" placeholder="..." />
+            <marker date="1487006819582" expanded="true" signature="17817:17829" placeholder="..." />
+            <marker date="1487006819582" expanded="true" signature="17894:17906" placeholder="..." />
+            <marker date="1487006819582" expanded="true" signature="18205:18218" placeholder="..." />
+            <marker date="1487006819582" expanded="true" signature="18324:18335" placeholder="..." />
+            <marker date="1487006819582" expanded="true" signature="18407:18419" placeholder="..." />
+            <marker date="1487006819582" expanded="true" signature="18601:18612" placeholder="..." />
+            <marker date="1487006819582" expanded="true" signature="18687:18698" placeholder="..." />
+            <marker date="1487006819582" expanded="true" signature="18773:18784" placeholder="..." />
+            <marker date="1487006819582" expanded="true" signature="18859:18870" placeholder="..." />
+            <marker date="1487006819582" expanded="true" signature="18945:18956" placeholder="..." />
+            <marker date="1487006819582" expanded="true" signature="19031:19042" placeholder="..." />
+            <marker date="1487006819582" expanded="true" signature="19117:19128" placeholder="..." />
+            <marker date="1487006819582" expanded="true" signature="19203:19214" placeholder="..." />
+            <marker date="1487006819582" expanded="true" signature="19357:19368" placeholder="..." />
+            <marker date="1487006819582" expanded="true" signature="19441:19453" placeholder="..." />
+            <marker date="1487006819582" expanded="true" signature="19532:19544" placeholder="..." />
+            <marker date="1487006819582" expanded="true" signature="19630:19642" placeholder="..." />
+            <marker date="1487006819582" expanded="true" signature="19794:19805" placeholder="..." />
+            <marker date="1487006819582" expanded="true" signature="19868:19880" placeholder="..." />
+            <marker date="1487006819582" expanded="true" signature="20061:20072" placeholder="..." />
+            <marker date="1487006819582" expanded="true" signature="20148:20159" placeholder="..." />
+            <marker date="1487006819582" expanded="true" signature="20235:20246" placeholder="..." />
+            <marker date="1487006819582" expanded="true" signature="20322:20333" placeholder="..." />
+            <marker date="1487006819582" expanded="true" signature="20409:20420" placeholder="..." />
+            <marker date="1487006819582" expanded="true" signature="20496:20507" placeholder="..." />
+            <marker date="1487006819582" expanded="true" signature="20583:20594" placeholder="..." />
+            <marker date="1487006819582" expanded="true" signature="20670:20681" placeholder="..." />
+            <marker date="1487006819582" expanded="true" signature="20825:20836" placeholder="..." />
+            <marker date="1487006819582" expanded="true" signature="20910:20922" placeholder="..." />
+            <marker date="1487006819582" expanded="true" signature="20997:21009" placeholder="..." />
+            <marker date="1487006819582" expanded="true" signature="21187:21199" placeholder="..." />
+            <marker date="1487006819582" expanded="true" signature="21275:21287" placeholder="..." />
+            <marker date="1487006819582" expanded="true" signature="21356:21368" placeholder="..." />
+            <marker date="1487006819582" expanded="true" signature="21609:21620" placeholder="..." />
+            <marker date="1487006819582" expanded="true" signature="21680:21692" placeholder="..." />
+            <marker date="1487006819582" expanded="true" signature="21861:21872" placeholder="..." />
+            <marker date="1487006819582" expanded="true" signature="21946:21957" placeholder="..." />
+            <marker date="1487006819582" expanded="true" signature="22031:22042" placeholder="..." />
+            <marker date="1487006819582" expanded="true" signature="22116:22127" placeholder="..." />
+            <marker date="1487006819582" expanded="true" signature="22201:22212" placeholder="..." />
+            <marker date="1487006819582" expanded="true" signature="22286:22297" placeholder="..." />
+            <marker date="1487006819582" expanded="true" signature="22371:22382" placeholder="..." />
+            <marker date="1487006819582" expanded="true" signature="22456:22467" placeholder="..." />
+            <marker date="1487006819582" expanded="true" signature="22609:22620" placeholder="..." />
+            <marker date="1487006819582" expanded="true" signature="22688:22700" placeholder="..." />
+            <marker date="1487006819582" expanded="true" signature="22778:22790" placeholder="..." />
+            <marker date="1487006819582" expanded="true" signature="22981:22993" placeholder="..." />
+            <marker date="1487006819582" expanded="true" signature="23066:23078" placeholder="..." />
+            <marker date="1487006819582" expanded="true" signature="23154:23166" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/view/inventory/pi/FormModel.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.32082325">
+          <caret line="20" column="33" selection-start-line="20" selection-start-column="33" selection-end-line="20" selection-end-column="33" />
           <folding />
         </state>
       </provider>

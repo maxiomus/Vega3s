@@ -11,7 +11,7 @@ Ext.define('Ext.ux.form.DDFileUpload', {
     /**
      * @cfg {String} text of the button, which is one of the ways to choose image
      */
-    buttonText: 'Browse',
+    buttonText: 'Browse...',
 
     /**
      * @cfg {String} name of the params which contained the image. This is will be used to process the image in the server side
@@ -52,9 +52,10 @@ Ext.define('Ext.ux.form.DDFileUpload', {
 
         var upLoadButton = {
             xtype: 'filefield',
-            name: 'imageupload',
+            name: 'fileselected',
             //iconCls: 'fa fa-paperclip',
             hideLabel: true,
+            buttonOnly: true,
             /*border: 0,
              style: {
              borderColor: 'black',
@@ -62,15 +63,20 @@ Ext.define('Ext.ux.form.DDFileUpload', {
              },*/
             inputId: 'fileuploadfield_' + me.id,
             //layout: me.layout,
-            allowBlank: me.allowBlank,
+            //allowBlank: me.allowBlank,
             buttonConfig: {
                 //width: me.imageWidth - 10,
-                //iconCls: 'fa fa-paperclip',
+                iconCls: 'fa fa-plus',
                 text: me.buttonText
             },
-            //buttonText: me.buttonText,
-            buttonOnly: true,
             listeners: {
+                render: function(field){
+                    field.fileInputEl.set({ multiple: 'multiple' });
+
+                    if (Ext.isIE) {
+                        Ext.Msg.alert('Warning', 'IE does not support multiple file upload, to  use this feature use Firefox or Chrome');
+                    }
+                },
                 change: function (input, value, opts) {
                     var el = input.getEl().down('input[type=file]').dom;
 
@@ -96,7 +102,7 @@ Ext.define('Ext.ux.form.DDFileUpload', {
             store: store,
 
             tbar: [{
-                text: "Delete All",
+                text: "Remove All",
                 ui: 'default',
                 handler: function() {
                     store.reload();
@@ -354,7 +360,7 @@ Ext.override(Ext.FormPanel, {
                     interval: 200
                 }
             });
-        }, false);
+        }, false);uplao
 
         xhr.addEventListener('loadend', function (evt) {
             if (evt.target.status === 200) {

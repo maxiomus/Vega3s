@@ -1,0 +1,44 @@
+[{
+  "text": "P.D.M #",
+  "id": "F_OWNER"
+},
+{
+    "text": "Style #",
+    "id": "F_STYLE"
+  },
+  {
+    "text": "Desc",
+    "id": "F_DESC1"
+  },
+  {
+    "text": "Type",
+    "id": "F_DESC2"
+  },
+  {
+    "text": "Color",
+    "id": "F_DESC3"
+  },
+  {
+    "text": "Vendor",
+    "id": "F_DESC4"
+  },
+  {
+    "text": "Body #",
+    "id": "F_DESC5"
+  },
+  {
+    "text": "Print #",
+    "id": "F_DESC6"
+  },
+  {
+    "text": "Account",
+    "id": "F_DESC8"
+  },
+  {
+    "text": "Theme",
+    "id": "F_DESC9"
+  },
+  {
+    "text": "Colorway",
+    "id": "F_DESC10"
+}]

@@ -5,17 +5,8 @@
  */
 Ext.define('Vega.view.authentication.Dialog', {
     extend: 'Ext.form.Panel',
+
     xtype: 'authdialog',
-
-    requires: [
-        'Vega.view.authentication.AuthenticateController',
-        'Ext.form.Panel'
-    ],
-
-    controller: 'authenticate',
-    viewModel: {
-        type: 'authenticate'
-    },
 
     /*
      * Seek out the first enabled, focusable, empty textfield when the form is focused

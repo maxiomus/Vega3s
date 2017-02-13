@@ -1,54 +1,80 @@
 Ext.define('Vega.view.dashboard.DashboardController', {
     extend: 'Ext.app.ViewController',
+
     alias: 'controller.dashboard',
 
     requires: [
-        'Ext.util.TaskRunner'
+        'Vega.model.City'
     ],
 
-    onRefreshToggle: function(tool, e, owner) {
-        var me = this,
-            store=this.getViewModel().getStore('dashboardfulllinechartstore'),
-            items=Ext.Array.from(store && store.getData().items),
-            num_items=items.length;
+    mixins: [
+        'Ext.app.route.Base'
+    ],
 
-        if (tool.toggleValue){
-            me.clearChartUpdates(owner);
-        } else {
-            if (num_items) {
-                me.chartTaskRunner  = me.chartTaskRunner || Ext.create('Ext.util.TaskRunner');
-                me.chartTaskRunner.start({
-                    run : function () {
-                        this.last_x += this.last_x - this.second_last_x;
-                        var first = this.items[0].data;
-                        this.store.removeAt(0);
-                        this.store.add({xvalue: first.xvalue, y1value: first.y1value, y2value: first.y2value});
-                        this.count++;
-                    },
-                    store : store,
-                    count : 0,
-                    items : items,
-                    last_x : items[num_items -1].data.xvalue,
-                    second_last_x : items[num_items -2].data.xvalue,
-                    interval : 200
-                });
-            }
+    init: function (view) {
+        // We provide the updater for the activeState config of our View.
+        //view.updateActiveState = this.updateActiveState.bind(this);
+
+        //view.down('home-weather').setMyClimates('5368361,5128581');
+
+        var vm = this.getViewModel();
+        vm.set('currentUser', Vega.user);
+
+        var greet, hour = new Date().getHours();
+        if(hour >= 5 && hour < 12){
+            greet = 'Morning'
         }
-
-        // change the toggle value
-        tool.toggleValue = !tool.toggleValue;
+        else if (hour >= 12 && hour < 17){
+            greet = 'Afternoon'
+        }
+        else if (hour >= 17 && hour < 20){
+            greet = 'Evening'
+        }
+        else {
+            greet = 'Night'
+        }
+        vm.set('greeting',  greet);
     },
 
-    clearChartUpdates : function() {
-        this.chartTaskRunner = Ext.destroy(this.chartTaskRunner);
+    initViewModel: function(viewModel){
+        this.fireEvent('viewmodelready', this, viewModel);
     },
-    
-    onDestroy: function () {
-        this.clearChartUpdates();
-        //this.callParent();
-    },
-    
-    onHideView: function () {
-        this.clearChartUpdates();
+
+    updateActiveState: function (activeState) {
+        var viewModel = this.getViewModel();
+
+        //viewModel.set('company', activeState);
+
+        this.fireEvent('changeroute', this, 'dashboard/' + activeState);
     }
+
+    /*
+    loadMyBookmarks: function(bookmarks){
+        if(bookmarks == null){
+            Ext.Ajax.request({
+                url: '/api/UserOptions/bookmarks',
+                method: 'GET',
+
+                params: {
+                    //filters: Ext.encode([{type: 'string', value: record.get('UserName'), field: 'UserName'}])
+                    // When sending params with 'POST' method no need to encode...
+                },
+                success: function(response, options) {
+                    // set "safe mode" so we don't get hammered with giant Ext.Error
+                    var responseData = Ext.decode(response.responseText, true);
+                },
+                failure: function(response, options){
+                    Ext.Msg.alert('Error', response);
+                },
+                callback: function(options, success, response) {
+
+                }
+            });
+        }
+        else {
+            return bookmarks;
+        }
+    }
+    */
+    
 });

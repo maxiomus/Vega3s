@@ -1,0 +1,105 @@
+/* ---------------------------------- DataView ------------------------------------- */
+
+.dashboard-pow {
+  background: white;
+  font: 11px Arial, Helvetica, sans-serif;
+  padding: 4px 0 4px 6px;
+  //margin: 10px 0 10px 10px;
+}
+
+//.dashboard-pow .images-view
+//{
+//  padding: 4px 0 4px 4px;
+//}
+
+.dashboard-pow .thumb-wrap {
+  -moz-border-radius:.3em;
+  -webkit-border-radius:.3em;
+  border-radius:.3em;
+  //background: #ffffff;
+  border: 1px solid transparent;
+  padding: 2px 0 0 6px;
+  margin: 0 0 4px 0;
+  cursor: pointer;
+  //width: 220px;
+  //height: 144px;
+}
+
+.dashboard-pow .thumb-wrap i
+{
+  vertical-align: middle;
+  //text-align: left;
+  padding-bottom: 2px;
+  //font-size: 10px;
+  //border-bottom: 1px solid #dadadb;
+}
+
+.dashboard-pow .thumb-wrap span
+{
+  //display: block;
+  //overflow: hidden;
+  //text-align: left;
+  padding-left: 6px;
+  font-size: 1.0em;
+  //border-bottom: 1px solid #dadadb;
+}
+
+.dashboard-pow .thumb-wrap h2
+{
+  margin-left: 6px;
+  /*   background: transparent url(../../../POWS/2012_07 POW/07_06/thumbs/1461f6d6-58c7-4404-8ef8-e2854dcb703f_thumb.png) no-repeat 0 1px; */
+  /*   background:transparent url(../../../Resources/images/CrystalClear/22x22/actions/news_subscribe.png) no-repeat 0 1px; */
+}
+
+.dashboard-pow a.link:link
+{
+  color: #878ea2;
+  text-decoration: none !important;
+}
+
+.dashboard-pow a.link:active
+{
+  color: #878ea2;
+  text-decoration: none !important;
+}
+
+.dashboard-pow a.link:visited
+{
+  color: #878ea2;
+  text-decoration: none !important;
+}
+
+.dashboard-pow .x-item-over {
+  border:1px solid #6593cf;
+  background: #DFEDFF url(images/row-over.gif) repeat-x left top;
+  //padding: 1px;
+  -moz-border-radius:.3em;
+  -webkit-border-radius:.3em;
+  border-radius:.3em;
+}
+
+.dashboard-pow .x-item-over .thumb {
+  //background: transparent;
+}
+
+.dashboard-pow .x-item-selected {
+  //background: #DFEDFF;
+  //border: 1px solid #6593cf;
+  //padding: 1px;
+  //-moz-border-radius:.3em;
+  //-webkit-border-radius:.3em;
+  //border-radius:.3em;
+}
+
+.dashboard-pow .x-item-selected span {
+  //color:#1A4D8F;
+}
+
+.dashboard-pow .loading-indicator {
+  font-size:11px;
+  background-image:url(loading.gif);
+  background-repeat: no-repeat;
+  background-position: left;
+  padding-left:20px;
+  margin:10px;
+}

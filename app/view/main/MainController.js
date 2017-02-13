@@ -16,17 +16,28 @@ Ext.define("Vega.view.main.MainController", {
                 "#": {
 
                 }
+            },
+            component: {
+                'grid': {
+                    afterrender: function(e) {
+                        //e.getView().setLoading(true);
+                    },
+                    reconfigure: function(e){
+                        //e.getView().setLoading(true);
+                    }
+                }
             }
+
         });
 
         //Ext.app.ViewController.prototype.init.call(this);
     },
 
-    onHdrUserRender: function(b){
-        b.setText(Vega.user.Username);
+    initViewModel: function(b){
+        //console.log('initViewModel', b.getStore('setting').isLoaded());
     },
 
-    onLogout:function(e,g,f){
+    onLogout: function(e,g,f){
         var h=this;
         Ext.Ajax.request({
             url: "/security/logout.ashx",
@@ -37,7 +48,7 @@ Ext.define("Vega.view.main.MainController", {
         })
     },
 
-    onLogoutSuccess:function(h,f,j){
+    onLogoutSuccess: function(h,f,j){
         var me = this,
             result = Ext.decode(h.responseText);
 
@@ -48,17 +59,17 @@ Ext.define("Vega.view.main.MainController", {
             window.location.reload(true)
         }
         else{
-            Vega.util.Util.showErrorMsg(result.msg)
+            Vega.util.Utils.showErrorMsg(result.msg);
         }
     },
 
-    onLogoutFailure:function(g,e,h){
+    onLogoutFailure: function(g,e,h){
         var result = Ext.decode(g.responseText);
 
-        Vega.util.Util.showErrorMsg(result.msg)
+        Vega.util.Utils.showErrorMsg(result.msg)
     },
 
-    onNavigationTreeSelectionChange:function(o,z){
+    onNavigationTreeSelectionChange: function(o,z){
         if(z && z.get("view")){
             var me = this,
                 refs = me.getReferences(),
@@ -68,10 +79,10 @@ Ext.define("Vega.view.main.MainController", {
             route[0] = z.get("routeId");
 
             if(view && view.lookupReference("multiview")){
-                var tab = view.activeTab,
-                    grid = tab.lookupReference("grid"),
-                    store = view.getViewModel().getStore(view.routeId+"s"),
-                    field = store.first().getIdProperty();
+                var tab = view.getActiveTab(),
+                    grid = tab.lookupReference("grid");
+                    //store = view.getViewModel().getStore(view.routeId+"s"),
+                    //field = store.first().getIdProperty();
 
                 if(grid){
                     var mode,
@@ -90,21 +101,28 @@ Ext.define("Vega.view.main.MainController", {
                     }
 
                     route[1] = mode
-                }
 
-                if(grid && grid.getSelectionModel().getSelection().length > 0){
-                    var x = grid.getSelectionModel().getSelection();
-                    route[2] = x[0].get(field);
+                    if(grid.getSelectionModel().getSelection().length > 0){
+                        var x = grid.getSelectionModel().getSelection();
+                        route[2] = x[0].id;
+                        //route[2] = x[0].get(field);
+                    }
                 }
 
                 if(tab.inTab){
                     route[1] = "tab";
                     if(tab.active){
-                        route[2] = tab.active.get(field);
+                        route[2] = tab.active.id;
+                        //route[2] = tab.active.get(field);
                     }
                     else {
-                        route[2] = 'new';
+                        route[2] = tab.reference;
                     }
+                }
+
+                if(tab.isEdit){
+                    route[1] = "edit";
+                    route[2] = tab.getViewModel().get('srcPowhId')
                 }
             }
 
@@ -158,11 +176,7 @@ Ext.define("Vega.view.main.MainController", {
 
     onMainViewRender:function(){
         if(!window.location.hash){
-            this.redirectTo("dashboard")
+            this.redirectTo("dashboard");
         }
-    },
-
-    onUnmatchedRoute:function(){
-
     }
 });

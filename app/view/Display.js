@@ -27,6 +27,7 @@ Ext.define("Vega.view.Display",{
 
     config: {
         inTab: false,
+        node: null,
         active: null
     },
 
@@ -34,9 +35,9 @@ Ext.define("Vega.view.Display",{
         var me = this;
 
         //this.tpl = this.createTpl();
-        //this.items = this.buildItems();
-        this.dockedItems = [this.createToolbar()];
+        me.dockedItems = me.createToolbar();
 
+        //this.items = this.buildItems();
         me.callParent(arguments);
     },
 
@@ -62,48 +63,58 @@ Ext.define("Vega.view.Display",{
     createToolbar: function(){
         var config = {},
             items = [],
-            btnViewTab, btnPrintTab, btnBookmark;
+            btnClose, btnViewTab, btnPrintTab, btnBookmark;
+
+        btnClose = Ext.widget('button', {
+            text: 'Close',
+            iconCls: 'fa fa-close',
+            handler: 'onClose'
+        });
 
         btnViewTab = Ext.widget('button', {
-            handler: "openTab",
-            scope: this,
             text: 'View in new tab',
-            width: 120,
             //glyph: 102,
-            iconCls: 'fa fa-external-link'
+            iconCls: 'fa fa-external-link',
+            handler: "openTab",
+            scope: this
         });
 
         btnPrintTab = Ext.widget('button', {
-            handler: "printTab",
-            scope: 'controller',
             text: 'Print',
-            textAlign: 'left',
-            width: 100,
             //glyph: 102,
-            iconCls: 'fa fa-print'
+            iconCls: 'fa fa-print',
+            handler: "printTab"
         });
 
         btnBookmark = Ext.widget('button', {
-            handler: "bookmarkTab",
             text: 'Add to Bookmark',
-            textAlign: 'left',
-            width: 120,
             //glyph: 102,
-            iconCls: 'fa fa-bookmark'
+            iconCls: 'fa fa-bookmark',
+            handler: "bookmarkTab"
         });
 
         if (!this.inTab) {
-            items.push(btnViewTab,btnPrintTab);
+            items.push(btnViewTab, btnPrintTab, {xtype: 'tbfill'});
         }
         else {
-            items.push(btnPrintTab, btnBookmark);
-            //
-            //config.cls = 'x-docked-noborder-top';
+            items.push(btnClose, btnPrintTab, btnBookmark, {xtype: 'tbfill'});
         }
+
+        /*
+        switch(this.node){
+            case 'review':
+                items.push(btnRevise, btnAccept);
+                break;
+        }
+        */
+
+        config.reference = 'topbar';
         config.items = items;
+
         return Ext.create('Ext.toolbar.Toolbar', config);
     },
 
+    /*
     buildItems: function(){
         var innerPnl = Ext.create('Ext.panel.Panel', {
             itemId: 'innerPnl'
@@ -111,12 +122,14 @@ Ext.define("Vega.view.Display",{
 
         return [innerPnl];
     },
+    */
 
     /**
      * Open the post in a new tab
      * @private
      */
     openTab: function(btn){
-        this.fireEvent('opentab', this, this.active);
+        console.log('openTab', this.active);
+        this.fireEvent('open', this, this.active);
     }
 });

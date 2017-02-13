@@ -1,0 +1,37 @@
+[
+  {
+    "id": 1,
+    "name": "SELF",
+    "type": "FABRICS"
+  },
+  {
+    "id": 2,
+    "name": "PRINTS",
+    "type": "PRINTS"
+  },
+  {
+    "id": 3,
+    "name": "STONE",
+    "type": "STONE"
+  },
+  {
+    "id": 4,
+    "name": "TRIMS",
+    "type": "TRIMS"
+  },
+  {
+    "id": 5,
+    "name": "CONTRAST1",
+    "type": "FABRICS"
+  },
+  {
+    "id": 6,
+    "name": "CONTRAST2",
+    "type": "FABRICS"
+  },
+  {
+    "id": 7,
+    "name": "CONTRAST3",
+    "type": "FABRICS"
+  }
+]

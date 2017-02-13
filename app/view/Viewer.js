@@ -7,7 +7,8 @@ Ext.define("Vega.view.Viewer",{
         'Vega.view.ViewerModel',
         'Vega.view.Multiview',
         'Ext.ux.TabCloseMenu',
-        'Ext.ux.TabScrollerMenu'
+        'Ext.ux.TabScrollerMenu',
+        'Ext.ux.TabReorderer'
     ],
 
     alias: 'widget.viewer',
@@ -25,12 +26,15 @@ Ext.define("Vega.view.Viewer",{
     cls: 'viewer',
 
     tabBar: {
-        border: true,
         defaults: {
             //flex: 1, // if you want them to stretch all the way
             height: 36, // set the height,
             //padding: 6, // set the padding
-            textAlign: 'left'
+            textAlign: 'left',
+            border: true,
+            style: {
+                border: '2px solid #ccc'
+            }
         }
     },
 
@@ -40,6 +44,9 @@ Ext.define("Vega.view.Viewer",{
     },{
         pluginId: 'tabscrollermenu',
         ptype: 'tabscrollermenu'
+    },{
+        pluginId: 'tabreorderer',
+        ptype: 'tabreorderer'
     }],
 
     listeners: {
@@ -49,6 +56,7 @@ Ext.define("Vega.view.Viewer",{
     initComponent: function() {
         var me = this;
         //console.log('Viewer - initComponent');
+
         Ext.applyIf(me, {
 
         });

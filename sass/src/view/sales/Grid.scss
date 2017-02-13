@@ -1,7 +1,25 @@
+.x-grid-row
+{
+  //height: 40px;
+  //vertical-align: middle;
+  //cursor: pointer;
+}
 
 .custom-row-style
 {
-  height: 35px;
+  height: 40px;
   vertical-align: middle;
 }
 
+.grid-row-accepted
+{
+  text-decoration: line-through;
+  font-weight: bolder;
+  color: #4cae4c;
+}
+
+.grid-row-pending
+{
+  font-weight: bolder;
+  color: #ff0000;
+}

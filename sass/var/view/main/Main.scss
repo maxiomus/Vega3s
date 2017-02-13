@@ -2,7 +2,7 @@ $panel-navigation-background-color: #32404e;
 $panel-navigation-item-line-height: 64px;
 $panel-navigation-item-text-color: #ADB3B8;
 
-$base-color:#35baf6;
+//$base-color:#35baf6;
 $circle-border-radius:50%;
 $base-border-color: #ddd;
 $lightest-color:#fff;
@@ -16,11 +16,9 @@ $social-twitter-btn-background: #03b4d5;
 $social-google-plus-btn-background: #e44959;
 $social-envelope-btn-background: #7754aa; 
 
-$button-toolbar-background-color: transparent;
-$button-toolbar-border-color: transparent;
+//$button-toolbar-background-color: transparent;
+//$button-toolbar-border-color: transparent;
 $button-toolbar-hover-background-color: #efefef;
-
-
 
 //Form and Toolbar Button UI colors
 
@@ -29,10 +27,11 @@ $color-soft-cyan: #03b4d5;
 $color-soft-blue: #2eadf5;
 $color-soft-green: #9cc96b;
 $color-soft-red: #e44959;
+$color-soft-yellow: #f1c40f;
+$color-soft-orange: #e67e22;
 $color-soft-purple: #925e8b;
 $color-gray: #949495;
 $color-green: #16b603;
-
 
 // COLOR PALETTE
 
@@ -56,3 +55,5 @@ $main-font-size-xlarge-title: 28px;
 $main-font-regular: 400;
 $main-font-semibold: 500;
 $main-font-bold: 800;
+
+$tool-glyph-color: $base-color;

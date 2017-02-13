@@ -1,0 +1,32 @@
+[{
+    "label": "P.O.W #",
+    "field": "powno"
+  },
+  {
+    "label": "Customer",
+    "field": "customer"
+  },
+  {
+    "label": "Status",
+    "field": "status"
+  },
+  {
+    "label": "Type",
+    "field": "ordertype"
+  },
+  {
+    "label": "Division",
+    "field": "division"
+  },
+  {
+    "label": "Progress",
+    "field": "progress"
+  },
+  {
+    "label": "Desc",
+    "field": "comments"
+  },
+  {
+    "label": "User",
+    "field": "userId"
+}]

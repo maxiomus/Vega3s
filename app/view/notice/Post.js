@@ -61,15 +61,17 @@ Ext.define("Vega.view.notice.Post",{
     },
 
     createTpl: function() {
+        var me = this;
         return new Ext.XTemplate(
             '<div class="post-data">',
-            '<span class="post-date">{CreatedOn:this.formatDate}</span>',
-            '<div class="post-title">{Title}</div>',
-            '<div class="post-author">by {Author:this.defaultValue}</div>',
+                '<span class="post-date">{CreatedOn:this.formatDate}</span>',
+                '<div class="post-title">{Title}</div>',
+                '<div class="post-author">by {Author:this.defaultValue}</div>',
             '</div>',
+            '<div class="post-link {hasAttach}">{Link:this.formatLink(values)}</div>',
             '<div class="post-body">{Description:this.getBody}</div>',
             {
-                getBody: function(value, all){
+                getBody: function(value){
                     return Ext.util.Format.stripScripts(value);
                 },
 
@@ -82,6 +84,52 @@ Ext.define("Vega.view.notice.Post",{
                         return '';
                     }
                     return Ext.Date.format(value, 'M j, Y, g:i a');
+                },
+
+                formatLink: function(value, data){
+                    var rec = me.active,
+                        str = '<i class="fa fa-paperclip fa-lg"></i><a href="../DLIB/BOARD-ATTACHMENTS/{0}/{1}/{2}/{3}" target="_blank">{4};</a>',
+                        tmp = '';
+
+                    var d = new Date(data.CreatedOn),
+                        ar = value.split(",");
+
+                    for (i = 0; i <= ar.length - 1; i++) {
+                        var path = ar[i];
+                        if(rec.filesInArticles().getCount() > 0){
+                            rec.filesInArticles(function(files){
+                                files.each(function(file){
+                                    if(ar[i].toString() === file.data.name){
+                                        path = data.ArticleID + '/' + ar[i]
+                                    }
+                                })
+                            });
+                        }
+
+                        tmp += Ext.String.format(str, d.getFullYear(), d.getMonth()+1, d.getDate(), path, ar[i]);
+                    }
+
+                    /*
+                    if(rec.filesInArticles().getCount() > 0){
+                        rec.filesInArticles(function(files){
+                            files.each(function(file){
+                                var d = new Date(file.data.created);
+                                tmp += Ext.String.format(str, d.getFullYear(), d.getMonth()+1, d.getDate(), file.data.name, file.data.name);
+                            })
+                        });
+                    }
+                    else{
+                        var d = new Date(data.CreatedOn),
+                            ar = value.split(",");
+
+                        for (i = 0; i <= ar.length - 1; i++) {
+                            tmp += Ext.String.format(str, d.getFullYear(), d.getMonth()+1, d.getDate(), escape(ar[i]), ar[i]);
+                        }
+
+                    }
+                    */
+
+                    return tmp;
                 }
             }
         );
@@ -175,7 +223,7 @@ Ext.define("Vega.view.notice.Post",{
      * @private
      */
     openTab: function(){
-        this.fireEvent('opentab', this, this.active);
+        this.fireEvent('open', this, this.active);
     },
 
     printTab: function() {

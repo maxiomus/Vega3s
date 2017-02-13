@@ -19,8 +19,8 @@ Ext.application({
     // will gain a "viewport" plugin if it does not extend Ext.Viewport. With the
     // modern toolkit, the main view will be added to the Viewport.
     //
-    mainView: 'Vega.view.main.Main'
-	
+    //mainView: 'Vega.view.main.Main'
+    autoCreateViewport: false
     //-------------------------------------------------------------------------
     // Most customizations should be made to Vega3s.Application. If you need to
     // customize this file, doing so below this section reduces the likelihood

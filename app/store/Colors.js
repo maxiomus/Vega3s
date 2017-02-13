@@ -8,8 +8,11 @@ Ext.define('Vega.store.Colors', {
     fields: ['id', 'text'],
     // allow the grid to interact with the paging scroller by buffering
     //buffered: true,
-    pageSize: 100,
+    pageSize: 0,
     autoLoad: false,
+
+    remoteFilter: true,
+    //remoteSort: true
 
     proxy: {
         type: 'ajax',
@@ -18,8 +21,5 @@ Ext.define('Vega.store.Colors', {
             type: 'json',
             rootProperty: 'data'
         }
-    },
-
-    remoteFilter: true
-    //remoteSort: true
+    }
 });

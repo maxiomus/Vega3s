@@ -1,23 +1,19 @@
 [{
-  label: 'China/Hengfu',
-  id: 1,
-  checked: true
+  "text": "China/Hengfu",
+  "id": "China/Hengfu"
 }, {
-  label: 'China/Moon Heart',
-  id: 2
+  "text": "China/Themis",
+  "id": "China/Themis"
 }, {
-  label: 'China/Themis',
-  id: 3
+  "text": "MX-FP",
+  "id": "MX-FP"
 }, {
-  label: 'China/Wintop',
-  id: 4
+  "text": "Puebla-TPL",
+  "id": "Puebla-TPL"
 }, {
-  label: 'Puebla-TPL',
-  id: 5
+  "text": "Puebla-NAFTA-D",
+  "id": "Puebla-NAFTA-D"
 }, {
-  label: 'Puebla-NAFTA-D',
-  id: 6
-}, {
-  label: 'Puebla-NAFTA-I',
-  id: 7
+  "text": "Puebla-NAFTA-I",
+  "id": "Puebla-NAFTA-I"
 }]

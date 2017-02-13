@@ -1,0 +1,93 @@
+﻿body 
+{
+    margin: 9px 0 0 0px;
+    padding: 0;
+    background: #FFF;
+    font-family: Arial;
+    font-size: 12px;
+}
+
+#header
+{         
+    
+}
+
+#pre-title
+{
+    text-align: left;
+    padding: 0 0 2px 9px;
+}
+
+#title
+{
+    text-align: center;
+    background-color: #0099CC;
+    font-weight: bolder;
+    font-size: 16px;
+    padding: 2px 0 0 0;
+}
+
+#sub-title
+{
+    text-align: center;
+    background: #FFF;
+    padding: 2px 0 2px 0;
+}
+
+#content
+{
+    padding-left:9px;
+    padding-right: 9px;
+    background:#FFF;
+}
+
+#footer
+{
+
+}
+
+#row1column1
+{
+    float: left;
+    width: 49%;
+}
+
+#row1column2
+{  
+    float: left;
+    width: 51%;    
+}
+
+#row2column1
+{
+    clear: both;
+}
+
+.contrast
+{
+    margin: 10px 0 0 0;
+    font-weight: bolder;
+}
+
+#trim
+{
+    margin: 10px 0 0 0;
+}
+
+.rowStyle
+{
+    padding: 2px 0 0 0;
+    font-weight: bolder;
+    border-bottom: 1px solid #000;
+}
+
+.form_view
+{
+    text-transform: lowercase;
+}
+
+.multiline
+{
+    font-family: Arial;
+    font-size:12px;
+}

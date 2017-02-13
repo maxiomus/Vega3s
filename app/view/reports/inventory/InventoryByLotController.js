@@ -38,10 +38,12 @@ Ext.define('Vega.view.reports.inventory.InventoryByLotController', {
     },
 
     onComboChanged: function (combo, newValue, oldValue, eOpts) {
-        console.log(newValue, oldValue);
+        //console.log(newValue, oldValue);
+        /*
         if(combo.triggers.clear){
             combo.triggers.clear.el.setDisplayed(combo.getRawValue().toString().length == 0 ? false : true);
         }
+        */
     },
 
     onPressEnterKey: function(field, e) {
@@ -81,19 +83,17 @@ Ext.define('Vega.view.reports.inventory.InventoryByLotController', {
 
     getFilterData: function() {
 
-        var filters = [], i, len,
+        var filters = [], i = 0, len,
             combos = ['style', 'color', 'lotno', 'warehouse', 'rawMatType', 'onHand'],
             toolbar = this.getView().down('toolbar'),
-            cboFabric = toolbar.getComponent('cboFabric'),
+            cboComp = toolbar.getComponent('cboComp'),
             cboColor = toolbar.getComponent('cboColor'),
             cboLotno = toolbar.getComponent('cboLotno'),
             cboWH = toolbar.getComponent('cboWH'),
             cboRawMat = toolbar.getComponent('cboRawMat'),
             chkOnHand = toolbar.getComponent('chkOnHand');
 
-        var fields = [cboFabric, cboColor, cboLotno, cboWH, cboRawMat, chkOnHand];
-
-        i = 0;
+        var fields = [cboComp, cboColor, cboLotno, cboWH, cboRawMat, chkOnHand];
 
         // default filter...
         Ext.each(combos, function(combo) {

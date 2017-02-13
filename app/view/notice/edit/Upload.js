@@ -7,9 +7,11 @@ Ext.define("Vega.view.notice.edit.Upload",{
     requires: [
         "Vega.view.notice.edit.UploadController",
         "Vega.view.notice.edit.UploadModel",
-        'Ext.ux.statusbar.StatusBar'
+        'Ext.ux.statusbar.StatusBar',
+        'Ext.ux.form.field.UploadFile'
     ],
 
+    /*
     controller: "notice-edit-upload",
     viewModel: {
         type: "notice-edit-upload"
@@ -18,9 +20,47 @@ Ext.define("Vega.view.notice.edit.Upload",{
     bind: {
         store: '{fileStore}'
     },
+    */
 
     listeners: {
+        //storeadd: 'onStoreAdd',
+        //storeremove: 'onStoreRemove',
 
+        drop: {
+            element: 'el',
+            fn: 'drop',
+            scope: 'this'
+        },
+
+        dragstart: {
+            element: 'el',
+            fn: 'addDropZone',
+            scope: 'this'
+        },
+
+        dragenter: {
+            element: 'el',
+            fn: 'addDropZone',
+            scope: 'this'
+        },
+
+        dragover: {
+            element: 'el',
+            fn: 'addDropZone',
+            scope: 'this'
+        },
+
+        dragleave: {
+            element: 'el',
+            fn: 'removeDropZone',
+            scope: 'this'
+        },
+
+        dragexit: {
+            element: 'el',
+            fn: 'removeDropZone',
+            scope: 'this'
+        }
     },
 
     initComponent: function(){
@@ -36,121 +76,75 @@ Ext.define("Vega.view.notice.edit.Upload",{
             model: 'File'
         });*/
 
-        Ext.applyIf(me, {
-            //store: fileStore,
-            columns: this.buildColumns(),
-            dockedItems: [
-                this.buildTopBar(),
-                this.buildBottomBar()
-            ],
-            viewConfig: {
-                stripeRows: true,
-                plugins: {
-                    ddGroup: 'file-group',
-                    ptype: 'gridviewdragdrop',
-                    enableDrop: true,
-                    dragText: 'Drag and drop to reorganize'
+        me.fileUpload = Ext.widget('uploadfiles', {
+            //xtype: 'uploadfiles',
+            name: 'fileselected',
+            width: 88,
+            hideLabel: true,
+            buttonOnly: true,
+            buttonConfig: {
+                //text: 'Add files...',
+                iconCls: 'fa fa-plus'
+            },
+            multiselect: true,
+            //url: '/api/Files/notice/upload',
+            //method: 'POST',
+            listeners: {
+                render: function(field){
+                    if (Ext.isIE) {
+                        Ext.Msg.alert('Warning', 'IE does not support multiple file upload, to  use this feature use Firefox or Chrome');
+                    }
                 },
-                listeners: {
-                    itemadd: 'onGridViewItemAdded',
-                    itemremove: 'onGridViewItemRemoved',
-                    drop: 'onGridViewDrop'
+                change: function(field, path, eOpts) {
+                    if (Ext.isIE) {
+                        return;
+                    }
+
+                    if(path){
+                        var el = field.fileInputEl.dom,
+                            store = field.up('grid').getStore();
+                        //var size = 0;
+                        //var names = '';
+                        window.URL = window.URL || window.webkitURL;
+
+                        for (var i = 0; i < el.files.length; i++) {
+                            var file = el.files[i];
+                            //store = me.store;
+
+                            var rec = store.add({
+                                name: file.name,
+                                type: file.type,
+                                size: file.size,
+                                path: window.URL.createObjectURL(file)
+                            });
+                        }
+
+                        field.addFilesToQueue(el.files);
+                        //field.fireEvent('fileselected', this, files);
+                        //field.reset();
+                        if (field.multiselect) {
+                            field.fileInputEl.dom.setAttribute('multiple', '1');
+                        }
+                    }
                 }
             }
         });
 
-        me.callParent(arguments);
-    },
-
-    buildColumns: function(){
-        return [{
-            dataIndex: 'rowIndex',
-            width: 30,
-            menuDisabled: true,
-            align: 'center',
-            sortable: false,
-            renderer: function(value, metaData, record, rowIndex, colIndex, store){
-                return rowIndex+1;
+        me.tbar = [{
+            xtype: 'button',
+            action: 'removeall',
+            //reference: 'btnRemoveAll',
+            text: 'Remove All',
+            //glyph: 43,
+            iconCls: 'fa fa-cog',
+            handler: function(btn){
+                btn.up('grid').getStore().removeAll();
+                me.fileUpload.filesQueue.length = 0;
             }
-        },{
-            text: 'ID',
-            dataIndex: 'id',
-            menuDisabled: true,
-            fixed: true,
-            width: 25,
-            hidden: true
-        },{
-            text: 'File Name',
-            dataIndex: 'name',
-            menuDisabled: true,
-            flex: 1
-        },{
-            text: 'Last Modified',
-            dataIndex: 'lastmod',
-            menuDisabled: true,
-            xtype: 'datecolumn',
-            format: 'MM-dd-yyyy',
-            hidden: true
-        },{
-            text: 'Size',
-            dataIndex: 'size',
-            menuDisabled: true,
-            formatter: 'fileSize'
-        },{
-            text: 'Delete',
-            xtype: 'actioncolumn',
-            width: 60,
-            align: 'center',
-            menuDisabled: true,
-            items: [{
-                icon: 'resources/images/shared/icon-error.png',
-                //glyph: 45,
-                tooltip: 'Delete',
-                handler: function(gridView, rowIndex, colIndex) {
-                    var store = gridView.getStore();
-                    store.removeAt(rowIndex);
-                    gridView.refresh();
-                }
-            }]
-        }]
-    },
+        }, '->', me.fileUpload];
 
-    buildTopBar: function() {
-        this.tbar = {
-            xtype: 'toolbar',
-            dock: 'top',
-            items: [{
-                xtype: 'filefield',
-                name: 'fileselect',
-                buttonText: 'Add files...',
-                hideLabel: true,
-                allowBlank: false,
-                buttonOnly: true,
-                listeners: {
-                    render: 'onFileFieldRender',
-                    change: 'onFileFieldChange'
-                }
-            },{
-                xtype: 'tbfill'
-            },{
-                xtype: 'button',
-                action: 'removeall',
-                itemId: 'btnRemoveAll',
-                text: 'Delete All',
-                //glyph: 43,
-                iconCls: 'fa fa-cog',
-                handler: function(btn){
-                    btn.up('grid').getStore().removeAll();
-                }
-            }]
-        };
-
-        return this.tbar;
-    },
-
-    buildBottomBar: function(){
-        this.bbar = {
-            xtype: 'statusbar',
+        me.statusbar = Ext.widget('statusbar', {
+            //xtype: 'statusbar',
             dock: 'bottom',
             defaultText: 'Ready',
             items: [{
@@ -166,8 +160,177 @@ Ext.define("Vega.view.notice.edit.Upload",{
                 name: 'size',
                 text: 'Total Size: 0'
             }]
-        };
+        });
+        me.bbar = me.statusbar;
 
-        return this.bbar;
+        Ext.applyIf(me, {
+            //store: fileStore,
+            columns: me.buildColumns(),
+            viewConfig: {
+                stripeRows: true,
+                plugins: {
+                    ptype: 'gridviewdragdrop',
+                    dragText: 'Drag and drop to reorganize'
+                },
+                listeners: {
+                    itemadd: function(recrods, index, node, eOpts){
+                        me.updateStatus();
+                    },
+                    itemremove: function(record, index, item, view, eOpts){
+                        me.updateStatus();
+                    },
+                    drop: function(node, data, overModel, dropPosition, eOpts){
+                        data.view.refresh();
+                    }
+                }
+            }
+        });
+
+        me.callParent(arguments);
+
+        this.relayEvents(this.getStore(), ['add', 'remove'], 'store');
+    },
+
+    buildColumns: function(){
+        return [{
+            width: 30,
+            menuDisabled: true,
+            align: 'center',
+            sortable: false,
+            renderer: function(value, metaData, record, rowIndex, colIndex, store){
+                return rowIndex + 1;
+            }
+        },{
+            text: 'ID',
+            dataIndex: 'id',
+            menuDisabled: true,
+            fixed: true,
+            width: 25,
+            hidden: true
+        },{
+            text: 'File Name',
+            dataIndex: 'name',
+            menuDisabled: true,
+            flex: 1
+        },{
+            text: 'Created',
+            dataIndex: 'created',
+            menuDisabled: true,
+            xtype: 'datecolumn',
+            format: 'MM-dd-yyyy',
+            hidden: true
+        },{
+            text: 'Last Modified',
+            dataIndex: 'lastmod',
+            menuDisabled: true,
+            xtype: 'datecolumn',
+            format: 'MM-dd-yyyy',
+            hidden: true
+        },{
+            text: 'Size',
+            dataIndex: 'size',
+            menuDisabled: true,
+            formatter: 'fileSize'
+        },{
+            text: 'Remove',
+            xtype: 'actioncolumn',
+            width: 60,
+            align: 'center',
+            menuDisabled: true,
+            items: [{
+                //icon: 'resources/images/shared/icon-error.png',
+                //glyph: 45,
+                //ui: 'default',
+                iconCls: 'fa fa-remove red-txt',
+                tooltip: 'Remove',
+                handler: function(gridview, rowIndex, colIndex) {
+                    //var store = grid.getStore();
+                    //store.removeAt(rowIndex);
+                    var field = gridview.grid.getDockedItems('toolbar[dock="top"] > uploadfiles')[0],
+                        rec = gridview.getStore().getAt(rowIndex);
+                    rec.drop();
+                    //console.log(gridview, rec.id * -1 - 1)
+                    if(rec.phantom){
+                        field.removeFileFromQueue(rec.id * -1 - 1);
+                    }
+                }
+            }]
+        }]
+    },
+
+    noop: function(e) {
+        e.stopEvent();
+    },
+
+    addDropZone: function(e) {
+        //console.log('add', this);
+        if (!e.browserEvent.dataTransfer || Ext.Array.from(e.browserEvent.dataTransfer.types).indexOf('Files') === -1) {
+            return;
+        }
+
+        e.stopEvent();
+
+        this.addCls('drag-over');
+    },
+
+    removeDropZone: function(e) {
+
+        var el = e.getTarget(),
+            thisEl = this.getEl();
+
+        e.stopEvent();
+
+        if (el === thisEl.dom) {
+            this.removeCls('drag-over');
+            return;
+        }
+
+        while (el !== thisEl.dom && el && el.parentNode) {
+            el = el.parentNode;
+        }
+
+        if (el !== thisEl.dom) {
+            this.removeCls('drag-over');
+        }
+
+    },
+
+    drop: function(e) {
+        window.URL = window.URL || window.webkitURL;
+        e.stopEvent();
+
+        var me = this,
+            files = e.browserEvent.dataTransfer.files,
+            store = me.store;
+            //store = me.down('grid').getStore();
+
+        me.fileUpload.addFilesToQueue(files);
+
+        Ext.Array.forEach(Ext.Array.from(files), function(file) {
+            var rec = store.add({
+                name: file.name,
+                type: file.type,
+                size: file.size,
+                path: window.URL.createObjectURL(file)
+            });
+
+            //me.showThumbnail(file, rec[0].id);
+            //console.log('drop', file);
+            me.statusbar.down('tbtext[name=count]').update('Files: ' + store.getCount());
+            me.statusbar.down('tbtext[name=size]').update('Total Size: ' + Ext.util.Format.fileSize(store.sum('size')));
+        });
+
+        this.removeCls('drag-over');
+    },
+
+    updateStatus: function() {
+        var me = this,
+            size, count,
+            store = me.store;
+            //store = me.down('grid').getStore();
+
+        size = store.sum('size');
+        me.statusbar.down('tbtext[name=count]').setText('Files: ' + store.getCount());
+        me.statusbar.down('tbtext[name=size]').setText('Total Size: ' + Ext.util.Format.fileSize(size));
     }
 });

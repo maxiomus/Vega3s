@@ -7,13 +7,21 @@ Ext.define('Vega.store.Components', {
 
     // allow the grid to interact with the paging scroller by buffering
     //buffered: true,
-    storeId: 'Components',
-    fields: ['id', 'text'],
+    alias: 'store.Components',
 
-    pageSize: 100,
-    //numFromEdge: 5,
+    storeId: 'Components',
+    fields: [{
+        name: 'id',
+        sortType: 'asUCString'
+    },{
+        name: 'text',
+        sortType: 'asUCString'
+    }],
+
+    pageSize: 0,
     remoteFilter: true,
-    //remoteSort: true
+    //remoteSort: true,
+    //numFromEdge: 5,
     //trailingBufferZone: 100,
     //leadingBufferZone: 100,
     autoLoad: false,
@@ -21,6 +29,13 @@ Ext.define('Vega.store.Components', {
     proxy: {
         type: 'ajax',
         url: '/api/Combos/components',
+
+        /*
+        pageParam: '',
+        startParam: '',
+        limitParam: '',
+        */
+
         reader: {
             type: 'json',
             rootProperty: 'data'

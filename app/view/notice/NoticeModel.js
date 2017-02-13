@@ -6,30 +6,30 @@ Ext.define('Vega.view.notice.NoticeModel', {
 
     requires: [
         'Vega.model.Post',
-        'Vega.model.File',
+        'Vega.model.notice.File',
         'Ext.data.proxy.Rest'
     ],
 
     alias: 'viewmodel.notice',
 
     data:{
-        post:null
+
     },
 
     formulas:{
         dirty:{
             bind:{
-                bindTo:"{post}",
+                bindTo: "{thePost}",
                 deep:true
             },
             get:function(b){
-                return b?b.dirty:false;
+                return b ? b.dirty : false;
             }
         },
 
         storeDirty:{
             bind:{
-                bindTo:"{post}",
+                bindTo: "{thePost}",
                 deep:true
             },
             get:function(b){
@@ -42,26 +42,15 @@ Ext.define('Vega.view.notice.NoticeModel', {
         notices: {
             model: "Post",
             storeId: "notices",
+            session: true,
             autoLoad: false,
             remoteFilter: true,
             remoteSort: true,
-
-            proxy:{
-                type:"rest",
-                url:"/api/Notices/",
-                reader:{
-                    type:"json",
-                    rootProperty:"data"
-                },
-
-                listeners:{
-
-                }
-            },
+            pageSize: 99,
 
             listeners:{
-                beforeload:"onBeforeLoad",
-                load:"onLoad"
+                beforeload: "onBeforeLoad",
+                load: "onLoad"
             },
 
             isDirty:function(){

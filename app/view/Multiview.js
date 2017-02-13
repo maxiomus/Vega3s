@@ -2,7 +2,7 @@
  * Created by tech on 3/8/2016.
  */
 Ext.define('Vega.view.Multiview', {
-    extend: 'Ext.panel.Panel',
+    extend: 'Ext.form.Panel',
 
     requires: [
         'Vega.view.MultiviewController',
@@ -22,8 +22,10 @@ Ext.define('Vega.view.Multiview', {
 
     defaultType: "container",
     defaults: {
-        layout: "fit"
+        //layout: "fit"
     },
+
+    publishes: ['items', 'mainItems'],
 
     mainItems: null,
     displayItems: null,
@@ -39,7 +41,7 @@ Ext.define('Vega.view.Multiview', {
                 region: "center",
                 reference: "center",
                 defaultType: "container",
-                flex: 2,
+                flex: 3,
                 minHeight: 300,
                 minWidth: 300,
                 items: me.mainItems
@@ -55,10 +57,9 @@ Ext.define('Vega.view.Multiview', {
                         region: "south"
                     }
                 },
-
                 border: false,
                 split: true,
-                flex: 1,
+                flex: 2,
                 hidden: true,
                 minWidth: 150,
                 items: me.displayItems

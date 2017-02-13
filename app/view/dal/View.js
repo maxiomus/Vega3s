@@ -15,12 +15,14 @@ Ext.define("Vega.view.dal.View", {
         type: "dal-view"
     },
 
+    /*
     publishes: ["selectedImage"],
 
     bind: {
         store: "{dals}",
         selection: "{selectedImage}"
     },
+    */
 
     config: {
 
@@ -33,12 +35,13 @@ Ext.define("Vega.view.dal.View", {
     preserveScrollOnRefresh: true,
     deferInitialRefresh: true,
     enableTextSelection: false,
-    emptyText: '<h1 style="margin: 20px">No matching results</h1>',
+    //emptyText: '<h1 style="margin: 20px">No matching results</h1>',
     selectionModel: {
         mode: "MULTI"
     },
 
     prepareData: function(d){
+        /*
         var c;
         switch(d.F_CATEGORY.toLowerCase()){
             case"body":
@@ -51,7 +54,11 @@ Ext.define("Vega.view.dal.View", {
                 c=d.F_DESC6;
                 break
         }
-        Ext.apply(d, {Title: c});
+
+        var b = d.F_CREATED_ON.getFullYear() + '/' + (d.F_CREATED_ON.getMonth() + 1) + '/' + d.F_CREATED_ON.getDate();
+
+        Ext.apply(d, {Title: c, F_PATH: b});
+        */
         return d;
     },
 

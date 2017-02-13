@@ -1,7 +1,26 @@
+
 Ext.define('Vega.view.sales.edit.LineItem', {
     extend: 'Ext.window.Window',
 
+    requires: [
+        //'Vega.view.sales.edit.LineItemController',
+        'Vega.model.Powm'
+    ],
+
     alias: 'widget.edit-lineitem',
+
+    //controller: 'sales-edit-lineitem',
+    /*viewModel: {
+        stores: {
+            powms: {
+                model: 'sales.Powm'
+            }
+        }
+    },*/
+
+    bind: {
+        title: '{title}'
+    },
 
     layout: {
         type: 'hbox'
@@ -12,8 +31,25 @@ Ext.define('Vega.view.sales.edit.LineItem', {
         margin: '0 5 10 0'
     },
 
+    //modal: true,
+    monitorResize: true,
+    maximizable: true,
+    //alwaysOnTop: true,
+    constrain: true,
+    //maximized: true,
+    //draggable: false,
+    closable: true,
+    padding: 10,
+
     style: {
         borderBottom: '1px solid #e3e3e3'
+    },
+
+    listeners: {
+        render: {
+            fn: 'onRendered',
+            scope: 'this'
+        }
     },
 
     initComponent: function() {
@@ -124,6 +160,7 @@ Ext.define('Vega.view.sales.edit.LineItem', {
                 items:[{
                     tooltip: 'Copy',
                     iconCls: 'fa fa-copy',
+                    hidden: true,
                     margin: '0 0 2 0',
                     handler: function(btn){
                         var panel = me.ownerCt,
@@ -134,6 +171,7 @@ Ext.define('Vega.view.sales.edit.LineItem', {
                     }
                 },{
                     tooltip: 'Delete',
+                    hidden: true,
                     iconCls: 'fa fa-remove',
                     handler: function(btn){
                         var panel = me.ownerCt;
@@ -166,7 +204,7 @@ Ext.define('Vega.view.sales.edit.LineItem', {
                         //width: 160,
                         publishes: 'value',
                         bind: {
-                            value: '{powd.style}'
+                            value: '{theStyle.style}'
                         },
                         store: styleStore,
                         valueField: "id",
@@ -210,7 +248,7 @@ Ext.define('Vega.view.sales.edit.LineItem', {
                         //labelWidth: 50,
                         //width: 160,
                         bind: {
-                            value: '{powd.color}'
+                            value: '{theStyle.color}'
                         },
                         store: stColorStore,
                         valueField: "id",
@@ -238,11 +276,12 @@ Ext.define('Vega.view.sales.edit.LineItem', {
                     }]
                 }, {
                     xtype: 'textfield',
-                    hideLabel: true
-
+                    hideLabel: true,
+                    bind: '{theStyle.descirpt}'
                 },{
                     xtype: 'multiimageupload',
-                    previewImageSrc: 'resources/images/default.png',
+                    reference: 'fileupload',
+                    previewImageSrc: ['resources/images/default.png', 'resources/images/default.png'],
                     previewNames: ["Body", "Prints"]
                 }]
             },{
@@ -262,13 +301,13 @@ Ext.define('Vega.view.sales.edit.LineItem', {
                     fieldLabel: 'Pattern #',
                     items:[{
                         xtype: "combo",
-                        name: 'bodyref',
+                        name: 'Body',
                         //itemId: "cboBody",
                         fieldLabel: 'Pattern #',
                         //labelWidth: 50,
                         //width: 292,
                         bind: {
-                            value: '{powd.bodyref}'
+                            value: '{theStyle.bodyref}'
                         },
                         store: bodyStore,
                         valueField: "id",
@@ -290,7 +329,8 @@ Ext.define('Vega.view.sales.edit.LineItem', {
                             ptype: "cleartrigger"
                         }],
                         listeners: {
-                            select: function(combo, record, e){
+
+                            change: function(combo, newValue, oldValue, eOpts){
                                 me.getImageSrc(combo);
                             }
                         }
@@ -310,7 +350,7 @@ Ext.define('Vega.view.sales.edit.LineItem', {
                         //labelWidth: 50,
                         //width: 160,
                         bind: {
-                            value: '{powm.matcode}'
+                            value: '{theStyle.powms.data.items.1.matcode}'
                         },
                         store: printStore,
                         valueField: "id",
@@ -357,7 +397,7 @@ Ext.define('Vega.view.sales.edit.LineItem', {
                         //labelWidth: 50,
                         //width: 160,
                         bind: {
-                            value: '{powm.matcolor}'
+                            value: '{theStyle.powms.data.items.1.matcolor}'
                         },
                         store: stColorStore,
                         valueField: "id",
@@ -389,21 +429,21 @@ Ext.define('Vega.view.sales.edit.LineItem', {
                 },{
                     xtype: 'textfield',
                     name: 'printdesc',
-                    bind: {
-                        value: '{powm.matdesc}'
-                    },
+                    bind: '{theStyle.powms.data.items.1.matdesc}',
                     hideEmptyLabel: false,
                     width: 455
                 },{
                     fieldLabel: 'Stone Vendor',
                     items:[{
                         xtype: "combo",
-                        name: 'stone',
+                        name: 'stonevendor',
                         //itemId: "cboStones",
                         fieldLabel: "Vendor",
                         //labelWidth: 50,
                         //width: 160,
-
+                        bind: {
+                            value: '{theStyle.powms.data.items.2.matvendor}'
+                        },
                         store: vendorStore,
                         valueField: "id",
                         displayField: "id",
@@ -425,7 +465,8 @@ Ext.define('Vega.view.sales.edit.LineItem', {
                         }]
                     },{
                         xtype: 'textfield',
-                        name: 'stonedesc',
+                        name: 'stonecost',
+                        bind: '{theStyle.powms.data.items.2.matcost}',
                         hideEmptyLabel: false,
                         flex: 1
                     }]
@@ -438,6 +479,9 @@ Ext.define('Vega.view.sales.edit.LineItem', {
                         fieldLabel: "Trims",
                         //labelWidth: 50,
                         //width: 160,
+                        bind: {
+                            value: '{theStyle.powms.data.items.3.matcode}'
+                        },
                         store: trimStore,
                         valueField: "id",
                         displayField: "id",
@@ -480,6 +524,9 @@ Ext.define('Vega.view.sales.edit.LineItem', {
                         fieldLabel: "Trim Color",
                         //labelWidth: 50,
                         //width: 160,
+                        bind: {
+                            value: '{theStyle.powms.data.items.3.matcolor}'
+                        },
                         store: stColorStore,
                         valueField: "id",
                         displayField: "id",
@@ -509,6 +556,7 @@ Ext.define('Vega.view.sales.edit.LineItem', {
                 },{
                     xtype: 'textfield',
                     name: 'trimdesc',
+                    bind: '{theStyle.powms.data.items.3.matdesc}',
                     hideEmptyLabel: false,
                     width: 455
                 },{
@@ -520,6 +568,9 @@ Ext.define('Vega.view.sales.edit.LineItem', {
                         fieldLabel: "Fabric",
                         //labelWidth: 50,
                         //width: 160,
+                        bind: {
+                            value: '{theStyle.powms.data.items.0.matcode}'
+                        },
                         store: fabricStore,
                         valueField: "id",
                         displayField: "id",
@@ -562,6 +613,9 @@ Ext.define('Vega.view.sales.edit.LineItem', {
                         fieldLabel: "Fabric Color",
                         //labelWidth: 50,
                         //width: 160,
+                        bind: {
+                            value: '{theStyle.powms.data.items.0.matcolor}'
+                        },
                         store: stColorStore,
                         valueField: "id",
                         displayField: "id",
@@ -592,6 +646,7 @@ Ext.define('Vega.view.sales.edit.LineItem', {
                 },{
                     xtype: 'textfield',
                     name: 'fabricdesc',
+                    bind: '{theStyle.powms.data.items.0.matdesc}',
                     hideEmptyLabel: false,
                     width: 455
                 },{
@@ -599,6 +654,7 @@ Ext.define('Vega.view.sales.edit.LineItem', {
                     fieldLabel: 'Body Desc',
                     width: 455,
                     height: 50,
+                    bind: '{theStyle.bodydesc}',
                     name: 'bodydesc'
                 }]
             },{
@@ -624,11 +680,13 @@ Ext.define('Vega.view.sales.edit.LineItem', {
                     items: [{
                         fieldLabel: 'Cost',
                         hideLabel: false,
-                        name: 'cost'
+                        name: 'cost',
+                        bind: '{theStyle.cost}'
                     },{
                         fieldLabel: 'Selling Price',
                         hideLabel: false,
-                        name: 'price'
+                        name: 'price',
+                        bind: '{theStyle.price}'
                     }]
                 },{
                     defaultType: 'textfield',
@@ -640,11 +698,13 @@ Ext.define('Vega.view.sales.edit.LineItem', {
                     items: [{
                         fieldLabel: 'MSRP',
                         hideLabel: false,
-                        name: 'msrp'
+                        name: 'msrp',
+                        bind: '{theStyle.msrp}'
                     },{
                         fieldLabel: 'UNITS',
                         hideLabel: false,
-                        name: 'units'
+                        name: 'units',
+                        bind: '{theStyle.units}'
                     }]
                 },{
                     fieldLabel: 'Contrast 1',
@@ -655,6 +715,9 @@ Ext.define('Vega.view.sales.edit.LineItem', {
                         fieldLabel: "Contrast 1",
                         //labelWidth: 50,
                         //width: 160,
+                        bind: {
+                            value: '{theStyle.powms.data.items.4.matcode}'
+                        },
                         store: contrastStore,
                         valueField: "id",
                         displayField: "id",
@@ -696,6 +759,9 @@ Ext.define('Vega.view.sales.edit.LineItem', {
                         fieldLabel: "Contrast Color 1",
                         //labelWidth: 50,
                         //width: 160,
+                        bind: {
+                            value: '{theStyle.powms.data.items.4.matcolor}'
+                        },
                         store: stColorStore,
                         valueField: "id",
                         displayField: "id",
@@ -726,6 +792,9 @@ Ext.define('Vega.view.sales.edit.LineItem', {
                     xtype: 'textfield',
                     name: 'contrastdesc1',
                     hideEmptyLabel: false,
+                    bind: {
+                        value: '{theStyle.powms.data.items.4.matdesc}'
+                    },
                     width: 455
                 },{
                     fieldLabel: 'Contrast 2',
@@ -736,6 +805,9 @@ Ext.define('Vega.view.sales.edit.LineItem', {
                         fieldLabel: "Contrast 2",
                         //labelWidth: 50,
                         //width: 160,
+                        bind: {
+                            value: '{theStyle.powms.data.items.5.matcode}'
+                        },
                         store: contrastStore,
                         valueField: "id",
                         displayField: "id",
@@ -777,6 +849,9 @@ Ext.define('Vega.view.sales.edit.LineItem', {
                         fieldLabel: "Contrast Color 2",
                         //labelWidth: 50,
                         //width: 160,
+                        bind: {
+                            value: '{theStyle.powms.data.items.5.matcolor}'
+                        },
                         store: stColorStore,
                         valueField: "id",
                         displayField: "id",
@@ -807,6 +882,9 @@ Ext.define('Vega.view.sales.edit.LineItem', {
                     xtype: 'textfield',
                     name: 'contrastdesc2',
                     hideEmptyLabel: false,
+                    bind: {
+                        value: '{theStyle.powms.data.items.5.matdesc}'
+                    },
                     width: 455
                 },{
                     fieldLabel: 'Contrast 3',
@@ -817,6 +895,9 @@ Ext.define('Vega.view.sales.edit.LineItem', {
                         fieldLabel: "Contrast 3",
                         //labelWidth: 50,
                         //width: 160,
+                        bind: {
+                            value: '{theStyle.powms.data.items.6.matcode}'
+                        },
                         store: contrastStore,
                         valueField: "id",
                         displayField: "id",
@@ -857,6 +938,9 @@ Ext.define('Vega.view.sales.edit.LineItem', {
                         fieldLabel: "Contrast Color 3",
                         //labelWidth: 50,
                         //width: 160,
+                        bind: {
+                            value: '{theStyle.powms.data.items.6.matcolor}'
+                        },
                         store: stColorStore,
                         valueField: "id",
                         displayField: "id",
@@ -888,12 +972,14 @@ Ext.define('Vega.view.sales.edit.LineItem', {
                     xtype: 'textfield',
                     name: 'contrastdesc3',
                     hideEmptyLabel: false,
+                    bind: '{theStyle.powms.data.items.6.matdesc}',
                     width: 455
                 },{
                     xtype: 'textareafield',
                     fieldLabel: 'Stitch Desc',
                     width: 455,
                     height: 50,
+                    bind: '{theStyle.stitchdesc}',
                     name: 'stitchdesc'
                 }]
             },{
@@ -904,18 +990,27 @@ Ext.define('Vega.view.sales.edit.LineItem', {
                 },
                 items:[{
                     name: 'fabricby',
-                    fieldLabel: 'Fabric by'
+                    fieldLabel: 'Fabric by',
+                    bind: '{theStyle.fabricby}'
                 },{
                     name: 'markerby',
-                    fieldLabel: 'Marker by'
+                    fieldLabel: 'Marker by',
+                    bind: '{theStyle.markerby}'
                 },{
                     name: 'pnsby',
-                    fieldLabel: 'Print & Stone by'
+                    fieldLabel: 'Print & Stone by',
+                    bind: '{theStyle.pnsby}'
                 }]
             }]
         });
 
         me.callParent(arguments);
+    },
+
+    onRendered: function(comp){
+        var preview = this.down('multiimageupload'),
+            previewImages = preview.query('image');
+
     },
 
     getImageSrc: function(combo){
@@ -934,7 +1029,7 @@ Ext.define('Vega.view.sales.edit.LineItem', {
                     //console.log('success', result.data);
                     //printImage.title = result.data.F_DESC1;
                     if(result.data != null){
-                        path = '../' + result.data.F_LINK + result.data.F_LOCATION + result.data.F_EXT;
+                        path = '../' + result.data.F_LINK + 'thumbs/' + result.data.F_LOCATION + '_medium' + result.data.F_EXT;
                     }
                     previewImage.setSrc(path);
                 }

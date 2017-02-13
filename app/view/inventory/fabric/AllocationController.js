@@ -86,12 +86,12 @@ Ext.define('Vega.view.inventory.fabric.AllocationController', {
 
     onTriggerSearchClicked: function(field){
 
-        this.redirectTo('inventory.allocation/' + field.getValue());
+        this.redirectTo('allocation/' + field.getValue());
     },
 
     onTriggerClearClicked: function(field){
 
-        this.redirectTo('inventory.allocation');
+        this.redirectTo('allocation');
     },
 
     onComboRendered: function(combo){
@@ -99,9 +99,11 @@ Ext.define('Vega.view.inventory.fabric.AllocationController', {
     },
 
     onComboChanged: function (combo, newValue, oldValue, eOpts) {
+        /*
         if(combo.triggers.clear){
             combo.triggers.clear.el.setDisplayed(combo.getRawValue().toString().length == 0 ? false : true);
         }
+        */
     },
 
     onSearchClicked: function(btn) {
@@ -221,7 +223,6 @@ Ext.define('Vega.view.inventory.fabric.AllocationController', {
             style: fabric.getValue().trim(),
             color: color.getValue().trim()
         });
-
         lotno.getStore().load();
 
         Ext.apply(store.getProxy().extraParams, {
@@ -362,8 +363,8 @@ Ext.define('Vega.view.inventory.fabric.AllocationController', {
                 property: 'lotno',
                 value: combo.getValue()
             });
-            combo.triggerCell.item(1).setDisplayed(true);
-            combo.updateLayout();
+            //combo.triggerCell.item(1).setDisplayed(true);
+            //combo.updateLayout();
         }
 
     },

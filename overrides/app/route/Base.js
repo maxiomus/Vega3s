@@ -23,7 +23,7 @@ Ext.define('Ext.app.route.Base', {
     },
 
     onTabChange: function(tabpanel, newTab, oldTab, eOpts){
-        console.log('Base - onTabChange', tabpanel, newTab);
+        //console.log('Base - onTabChange', tabpanel, newTab);
         this.redirectTo(this.getTabRoute(tabpanel, newTab));
         //var route = this.getTabRoute(tabpanel, newTab);
         //this.changeRoute(this, route);
@@ -75,13 +75,12 @@ Ext.define('Ext.app.route.Base', {
             route[0] = view.routeId;
 
         if(tab){
-            var store = view.getViewModel().getStore(view.routeId+"s"),
-                field = store.first().getIdProperty();
-
+            //console.log('Base', tab.getXType());
             if(tab.isXType("multiview")){
                 var mode = "",
-                    grid = tab.lookupReference("grid"),
-                    index = tab.lookupReference("center").getLayout().getActiveIndex();
+                    ctn = tab.lookupReference("center"),
+                    grid = ctn.getLayout().getActiveItem(),
+                    index = ctn.getLayout().getActiveIndex();
 
                 switch(index){
                     case 0:
@@ -99,14 +98,35 @@ Ext.define('Ext.app.route.Base', {
                 if(grid && grid.getSelectionModel().getSelection().length > 0){
                     var p = grid.getSelectionModel().getSelection();
 
-                    route[2] = p[0].get(field);
+                    route[2] = p[0].id;
+                }
+
+                //console.log('getTabRoute - multiview', p);
+            }
+            else if (tab.isXType("sales-edit-form")){
+                route[1] = tab.opMode;
+
+                if(tab.getViewModel().get('srcPowhId') != null){
+                    route[2] = tab.getViewModel().get('srcPowhId');
+                }
+
+            }
+            else if (tab.isXType("sample-edit-form")){
+                route[1] = tab.reference;
+                if(tab.getViewModel().get('theStyle').id > 0) {
+                    route[2] = tab.getViewModel().get('theStyle').id;
                 }
             }
-
-            if(tab.inTab){
+            else if (tab.isXType("pi-form")){
+                route[1] = tab.reference;
+                if(tab.getViewModel().get('thePhysical').id > 0) {
+                    route[2] = tab.getViewModel().get('thePhysical').id;
+                }
+            }
+            else if(tab.inTab){
                 route[1] = "tab";
                 if(tab.active) {
-                    route[2] = tab.active.get(field);
+                    route[2] = tab.active.id;
                 }
                 else {
                     route[2] = tab.reference;
@@ -278,7 +298,7 @@ Ext.define('Ext.app.route.Base', {
 
         //console.log('downloadItems', recordIds);
 
-        location.href = '/api/Files/download?items=' + Ext.encode(recordIds);
+        location.href = '/api/FileStreams/download?items=' + Ext.encode(recordIds);
 
         // No need to use Ajax request for download files...
         /*Ext.Ajax.request({

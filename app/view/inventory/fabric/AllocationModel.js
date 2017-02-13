@@ -18,7 +18,7 @@ Ext.define('Vega.view.inventory.fabric.AllocationModel', {
 
             // allow the grid to interact with the paging scroller by buffering
             //buffered: true,
-            pageSize: 100,
+            pageSize: 50,
             //numFromEdge: 5,
             //trailingBufferZone: 100,
             //leadingBufferZone: 100,

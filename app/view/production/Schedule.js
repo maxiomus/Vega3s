@@ -5,7 +5,8 @@ Ext.define("Vega.view.production.Schedule",{
     requires: [
         "Vega.view.production.ScheduleController",
         "Vega.view.production.ScheduleModel",
-        "Vega.view.production.Grid"
+        "Vega.view.production.Grid",
+        'Ext.tip.ToolTip'
     ],
 
     alias: 'widget.prod-schedule',
@@ -19,8 +20,14 @@ Ext.define("Vega.view.production.Schedule",{
     header: false,
     margin: 8,
 
+    listeners: {
+        actrefresh: "onActionRefresh",
+        clearall: 'onClearFilters'
+    },
+
     initComponent: function(){
         var me = this;
+
         Ext.applyIf(me, {
             items: [{
                 xtype: "multiview",
@@ -37,6 +44,10 @@ Ext.define("Vega.view.production.Schedule",{
                     scrollable: true,
                     flex: 2,
                     listeners: {
+                        render: {
+                            fn: 'onGridRender',
+                            scope: this.controller
+                        },
                         select: {
                             //fn: "onSelect",
                             //scope: this.controller
@@ -66,6 +77,8 @@ Ext.define("Vega.view.production.Schedule",{
             display = multiview.lookupReference("display"),
             topbar = multiview.lookupReference("topbar");
 
+
+        topbar.items.items[0].setHidden(false);
         topbar.items.last().setHidden(true);
         topbar.insert(0,
             [{
@@ -82,22 +95,53 @@ Ext.define("Vega.view.production.Schedule",{
                 },
                 listeners: {
                     change: "onFilterItemChange",
-                    scope: this
+                    scope: this.controller
+                }
+            },
+            {
+                xtype: "searchcombo",
+                reference: 'searchcombo',
+                width: 300,
+                hidden: true,
+                listeners: {
+                    triggerclear: "onClearClick",
+                    triggersearch: "onSearchClick",
+                    scope: this.controller
                 }
             },
             {
                 xtype: "gridsearchfield",
+                reference: 'searchfield',
                 width: 300,
                 grid: "prod-grid",
                 paramName: "POW"
             }]
         );
+
+        topbar.insert(15, [{
+            xtype: 'button',
+            iconCls: 'fa fa-external-link-square',
+            text: 'Export',
+            handler: function(b){
+                grid.saveDocumentAs({
+                    type: 'excel',
+                    title: 'Production Schedule Sheet',
+                    fileName: 'pss ' + Ext.Date.format(new Date(), 'Y-m-d') + '.xml'
+                })
+            }
+        }]);
+
+        me.contextmenu = Ext.create('Ext.menu.Menu', {
+            items: [
+                topbar.actRefresh
+            ]
+        });
+
+        this.relayEvents(topbar, ["actrefresh", "clearall"]);
     },
 
-    onFilterItemChange: function(combo, j, g, l){
-        var topbar = combo.up("topbar"),
-            search = topbar.down("gridsearchfield");
-
-        search.paramName = combo.getValue();
+    onDestroy:function(){
+        this.contextmenu.destroy();
+        this.callParent(arguments);
     }
 });

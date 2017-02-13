@@ -7,13 +7,19 @@ Ext.define('Vega.view.reports.inventory.InventoryByLotModel', {
 
     alias: 'viewmodel.inventorybylot',
 
+    data: {
+
+    },
+
     stores: {
+
         'lotnos': {
             fields: ['id', 'text'],
 
             // allow the grid to interact with the paging scroller by buffering
             //buffered: true,
-            pageSize: 100,
+            pageSize: 50,
+            remoteFilter: true,
             //numFromEdge: 5,
             //trailingBufferZone: 100,
             //leadingBufferZone: 100,
@@ -24,14 +30,11 @@ Ext.define('Vega.view.reports.inventory.InventoryByLotModel', {
                 url: '/api/Combos/lotnos',
                 reader: {
                     type: 'json',
-                    rootProperty: 'data',
-                    totalProperty: 'total',
-                    successProperty: 'success'
+                    rootProperty: 'data'
                 }
-            },
-
-            remoteFilter: true
+            }
         },
+
         'inventories': {
             model: 'reports.InventoryByLot',
 

@@ -4,6 +4,7 @@
 Ext.define('Ext.overrides.form.field.ComboBox', {
     override: 'Ext.form.field.ComboBox',
     createPicker: function() {
+
         var me = this,
             picker,
             pickerCfg = Ext.apply({

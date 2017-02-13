@@ -9,7 +9,7 @@ Ext.define("Ext.ux.panel.HAccordion",{
         pack: 'center'
     },
 
-    defaultType: 'form',
+    defaultType: 'panel',
     defaults: {
         flex: 1,
         margin: 1,

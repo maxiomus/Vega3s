@@ -9,7 +9,17 @@ Ext.define("Vega.view.dal.DalModel", {
     alias: "viewmodel.dal",
 
     data: {
-        selectedImage: null
+
+    },
+
+    formulas: {
+        currentComp: {
+            bind: '{components.selection}',
+            get: function(comp){
+                this.set('current.component', comp);
+                return comp;
+            }
+        }
     },
 
     filters: {
@@ -20,17 +30,197 @@ Ext.define("Vega.view.dal.DalModel", {
     },
 
     stores: {
-        types: {
+        bodies: {
+            fields: ['id', 'text'],
+            pageSize: 25,
+            //remoteFilter: true,
+            autoLoad: true,
+
+            proxy: {
+                type: 'ajax',
+                url: '/api/Combos/bodies',
+
+                reader: {
+                    type: 'json',
+                    rootProperty: 'data'
+                }
+            }
+        },
+
+        styles: {
+            fields: ['id', 'text'],
+            pageSize: 25,
+            //remoteFilter: true,
+            autoLoad: false,
+
+            proxy: {
+                type: 'ajax',
+                url: '/api/Combos/styles',
+
+                reader: {
+                    type: 'json',
+                    rootProperty: 'data'
+                }
+            }
+        },
+
+        components: {
             fields: ["id", "text"],
+            //storeId: 'components',
+            pageSize: 25,
+            autoLoad: false,
+            proxy: {
+                type: 'ajax',
+                url: '/api/Combos/components',
+
+                reader: {
+                    type: 'json',
+                    rootProperty: 'data'
+                }
+            }
+        },
+
+        compColors: {
+            fields: ['id', 'text'],
+            pageSize: 25,
+            //remoteFilter: true,
+            autoLoad: false,
+
+            proxy: {
+                type: 'ajax',
+                url: '/api/Combos/rawcolors',
+
+                reader: {
+                    type: 'json',
+                    rootProperty: 'data'
+                }
+            }
+        },
+
+        sides: {
+            fields: ['id', 'text'],
+            autoLoad: true,
+            //pageSize: 999,
+            proxy: {
+                type: 'ajax',
+                url: 'data/sideTypes.json'
+            }
+        },
+
+        bomtypes: {
+            fields: ["id", "text"],
+            autoLoad: true,
+            //pageSize: 999,
+            proxy: {
+                type: "ajax",
+                url: "/api/Combos/bomtypes",
+
+                pageParam: '',
+                startParam: '',
+                limitParam: '',
+
+                reader: {
+                    type: "json",
+                    rootProperty: 'data'
+                }
+            }
+        },
+
+        customers: {
+            fields: ["id", "text"],
+            autoLoad: true,
+            //pageSize: 999,
+            proxy: {
+                type: "ajax",
+                url: "/api/Combos/customers",
+
+                pageParam: '',
+                startParam: '',
+                limitParam: '',
+
+                reader: {
+                    type: "json",
+                    rootProperty: 'data'
+                }
+            }
+        },
+
+        vendors: {
+            fields: ["id", "text"],
+            autoLoad: true,
+            //pageSize: 999,
+            proxy: {
+                type: "ajax",
+                url: "/api/Combos/vendors",
+
+                pageParam: '',
+                startParam: '',
+                limitParam: '',
+
+                reader: {
+                    type: "json",
+                    rootProperty: 'data'
+                }
+            }
+        },
+
+        themes: {
+            fields: ["id", "text"],
+
+            //pageSize: 999,
             autoLoad: true,
             proxy: {
                 type: "ajax",
-                url: "/api/Options/types",
+                url: "/api/Combos/themes",
+
+                pageParam: '',
+                startParam: '',
+                limitParam: '',
+
                 reader: {
                     type: "json",
-                    rootProperty: 'data',
-                    totalProperty: 'total',
-                    successProperty: 'success'
+                    rootProperty: 'data'
+                }
+            }
+        },
+
+        pantones: {
+            fields: ['id', 'text'],
+            // allow the grid to interact with the paging scroller by buffering
+            //buffered: true,
+            //pageSize: 999,
+            autoLoad: true,
+
+            proxy: {
+                type: 'ajax',
+                url: '/api/Combos/pantones',
+
+                pageParam: '',
+                startParam: '',
+                limitParam: '',
+
+                reader: {
+                    type: 'json',
+                    rootProperty: 'data'
+                }
+            }
+        },
+
+        types: {
+            fields: ["id", "text"],
+            autoLoad: true,
+            //pageSize: 999,
+            proxy: {
+                type: "ajax",
+                url: "/api/Options/types",
+
+                pageParam: '',
+                startParam: '',
+                limitParam: '',
+
+                reader: {
+                    type: "json",
+                    rootProperty: 'data'
                 }
             },
 
@@ -39,19 +229,58 @@ Ext.define("Vega.view.dal.DalModel", {
             }
         },
 
+        fabricTypes: {
+            fields: ['id', 'text'],
+            autoLoad: true,
+            pageSize: 9999,
+            proxy: {
+                type: 'ajax',
+                url: 'data/dal/fabricTypes.json',
+
+                pageParam: '',
+                startParam: '',
+                limitParam: ''
+            }
+        },
+
+        bodyTypes: {
+            fields: ['id', 'text'],
+            autoLoad: true,
+            pageSize: 9999,
+            proxy: {
+                type: 'ajax',
+                url: 'data/dal/bodyTypes.json',
+
+                pageParam: '',
+                startParam: '',
+                limitParam: ''
+            }
+        },
+
+        categories: {
+            fields: ["id", "text"],
+            autoLoad: true,
+            pageSize: 9999,
+            proxy: {
+                type: 'ajax',
+                url: 'data/dal/categories.json',
+
+                pageParam: '',
+                startParam: '',
+                limitParam: ''
+            },
+            listeners: {load: "onCategoryLoad"}
+        },
+
         dals: {
             model: "Media",
             storeId: "dals",
+            session: true,
             autoLoad: false,
+            //autoSync: true,
             remoteFilter: true,
             remoteSort: true,
             pageSize: 50,
-
-            listeners: {
-                load: function(store){
-
-                }
-            },
 
             isDirty: function(){
                 var b=this.getModifiedRecords().length;
@@ -61,50 +290,6 @@ Ext.define("Vega.view.dal.DalModel", {
             }
         },
 
-        category: {
-            fields: ["label", "field"],
-            data: [{
-                label: "P.D.M #",
-                field: "F_OWNER"
-            },
-            {
-                label: "Style #",
-                field: "F_NAME"
-            },
-            {
-                label: "Desc",
-                field: "F_DESC1"
-            },
-            {
-                label: "Type",
-                field: "F_DESC2"
-            },
-            {
-                label: "Color",
-                field: "F_DESC3"
-            },
-            {
-                label: "Vendor",
-                field: "F_DESC4"
-            },
-            {
-                label: "Body #",
-                field: "F_DESC5"
-            },
-            {
-                label: "Print #",
-                field: "F_DESC6"
-            },
-            {
-                label: "Account",
-                field: "F_DESC8"
-            },
-            {
-                label: "Theme",
-                field: "F_DESC9"
-            }],
-            listeners: {load: "onCategoryLoad"}
-        },
         dalsChained: {
             source: "{dals}"
         }

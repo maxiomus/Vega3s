@@ -5,9 +5,13 @@ Ext.define("Vega.view.sales.edit.Form",{
     requires: [
         "Vega.view.sales.edit.FormController",
         "Vega.view.sales.edit.FormModel",
-        'Vega.view.sales.edit.LineItem',
-        'Ext.ux.layout.ResponsiveColumn',
+        'Vega.view.sales.edit.Detail',
+        'Vega.model.sales.File',
+        'Ext.container.ButtonGroup',
+        'Ext.data.proxy.Memory',
+        'Ext.ux.form.field.MemoryCombo',
         'Ext.ux.panel.HAccordion',
+        'Ext.ux.layout.ResponsiveColumn',
         'Ext.ux.form.CheckboxStoreGroup',
         //'Ext.ux.form.ImageUploadField',
         'Ext.ux.form.DDFileUpload',
@@ -21,14 +25,26 @@ Ext.define("Vega.view.sales.edit.Form",{
         type: "sales-edit-form"
     },
 
+    bind: {
+        title: '{title}'
+    },
+
     session: true,
     trackResetOnLoad: true,
 
     layout: {
-        type: 'anchor'
+        type: 'fit'
     },
 
-    bodyPadding: 5,
+    minWidth: 1024,
+    //bodyPadding: 5,
+
+    listeners: {
+        //afterrender: 'onAfterRender',
+        //added: 'onAdded',
+        openwin: 'onEditStyleClick',
+        opentna: 'onGridWidgetClick'
+    },
 
     dockedItems: [{
         xtype: 'toolbar',
@@ -38,34 +54,150 @@ Ext.define("Vega.view.sales.edit.Form",{
             ui: 'default'
         },
         items: [{
+            iconCls: 'fa fa-arrow-circle-o-up',
+            //reference: 'submit',
+            text: '',
+            tooltip: 'Submit Current Form',
+            handler: 'onHandleAction'
+        },{
+            iconCls: 'fa fa-arrow-circle-o-left ',
+            //reference: 'audit',
+            text: 'To Audit',
+            hidden: true,
+            nextStep: 'audit',
+            tooltip: 'Sent back to Review',
+            handler: 'onHandleAction'
+        },{
             iconCls: 'fa fa-save',
-            reference: 'save',
+            //reference: 'save',
             text: 'Save',
-            handler: 'onSave'
+            hidden: true,
+            nextStep: 'save',
+            tooltip: 'Save Only',
+            handler: 'onHandleAction'
         },{
             iconCls: 'fa fa-close',
-            text: 'Close'
+            text: 'Close',
+            //glyph:'xf0c7@FontAwesome',
+            tooltip: 'Close View',
+            handler: 'onClose'
         },'-',{
-            iconCls: 'fa fa-plus-circle',
-            reference: 'add',
-            text: 'Add',
-            tooltip: 'Add Style',
+            text: 'T&A',
+            iconCls: 'fa fa-tasks',
+            tooltip: 'T&A',
+            //reference: 'tna',
             hidden: true,
-            handler: 'onAddStyle'
+            handler: 'onTNAClick'
         },{
-            iconCls: 'fa fa-paperclip',
-            reference: 'attach',
-            text: 'Attach',
+            xtype: 'buttongroup',
+            reference: 'groupCrud',
+            margin: -8,
+            padding: 0,
             hidden: true,
-            tooltip: 'Attachment'
+            items: [{
+                text: 'New',
+                iconCls: 'fa fa-plus-circle',
+                //glyph:'xf0c7@FontAwesome',
+                tooltip: 'Add Style',
+                reference: 'add',
+                //ui: 'default',
+                handler: 'onAddStyleClick'
+            },{
+                text: 'Copy',
+                iconCls: 'fa fa-copy',
+                tooltip: 'Duplicate Style',
+                reference: 'copy',
+                bind: {
+                    disabled: '{!details.selection}'
+                },
+                handler: 'onCopyStyleClick'
+            },{
+                text: 'Edit',
+                iconCls: 'fa fa-edit',
+                tooltip: 'Edit Style',
+                reference: 'edit',
+                bind: {
+                    disabled: '{!details.selection}'
+                },
+                handler: 'onEditStyleClick'
+            },{
+                text: 'Delete',
+                iconCls: 'fa fa-remove',
+                tooltip: 'Delete Style',
+                reference: 'remove',
+                bind: {
+                    disabled: '{!details.selection}'
+                },
+                handler: 'onDeleteStyleClick'
+            },{
+                text: 'Attach',
+                iconCls: 'fa fa-paperclip',
+                tooltip: 'Attachment',
+                reference: 'attach',
+                hidden: true
+            }]
         },'->',{
+            xtype: "cycle",
+            //ui: "default",
+            ui: 'bootstrap-btn-default',
+            //cls:"delete-focus-bg",
+            prependText: "Header: ",
+            iconCls: "fa fa-chevron-left",
+            //iconAlign: 'right',
+            showText: true,
+            reference: "positionBtn",
+            changeHandler: "onPositionChange",
+            //scope: this.controller,
+            menu: {
+                items: [{
+                    text: "Top",
+                    iconCls: "fa fa-chevron-up",
+                    //reference: 'top',
+                    itemId: "top",
+                    checked: false
+                },{
+                    text: "Right",
+                    iconCls: "fa fa-chevron-right",
+                    //reference: 'right',
+                    itemId: "right",
+                    checked: false
+                },{
+                    text: "Bottom",
+                    iconCls: "fa fa-chevron-down",
+                    //reference: 'bottom',
+                    itemId: "bottom",
+                    checked: false
+                },{
+                    text: "Left",
+                    iconCls: "fa fa-chevron-left",
+                    //reference: 'left',
+                    itemId: "left",
+                    checked: true
+                }]
+            }
+        },{
             iconCls: 'fa fa-toggle-off',
             reference: 'toggleattach',
             ui: 'bootstrap-btn-default',
-            cls:"delete-focus-bg",
+            //cls:"delete-focus-bg",
             tooltip: 'Toggle Attachments',
             enableToggle: true,
-            toggleHandler: 'onToogleAttach'
+            hidden: false,
+            toggleHandler: function(btn, pressed){
+                var tabs = btn.up('form').lookupReference('panels'),
+                    attachTab = btn.up('form').lookupReference('attachments'),
+                    idx = tabs.items.indexOf(attachTab);
+
+                if(pressed){
+                    tabs.previousTab = tabs.getActiveTab();
+                }
+
+                tabs.getTabBar().items.getAt(idx).setHidden(!pressed);
+                tabs.setActiveTab(pressed ? attachTab : tabs.previousTab);
+
+                btn.setIconCls(pressed ? 'fa fa-toggle-on' : 'fa fa-toggle-off');
+
+            }
         }]
     }],
 
@@ -75,23 +207,62 @@ Ext.define("Vega.view.sales.edit.Form",{
             fieldHeight = 17,
             remainingHeight = padding + fieldHeight * 3;
 
-        /*var s = Ext.create('Ext.data.Store', {
-            fields: ['value', 'label'],
-            proxy: {
-                type: 'ajax',
-                url: 'data/sales.json'
-            },
-            autoLoad: true
-        });*/
+        //var vm = this.getViewModel();
 
-        var vm = this.getViewModel();
+        var memComponents = Ext.create('Ext.data.Store', {
+            pageSize: 50,
+            remoteFilter: true,
+            proxy: {
+                type: 'memory',
+                enablePaging: true,
+                reader: {
+                    type: 'json',
+                    rootProperty: 'data'
+                }
+            }
+        });
+
+        var remoteComponents = Ext.create('Vega.store.Components', {
+            autoLoad: true,
+
+            listeners: {
+                load: function(s){
+                    memComponents.getProxy().setData(s.getRange());
+                    memComponents.load();
+                }
+            }
+        });
+
+        Ext.apply(remoteComponents.getProxy().extraParams, {
+            type: 'FABRICS'
+        });
 
         Ext.applyIf(me, {
             items:[{
-                xtype: 'horizontalaccordion',
-                anchor: '100% 100%',
-                padding: '0 0 0 0',
+                //xtype: 'horizontalaccordion',
+                xtype: 'tabpanel',
+                //anchor: '100% 100%',
+                //padding: '0 0 0 0',
+                previousTab: null,
                 reference: 'panels',
+                border: false,
+                defaults: {
+                    scrollable: true,
+                    border: false
+                },
+                tabPosition: 'left',
+                tabBar: {
+                    defaults: {
+                        //height: 28, // set the height,
+                        border: true,
+                        style: {
+                            border: '2px solid #ccc'
+                        }
+                    }
+                },
+                listeners: {
+                    tabchange: 'onTabChange'
+                },
                 items: [{
                     title: 'Basic Information',
                     itemId: 'information',
@@ -104,10 +275,10 @@ Ext.define("Vega.view.sales.edit.Form",{
                     defaultType: 'container',
                     defaults: {
                         //flex: 1,
-                        minHeight: 400,
-                        padding: '10 10 0 10'
+                        minHeight: 720,
+                        padding: '10 5 0 5'
                     },
-                    padding: '0 10 0 0',
+                    //padding: '0 0 0 0',
                     items: [{
                         //responsiveCls: 'big-50 small-100',
                         defaultType: 'textfield',
@@ -117,82 +288,121 @@ Ext.define("Vega.view.sales.edit.Form",{
                         },
                         items: [{
                             name: 'powno',
-                            fieldLabel: 'P.O #',
+                            fieldLabel: 'P.O.W #',
                             bind: {
                                 value: '{header.powno}'
                             },
-                            hidden: true
+                            hidden: false,
+                            disabled: true,
+                            editable: false
                         },{
                             xtype: 'combo',
                             name: 'status',
-                            bind: {
-                                value: '{header.status}'
-                            },
-                            value: 'PRE-ADVISE',
+                            //value: 'PRE-ADVISE',
                             fieldLabel: 'STATUS',
-                            displayField: 'label',
-                            valueField: 'label',
+                            displayField: 'text',
+                            valueField: 'text',
                             editable: false,
-                            disabled: true,
-                            allowBlank: false,
-                            store: 'powStatus'
+                            //disabled: false,
+                            //store: ['PRE-ADVISE', 'REVISED'],
+                            bind: {
+                                store: '{status}',
+                                value: '{header.status}'
+                            }
+                            //store: 'powStatus'
                         },{
                             xtype: 'combo',
                             name: 'customer',
                             fieldLabel: 'CUSTOMER NAME',
                             displayField: 'text',
                             valueField: 'text',
-                            editable: false,
+                            editable: true,
+                            selectOnFocus: true,
                             allowBlank: false,
+                            forceSelection: true,
                             //msgTarget: 'side',
-                            queryMode: 'remote',
-                            triggerAction: 'all',
+                            minChars: 1,
+                            queryMode: 'local',
+                            //queryParam: 'filter',
+                            //triggerAction: 'all',
                             bind: {
+                                store: '{customers}',
                                 value: '{header.customer}'
-                            },
-                            store: 'customer'
+                            }
                         },{
                             xtype: 'combo',
                             name: 'division',
                             fieldLabel: 'DIVISION',
                             displayField: 'text',
                             valueField: 'text',
+                            //selectOnFocus: false,
                             editable: false,
                             allowBlank: false,
-                            queryMode: 'remote',
-                            triggerAction: 'all',
+                            queryMode: 'local',
+                            //triggerAction: 'all',
                             bind: {
+                                store: '{divisions}',
                                 value: '{header.division}'
-                            },
-                            store: 'division'
+                            }
+                            //store: 'division'
                         },{
                             xtype: 'combo',
                             name: 'ordertype',
                             fieldLabel: 'ORDER TYPE',
                             displayField: 'text',
                             valueField: 'text',
-                            editable: false,
+                            selectOnFocus: true,
+                            editable: true,
                             allowBlank: false,
-                            queryMode: 'remote',
-                            triggerAction: 'all',
+                            forceSelection: true,
+                            minChars: 1,
+                            queryMode: 'local',
+                            //queryParam: 'filter',
+                            //triggerAction: 'all',
                             bind: {
+                                store: '{types}',
                                 value: '{header.ordertype}'
-                            },
-                            store: 'type'
+                            }
+                            //store: 'type'
                         },{
-                            name: 'label',
-                            fieldLabel: 'LABEL',
+                            name: 'custpo',
+                            fieldLabel: 'CUSTOMER P.O #',
                             bind: {
-                                value: '{header.label}'
+                                value: '{header.custpo}'
                             },
-                            allowBlank: false
+                            allowBlank: true
                         },{
                             name: 'dept',
                             fieldLabel: 'CUSTOMER DEPT #',
                             bind: {
                                 value: '{header.custdept}'
                             },
-                            allowBlank: false
+                            allowBlank: true
+                        },{
+                            xtype: 'combo',
+                            name: 'label',
+                            fieldLabel: 'LABEL',
+                            displayField: 'text',
+                            valueField: 'text',
+                            editable: true,
+                            selectOnFocus: true,
+                            allowBlank: true,
+                            forceSelection: true,
+                            //msgTarget: 'side',
+                            matchFieldWidth: false,
+                            minChars: 1,
+                            queryMode: 'local',
+                            //queryParam: 'filter',
+                            //triggerAction: 'all',
+                            bind: {
+                                store: '{labels}',
+                                value: '{header.label}'
+                            },
+                            listConfig: {
+                                loadindText: 'Searching...',
+                                emptyText: 'No matching items found.',
+                                width: 300
+                            }
                         },{
                             xtype: 'radiogroup',
                             fieldLabel: 'PRETICKET',
@@ -220,7 +430,7 @@ Ext.define("Vega.view.sales.edit.Form",{
                             bind: {
                                 value: '{header.pack}'
                             },
-                            store: ['HANGING', 'FOLDING']
+                            store: ['FLAT', 'HANGING']
                         },{
                             xtype: 'radiogroup',
                             fieldLabel: 'EDI',
@@ -239,19 +449,31 @@ Ext.define("Vega.view.sales.edit.Form",{
                                 inputValue: false
                             }]
                         },{
+                            xtype: 'combo',
                             name: 'terms',
                             fieldLabel: 'TERMS',
+                            displayField: 'text',
+                            valueField: 'text',
+                            editable: true,
+                            selectOnFocus: true,
+                            allowBlank: true,
+                            forceSelection: true,
+                            //msgTarget: 'side',
+                            minChars: 1,
+                            queryMode: 'local',
+                            //queryParam: 'filter',
+                            //triggerAction: 'all',
                             bind: {
+                                store: '{terms}',
                                 value: '{header.terms}'
-                            },
-                            allowBlank: false
+                            }
                         },{
                             name: 'buyer',
                             fieldLabel: 'BUYER',
                             bind: {
                                 value: '{header.buyer}'
                             },
-                            allowBlank: false
+                            allowBlank: true
                         },{
                             name: 'totalqty',
                             fieldLabel: 'TOTAL QTY',
@@ -260,11 +482,65 @@ Ext.define("Vega.view.sales.edit.Form",{
                             },
                             allowBlank: false
                         },{
+                            xtype: "memorycombo",
                             name: 'mainfabric',
+                            //itemId: "Prints",
+                            fieldLabel: 'FABRIC',
+                            //fieldStyle: 'text-transform:uppercase',
+                            //labelWidth: 50,
+                            //width: 160,
+                            //autoSelect: false,
+                            hideTrigger: true,
+                            //publishes: 'value',
+                            valueField: 'label',
+                            displayField: 'label',
                             bind: {
                                 value: '{header.mainfabric}'
                             },
-                            fieldLabel: 'FABRIC'
+                            store: memComponents,
+                            matchFieldWidth: false,
+                            autoLoadOnValue: true,
+                            //forceSelection: false,
+                            //selectOnFocus: true,
+                            pageSize: 50,
+                            //minChars: 0,
+                            queryMode: 'local',
+                            //queryParam: 'filter',
+                            //queryDelay: 800,
+                            //triggerAction: 'all',
+                            lastQuery: '',
+                            listConfig: {
+                                loadindText: 'Searching...',
+                                emptyText: 'No matching items found.',
+                                width: 340
+                            },
+                            plugins: [{
+                                ptype: "cleartrigger"
+                            }],
+                            listeners: {
+                                triggerClear: function(combo){
+                                    //var txtDesc = this.ownerCt.ownerCt.query('textfield[name="content"]')[0];
+                                    //txtDesc.setValue('');
+                                },
+                                beforequery: {
+                                    fn: function(qe){
+                                        //delete qe.combo.lastQuery;
+                                    }
+                                },
+                                render: {
+                                    fn: function(combo){
+
+                                    },
+                                    scope: this
+                                },
+                                select: {
+                                    fn: function(combo, rec, e){
+                                        //var me = this,
+                                        //    txtDesc = me.ownerCt.ownerCt.query('textfield[name="content"]')[0];
+                                        //txtDesc.setValue(me.getSelection().data.text);
+                                    }
+                                }
+                            }
                         },{
                             name: 'content',
                             bind: {
@@ -277,18 +553,42 @@ Ext.define("Vega.view.sales.edit.Form",{
                             fieldLabel: 'SIZES',
                             displayField: 'text',
                             valueField: 'text',
-                            queryMode: 'remote',
-                            triggerAction: 'all',
+                            editable: true,
+                            selectOnFocus: true,
+                            forceSelection: true,
+                            minChars: 1,
+                            queryMode: 'local',
+                            //triggerAction: 'all',
                             bind: {
+                                store: '{sizeCats}',
                                 value: '{header.sizes}'
-                            },
-                            store: 'sizeCat'
+                            }
+                            //store: 'sizeCat'
                         },{
                             name: 'ratio',
                             bind: {
                                 value: '{header.ratio}'
                             },
                             fieldLabel: 'RATIO'
+                        },{
+                            xtype: 'combo',
+                            name: 'factory',
+                            fieldLabel: 'FACTORY',
+                            displayField: 'text',
+                            valueField: 'text',
+                            editable: false,
+                            //triggerAction: 'all',
+                            bind: {
+                                store: '{factories}',
+                                value: '{header.factory}'
+                            }
+                        },{
+                            name: 'incidentals',
+                            fieldLabel: 'TRADE ALLOWANCE',
+                            bind: {
+                                value: '{header.incidentals}'
+                            },
+                            allowBlank: true
                         },{
                             xtype: 'datefield',
                             name: 'cxldate',
@@ -314,56 +614,58 @@ Ext.define("Vega.view.sales.edit.Form",{
                         },
                         //minWidth: 400,
                         items:[{
-                            title: 'SALES',
+                            title: 'Sales',
                             items:[{
                                 xtype: 'checkboxstoregroup',
                                 name: 'sales',
                                 bind: {
+                                    //store: '{sales}',
                                     value: '{salesValue}'
                                 },
+                                //publishes: ['value'],
+                                store: 'sales',
                                 hideLabel: true,
                                 columns: 3,
-                                padding: '0 0 0 8',
-                                store: "sales",
+                                padding: '0 0 0 0',
                                 listeners:
                                 {
                                     change: function(field, newValue, oldValue, eOpts)
                                     {
-                                        //console.log(newValue);
+
                                     }
                                 }
                             }]
                         },{
-                            title: 'SALES CONTACT',
+                            title: 'Sales Contact',
                             items:[{
                                 xtype: 'checkboxstoregroup',
                                 name: 'salescontact',
                                 bind: {
+                                    //store: '{sales}',
                                     value: '{contactValue}'
                                 },
+                                store: 'sales',
                                 hideLabel: true,
                                 columns: 3,
-                                padding: '0 0 0 8',
-                                store: "sales"
+                                padding: '0 0 0 0'
                             }]
                         },{
-                            title: 'Required Submission',
+                            title: 'Sample Requirements',
                             layout: 'anchor',
                             items: [{
                                 xtype: 'checkboxstoregroup',
                                 name: 'submissions',
                                 bind: {
+                                    //store: '{submissions}',
                                     value: '{submissionValue}'
                                 },
+                                store: 'submissions',
                                 hideLabel: true,
-                                columns: 2,
-                                store: 'submissions'
+                                columns: 2
                             }]
                         },{
-                            xtype: 'box',
-                            hidden: true
-                        },{
                             title: 'Special Comment',
+                            padding: '0 10 5 10',
                             items: [{
                                 xtype: 'htmleditor',
                                 bind: {
@@ -371,36 +673,231 @@ Ext.define("Vega.view.sales.edit.Form",{
                                 },
                                 name: 'comments'
                             }]
+                        },{
+                            title: '',
+                            padding: '5 5 0 10',
+                            items: [{
+                                xtype: 'fieldcontainer',
+                                fieldLabel: 'Created by',
+                                labelWidth: 80,
+                                layout: 'hbox',
+                                items: [{
+                                    xtype: 'displayfield',
+                                    name: 'userId',
+                                    fieldLabel: 'User ID',
+                                    hideLabel: true,
+                                    margin: '0 5 0 0',
+                                    flex: 1,
+                                    bind: {
+                                        value: '{header.userId}'
+                                    }
+                                },
+                                {
+                                    xtype: 'displayfield',
+                                    name: 'createdon',
+                                    fieldLabel: '@',
+                                    labelWidth: 10,
+                                    labelSeparator: '',
+                                    flex: 2,
+                                    bind: {
+                                        value: '{header.createdon}',
+                                        hidden: '{!header.createdon}'
+                                    },
+                                    renderer: Ext.util.Format.dateRenderer('F j, Y, h:i:s a')
+                                }]
+                            },{
+                                xtype: 'fieldcontainer',
+                                fieldLabel: 'Updated by',
+                                labelWidth: 80,
+                                layout: 'hbox',
+                                bind: {
+                                    hidden: '{!header.updatedby}'
+                                },
+                                items: [{
+                                    xtype: 'displayfield',
+                                    name: 'updatedby',
+                                    fieldLabel: 'By',
+                                    hideLabel: true,
+                                    margin: '0 5 0 0',
+                                    flex: 1,
+                                    bind: {
+                                        value: '{header.updatedby}'
+                                    }
+                                },
+                                {
+                                    xtype: 'displayfield',
+                                    name: 'updatedon',
+                                    fieldLabel: '@',
+                                    labelWidth: 10,
+                                    labelSeparator: '',
+                                    flex: 2,
+                                    bind: {
+                                        value: '{header.updatedon}',
+                                        hidden: '{!header.updatedon}'
+                                    },
+                                    renderer: Ext.util.Format.dateRenderer('F j, Y, h:i:s a')
+                                }]
+                            },{
+                                xtype: 'fieldcontainer',
+                                fieldLabel: 'Approved',
+                                reference: 'approved',
+                                labelWidth: 80,
+                                hidden: true,
+                                layout: 'hbox',
+                                items: [{
+                                    xtype: 'displayfield',
+                                    name: 'approvedby',
+                                    fieldLabel: 'By',
+                                    hideLabel: true,
+                                    margin: '0 5 0 0',
+                                    flex: 1
+                                },
+                                {
+                                    xtype: 'displayfield',
+                                    name: 'approvedon',
+                                    fieldLabel: '@',
+                                    labelWidth: 10,
+                                    labelSeparator: '',
+                                    flex: 2,
+                                    renderer: Ext.util.Format.dateRenderer('F j, Y, h:i:s a')
+                                }]
+                            }]
+                        }]
+                    },{
+                        title: 'Remarks',
+                        reference: 'logview',
+                        flex: 1,
+                        style: {
+                            //border: '1px solid black'
+                        },
+                        layout: {
+                            type: 'anchor'
+                        },
+                        //defaultType: 'container',
+                        defaults: {
+                            //flex: 1,
+                            //margin: '0 5 5 0',
+                            //padding: '5 0 0 5'
+                        },
+                        //scrollable: true,
+                        items: [{
+                            xtype: 'textarea',
+                            //height: 50,
+                            minWidth: 300,
+                            anchor: '100%',
+                            preventScrollbars: true,
+                            grow: true,
+                            growMax: 100,
+                            emptyText: 'Type to add...',
+                            labelAlign: 'top',
+                            fieldLabel: 'Remarks',
+                            listeners: {
+                                /*
+                                focus: function(field, event){
+                                    field.getEl().setHeight(160, true);
+                                },
+                                blur: function(field, event){
+                                    field.getEl().setHeight(50, true);
+                                }
+                                */
+                            }
+                        },{
+                            xtype: 'container',
+                            layout: {
+                                type: 'hbox'
+                            },
+                            items: [{
+                                xtype: 'button',
+                                text: 'Add',
+                                iconCls: 'fa fa-plus-circle',
+                                handler: 'onAddLogClick',
+                                margin: '0 5 0 0'
+                            },{
+                                xtype: 'button',
+                                text: 'Remove',
+                                bind: {
+                                    disabled: '{!logs.selection}'
+                                },
+                                iconCls: 'fa fa-minus-circle',
+                                handler: 'onRemoveLogClick'
+                            }]
+                        },{
+                            xtype: "dataview",
+                            reference: 'logs',
+                            anchor: '100%',
+                            minWidth: 440,
+                            margin: '5 0 5 0',
+                            cls: "comment-view",
+                            //session: true,
+                            overItemCls: "x-item-over",
+                            itemSelector: "div.thumb-wrap",
+                            preserveScrollOnRefresh: true,
+                            deferInitialRefresh: true,
+                            style: {
+                                //border: '1px solid black'
+                            },
+                            bind: {
+                                store: "{header.powlogs}"
+                            },
+                            tpl: new Ext.XTemplate(
+                                //'<div>',
+                                '<tpl for=".">',
+                                '<div class="thumb-wrap" id="{powlogId}">',
+                                '<div class="thumb">',
+                                '<div class="post-data">',
+                                '<h3 class="post-content">{content}</h3>',
+                                '</div>',
+                                '<div>',
+                                //'<div class="{status}">On WIP</div><span>Posted by {userId:capitalize} {logdate:date("M j, Y, g:i a")}</span>',
+                                '<div class="{status}"></div><span>Posted by {userId:capitalize} @ {logdate:date("M j, Y, g:i a")}</span>',
+                                '</div>',
+                                '</div>',
+                                '</div>',
+                                '</tpl>')
                         }]
                     }]
                 },{
                     title: 'Merchandise',
-                    itemId: 'merchandise',
+                    //itemId: 'merchandise',
                     reference: 'merchandise',
                     layout: {
                         type: 'vbox',
                         align: 'stretch'
                     },
-                    defaultType: 'container',
+                    //defaultType: 'container',
                     defaults: {
                         //flex: 1,
                         //minHeight: 400,
                         margin: '0 5 5 0',
                         padding: '5 0 0 5'
                     },
-                    padding: 5,
+                    //padding: 5,
+                    //collapsed: true,
                     scrollable: true,
-                    /*items: [{
-                        xtype: 'edit-lineitem'
-                    }],*/
-                    collapsed: true,
+                    items: [{
+                        xtype: 'sales-edit-detail',
+                        reference: 'details',
+                        bind: {
+                            store: '{header.powds}'
+                        },
+                        listeners: {
+                            //selectionchange: 'onGridSelectionChange',
+                            //afterrender: 'onAfterRender',
+                            rowdblclick: 'onGridRowDblclick'
+                        }
+                    }],
                     listeners: {
+                        /*
+                        render: {
+                            fn: 'onMerchandRender'
+                        },
                         expand: {
                             fn: 'onMerchandExpand'
                         },
                         collapse: {
                             fn: 'onMerchandCollapse'
                         }
+                        */
                     }
                 },{
                     title: 'Attachments',
@@ -411,24 +908,167 @@ Ext.define("Vega.view.sales.edit.Form",{
                         align: 'stretch'
                     },
                     hidden: true,
-                    collapsed: true,
+                    //collapsed: true,
+
+                    bind: {
+                        hidden: '{!toggleattach.pressed}'
+                    },
                     items:[{
-                        xtype: 'ddfileupload',
+                        xtype: 'multiupload',
+                        enableEdit: false,
                         flex: 1,
-                        margin: 5
-                    }],
-                    listeners: {
-                        expand: {
-                            fn: 'onAttachExpand'
+                        margin: 5,
+                        viewModel: {
+                            stores: {
+                                fileStore: {
+                                    model: 'Vega.model.sales.File'
+                                }
+                            }
                         },
-                        collapse: {
-                            fn: 'onAttachCollapse'
-                        }
-                    }
+                        columns: [{
+                            header: 'File Name',
+                            dataIndex: 'name',
+                            menuDisabled: true,
+                            sortable: false,
+                            flex: 4,
+                            renderer: Ext.util.Format.uppercase
+                        },{
+                            header: 'Size',
+                            dataIndex: 'size',
+                            flex: 1,
+                            renderer: Ext.util.Format.fileSize
+                        },{
+                            header: 'Type',
+                            dataIndex: 'type',
+                            menuDisabled: true,
+                            sortable: false,
+                            flex: 1,
+                            renderer: function(value, metaData, rec){
+                                metaData.tdAttr = 'valign=top';
+
+                                return value;
+                            }
+                        },{
+                            xtype: 'actioncolumn',
+                            text: '',
+                            iconCls: 'fa fa-close red-txt',
+                            width: 50,
+                            align: 'center',
+                            menuDisabled: true,
+                            sortable: false,
+                            items: [{
+                                iconCls: 'fa fa-remove',
+                                tooltip: 'Remove',
+                                handler: function(view, rowIndex, colIndex) {
+                                    //var store = grid.getStore();
+                                    //store.removeAt(rowIndex);
+                                    var field = view.grid.up('multiupload').fileUpload,
+                                        rec = view.getStore().getAt(rowIndex);
+                                    rec.drop();
+                                    //view.grid.getSelectionModel().deselectAll();
+                                    //console.log(gridview, rec.id * -1 - 1)
+                                    if(rec.phantom){
+                                        field.removeFileFromQueue(rec.id * -1 - 1)
+                                    }
+                                }
+                            }]
+                        }]
+                    }]
                 }]
             }]
         });
 
         me.callParent(arguments);
+
+        var grid = me.lookupReference('details');
+        me.relayEvents(grid, ['openwin', 'opentna']);
+        //grid.relayEvents(grid.getStore(), ['datachanged']);
+
+        //var vm = this.getViewModel();
+        //console.log(vm, vm.get('header'))
+    },
+
+    /**
+     * Sends request
+     */
+    send: function(options, extraData) {
+        var url = options.url,
+            method = options.method || 'POST',
+            success = options.success,
+            failure = options.failure,
+            params = options.params,
+            waitMsg = options.waitMsg,
+            formData = new FormData(this);
+
+        for (var attr in params) {
+            formData.append(attr, params[attr]);
+        }
+
+        if(extraData){
+            for (var item in extraData) {
+                formData.append(item, extraData[item]);
+                //console.log(item, extraData[item]);
+            }
+        }
+
+        Ext.each(this.imagesQueue, function (image) {
+            // syntax
+            // formData.append(name, value, filename);
+            // filename optional
+            formData.append(image['imageKey'], image['imageFile'], image['imageFile'].name);
+        });
+
+        var xhr = new XMLHttpRequest();
+        xhr.open(method, url, true);
+
+        xhr.addEventListener('loadstart', function (e) {
+            Ext.MessageBox.show({
+                msg: waitMsg,
+                progressText: 'Saving...',
+                width: 300,
+                wait: true,
+                waitConfig: {
+                    interval: 200
+                }
+            });
+        }, false);
+
+        xhr.addEventListener('loadend', function (evt) {
+            Ext.MessageBox.hide();
+            /*
+             if (evt.target.status === 200) {
+             var obj = Ext.decode(evt.target.responseText);
+             if (obj.success) {
+             success(obj);
+             } else {
+             failure(obj);
+             }
+             } else {
+             failure(obj);
+             }
+             */
+
+        }, false);
+
+        // notice that the event handler is on xhr and not xhr.upload
+        xhr.addEventListener('readystatechange', function(evt) {
+            if(this.readyState === 4 && this.status === 200 ) {
+                // the transfer has completed and the server closed the connection.
+                var obj = Ext.decode(evt.target.responseText);
+                if(obj.success){
+                    success(obj);
+                }
+                else {
+                    failure(obje);
+                }
+            }
+
+        }, false);
+
+        xhr.send(formData);
+
+        //this.imagesQueue = []; Array empty not working
+        //this.imagesQueue.length = 0;
+        //formData = new FormData();
     }
 });

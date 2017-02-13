@@ -1,9 +1,11 @@
 Ext.define('Ext.ux.form.CheckboxStoreGroup', {
     extend: 'Ext.form.CheckboxGroup',
 
-    //mixins: [
-    //    'Ext.util.StoreHolder'
-    //],
+    /*
+    mixins: [
+        'Ext.util.StoreHolder'
+    ],
+    */
 
     alias: 'widget.checkboxstoregroup',
 
@@ -46,11 +48,11 @@ Ext.define('Ext.ux.form.CheckboxStoreGroup', {
             rec = s.getAt(i);
 
             this.add({
-                xtype: 'checkbox',
-                inputValue: rec.get(vField),
+                //xtype: 'checkbox',
                 boxLabel: rec.get(lField),
-                checked: rec.get(cField)
-                //name: fName + i
+                inputValue: rec.get(vField)
+                //checked: rec.get(cField)
+                //name: this.name
             });
         }
 
@@ -61,8 +63,8 @@ Ext.define('Ext.ux.form.CheckboxStoreGroup', {
     initComponent: function() {
         var me = this;
 
-        //me.bindStore(me.store || 'empty-ext-store', true);
         me.callParent(arguments);
+        //me.bindStore(me.store || 'empty-ext-store', true);
         me.on('afterrender', me.onAfterRender);
     },
 

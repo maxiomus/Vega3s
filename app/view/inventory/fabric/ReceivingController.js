@@ -120,7 +120,7 @@ Ext.define('Vega.view.inventory.fabric.ReceivingController', {
             });
         }*/
 
-        this.redirectTo('inventory.receiving/' + field.getValue());
+        this.redirectTo('receiving/' + field.getValue());
     },
 
     onTriggerClearClicked: function(field){
@@ -138,7 +138,7 @@ Ext.define('Vega.view.inventory.fabric.ReceivingController', {
 
         grid.getStore().removeAll();*/
 
-        this.redirectTo('inventory.receiving');
+        this.redirectTo('receiving');
     },
 
     onReceivingSelectionChange: function(selection, records, eOpts){

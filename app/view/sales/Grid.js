@@ -7,34 +7,26 @@ Ext.define("Vega.view.sales.Grid", {
         'Vega.view.sales.GridModel'
     ],
 
-    alias: 'widget.pow-grid',
+    alias: 'widget.sales-grid',
 
+    /*
     itemId: "pow-grid",
 
     controller: "pow-grid",
     viewModel: {
         type: "pow-grid"
     },
+    */
 
-    publishes: ["selectedPows"],
-
-    bind: {
-        store: "{pows}",
-        selection: "{selectedPows}"
-    },
-
-    config: {
-
-    },
-
+    cls: "pow-grid",
     stateful:true,
     stateId: "pow-grid",
     stateEvents: ["columnmove", "columnresize", "groupchange", "bodyresize"],
 
+    loadMask: true,
+
     listeners: {
-        select: {
-            fn: "onSelect"
-        }
+
     },
 
     initComponent: function(){
@@ -42,9 +34,7 @@ Ext.define("Vega.view.sales.Grid", {
         me.columns = this.buildColumns();
 
         Ext.applyIf(me, {
-            selModel: {
-                pruneRemoved: false
-            },
+            /*
             viewConfig: {
                 loadMask:true,
                 stripeRows:true,
@@ -52,12 +42,19 @@ Ext.define("Vega.view.sales.Grid", {
                 preserveScrollOnRefresh:true,
                 deferInitialRefresh:true,
                 emptyText:'<h1 style="margin:20px">No matching results</h1>',
-                getRowClass: function(a, g, f, h){
-                    return"custom-row-style"
+                getRowClass: function(rec, idx, rowParams, store){
+                    return "custom-row-style"
+                },
+                prepareData: function(){
+
                 },
                 listeners:{
 
                 }
+            },
+            */
+            selModel: {
+                pruneRemoved: false
             },
             plugins:[{
                 ptype:"gridfilters"
@@ -69,98 +66,109 @@ Ext.define("Vega.view.sales.Grid", {
 
     buildColumns: function(){
         return[{
-            text:"PID",
-            dataIndex:"PID",
-            locked:false,
-            hidden:true,
-            filter:{
-                type:"number"
+            text: "ID",
+            dataIndex: "powhId",
+            locked: false,
+            hidden: true,
+            filter: {
+                type: "number"
             }
         },
         {
-            text:"Date",
-            width:140,
-            dataIndex:"CreateOn",
+            text: "Date",
+            width: 140,
+            dataIndex: "createdon",
             filter: {
-                type:"date"
+                type: "date"
             },
             renderer: this.formatDate
         },
         {
-            text:"P.O.W #",
-            dataIndex:"PowNo",
-            width:140,
-            filter:{
-                type:"string"
-            },
-            renderer: "renderPowNoColumn"
-        },
-        {
-            text:"Status",
-            dataIndex:"Status",
-            width:140,
-            hidden:false,
+            text: "P.O.W #",
+            dataIndex: "powno",
+            width: 140,
             filter: {
-                type:"string"
+                type: "string"
+            },
+            renderer: function(g,e,f){
+                var h = "";
+                if(localStorage.getItem("pow-seen-" + f.data.powhId)){
+                    e.tdCls += "visited";
+                    h = ' <i class="fa fa-check-square-o fa-lg"></i>'
+                }
+                return g + h;
             }
         },
         {
-            text:"Customer",
-            dataIndex:"Customer",
-            width:140,
+            text: "Status",
+            dataIndex: "status",
+            width: 140,
+            hidden: false,
             filter: {
-                type:"string"
+                type: "string"
+            }
+        },
+        {
+            text: "Customer",
+            dataIndex: "customer",
+            width: 140,
+            filter: {
+                type: "string"
             },
             renderer: function(c, d){
                 return Ext.util.Format.uppercase(c)
             }
         },
         {
-            text:"Type",
-            dataIndex:"Type",
+            text: "Type",
+            dataIndex: "ordertype",
+            width: 140,
+            hidden: false,
+            filter: {
+                type: "string"
+            }
+        },
+        {
+            text: "Division",
+            dataIndex: "division",
+            width: 140,
+            filter: {
+                type: "string"
+            }
+        },
+        {
+            text: "CXL Date",
+            dataIndex: "cancelon",
+            filter: {
+                type: "date"
+            }
+        },
+        {
+            text: "User ID",
+            dataIndex: "userId",
             width:140,
             hidden:false,
             filter: {
-                type:"string"
+                type: "string"
             }
         },
         {
-            text:"Division",
-            dataIndex:"Division",
-            width:140,
+            text: "Progress",
+            dataIndex: "progress",
+            hidden: false,
             filter: {
-                type:"string"
+                type: "string"
             }
         },
         {
-            text:"CXL Date",
-            dataIndex:"CancelOn",
-            filter: {
-                type:"date"
-            }
-        },
-        {
-            text:"User ID",
-            dataIndex:"UserID",
-            width:140,
-            hidden:false,
-            filter: {
-                type:"string"
-            }
-        },
-        {
-            text:"Description",
-            dataIndex:"Descript",
+            text: "Comments",
+            dataIndex: "comments",
             flex:1,
             hidden:false,
             filter: {
-                type:"string"
+                type: "string"
             }
         }]
-    },
-
-    onSelect: function(e, f, h, g){
-
     },
 
     loadStore: function(){

@@ -4,12 +4,9 @@
 Ext.define('Vega.controller.Base', {
     extend: 'Ext.app.Controller',
 
-    alias: 'controller.base',
+    alias: 'controller.base'
 
-    init: function(){
-
-    },
-
+    /*
     checkSession: function(){
         var app = Vega.app,
             args = Ext.Array.slice(arguments),
@@ -35,4 +32,6 @@ Ext.define('Vega.controller.Base', {
             )
         }
     }
+    */
 });
+

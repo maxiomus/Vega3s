@@ -1,0 +1,16 @@
+.request-fabric .x-grid-row
+{
+  height: 40px;
+  vertical-align: middle;
+  //cursor: pointer;
+}
+
+.complete-row .x-grid-cell {
+  background-color: #e2ffe2;
+  color: #090;
+}
+
+.due-row .x-grid-cell {
+  background-color: #ffe2e2;
+  color: #900;
+}

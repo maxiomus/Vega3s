@@ -1,0 +1,16 @@
+{
+  "total": 11,
+  "data": [
+    {"label": "ID", "field": "ID"},
+    {"label": "P.O.W #", "field": "PoNo"},
+    {"label": "Fabric", "field": "Fabric"},
+    {"label": "Color", "field": "Color"},
+    {"label": "Description", "field": "Descript"},
+    {"label": "Vendor", "field": "Vendor"},
+    {"label": "Lot #", "field": "LotNo"},
+    {"label": "Account", "field": "Dept"},
+    {"label": "Coordinator", "field": "Coordinator"},
+    {"label": "Status", "field": "Status"},
+    {"label": "Memo", "field": "Memo"}
+  ]
+}

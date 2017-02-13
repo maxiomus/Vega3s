@@ -123,12 +123,28 @@
         border-radius: 20px;
     }
 }
+
 .top-english-button{
     .x-btn-icon-el{
         width:21px;
         height:14px;
     }
 }
+
+.required
+{
+    background-color: #E1F5A9;
+    background-image: none;
+    //cursor: pointer;
+}
+
+.emphasized
+{
+    background-color: #FFFFCC;
+    background-image: none;
+    //cursor: pointer;
+}
+
 .collapsed{
     .hot-icon,.new-icon{
         &:after{
@@ -143,9 +159,11 @@
         display:none;
     }
 }
+
 .x-grid-cell{
     position:relative;
 }
+
 .hot-icon,.new-icon{
     &.hot-icon:after{
         content: "HOT";
@@ -169,6 +187,20 @@
         line-height: 18px;
     }
 }
+
+.white-txt { color: $lightest-color; }
+
+.blue-txt { color: $color-soft-blue; }
+
+.red-txt { color: $color-soft-red; }
+
+.green-txt { color: $color-soft-green; }
+
+.yellow-txt { color: $color-soft-yellow; }
+
+.orange-txt { color: $color-soft-orange; }
+
+.purple-txt { color: $color-soft-purple; }
 
 .x-treelist-item-tool {
     height: $panel-navigation-item-line-height;
@@ -194,6 +226,10 @@
     &:focus, &:hover{
         background: none;
     }
+}
+
+.x-hidden-node {
+    display: none !important;
 }
 
 //UI Styles for buttons

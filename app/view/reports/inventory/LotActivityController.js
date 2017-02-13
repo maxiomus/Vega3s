@@ -36,10 +36,12 @@ Ext.define('Vega.view.reports.inventory.LotActivityController', {
     },
 
     onComboChanged: function (combo, newValue, oldValue, eOpts) {
-        console.log(newValue, oldValue);
+        //console.log(newValue, oldValue);
+        /*
         if(combo.triggers.clear){
             combo.triggers.clear.el.setDisplayed(combo.getRawValue().toString().length == 0 ? false : true);
         }
+        */
 
     },
 
@@ -61,7 +63,7 @@ Ext.define('Vega.view.reports.inventory.LotActivityController', {
         store.clearFilter(true);
 
         if (filters.length > 0) {
-            console.log('fetchData', store);
+            //console.log('fetchData', store);
             store.filter(filters);
         }
         else {

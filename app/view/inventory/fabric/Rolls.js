@@ -17,140 +17,150 @@ Ext.define("Vega.view.inventory.fabric.Rolls", {
     },
 
     config: {
-        activeState: null,
-        defaultActiveState: "default"
+        //activeState: null,
+        //defaultActiveState: "default"
     },
 
     cls: "shadow-panel",
     header: false,
-    margin: 10,
-
-    listeners: {
-
-    },
+    margin: 8,
 
     initComponent: function(){
         var b=this;
+
+
         Ext.applyIf(b, {
             items: [{
                 xtype: "rolls-grid",
                 title: "Fabric Rolls",
-                reference: "grid",
+                reference: "rolls-grid",
                 iconCls: "fa fa-dot-circle-o",
                 dockedItems: [{
                     xtype: "toolbar",
                     dock: "top",
                     items: [{
-                        xtype: "combo",
+                        xtype: "memorycombo",
                         itemId: "cboFabric",
                         labelAlign: "left",
                         fieldLabel: "Fabric",
                         labelWidth: 50,
                         width: 200,
-                        store: "Components",
-                        valueField: "id",
-                        displayField: "id",
+                        store: "memComponents",
+                        valueField: "label",
+                        displayField: "label",
                         forceSelection: false,
                         selectOnFocus: false,
-                        pageSize: 100,
+                        pageSize: 50,
                         matchFieldWidth: false,
-                        queryMode: "remote",
-                        queryParam: "filter",
+                        queryMode: "local",
+                        //queryParam: "filter",
                         minChars: 1,
                         listConfig: {
                             loadindText: "Searching...",
                             emptyText: "No matching items found.",
                             width: 385
                         },
-                        triggers: {
-                            clear: {
-                                weight: -1,
-                                cls: "x-form-clear-trigger",
-                                tooltip: "Clear",
-                                hidden: true,
-                                handler: function(a){
-                                    this.clearValue();
-                                    this.collapse();
-                                    this.focus(10);
+                        plugins:[{
+                            ptype: "cleartrigger"
+                        }],
+                        listeners: {
+                            triggerClear: function(combo){
+
+                                var cboColor = combo.ownerCt.query('combo[itemId="cboColor"]')[0];
+                                cboColor.getStore().clearFilter();
+                                cboColor.setValue('');
+                            },
+                            beforequery: {
+                                fn: function(qe){
+                                    var store = qe.combo.getStore();
+                                    console.log(qe.combo, qe.combo.getValue())
+                                    store.clearFilter();
+                                    store.filter([{
+                                        property: 'text',
+                                        value: 'FABRICS',
+                                        operator: '='
+                                    }]);
                                 }
                             }
                         }
                     },
                     {xtype: "tbspacer"},
                     {
-                        xtype: "combo",
+                        xtype: "memorycombo",
                         itemId: "cboColor",
                         labelAlign: "left",
                         fieldLabel: "Color",
                         labelWidth: 50,
                         width: 200,
-                        store: "Colors",
-                        valueField: "id",
-                        displayField: "id",
+                        store: "memColors",
+                        valueField: "label",
+                        displayField: "label",
                         forceSelection: false,
                         selectOnFocus: false,
-                        pageSize: 100,
+                        pageSize: 50,
                         matchFieldWidth: false,
-                        queryMode: "remote",
-                        queryParam: "filter",
+                        queryMode: "local",
+                        //queryParam: "filter",
                         minChars: 1,
                         listConfig: {
                             loadindText: "Searching...",
                             emptyText: "No matching items found.",
                             width: 385
                         },
-                        triggers: {
-                            clear: {
-                                weight: -1,
-                                cls: "x-form-clear-trigger",
-                                tooltip: "Clear",
-                                hidden: true,
-                                handler: function(a){
-                                    this.clearValue();
-                                    this.collapse();
-                                    this.focus(10);
+                        plugins:[{
+                            ptype: "cleartrigger"
+                        }],
+                        listeners: {
+                            triggerClear: function(combo){
+
+                            },
+                            beforequery: {
+                                fn: function(qe){
+                                    var cboStyle = qe.combo.ownerCt.query('combo[itemId="cboFabric"]')[0],
+                                        store = qe.combo.getStore();
+
+                                    console.log(cboStyle, cboStyle.getValue())
+                                    store.clearFilter();
+
+                                    if(!Ext.isEmpty(cboStyle.getValue())){
+
+                                        store.filter([{
+                                            property: 'descript',
+                                            value: cboStyle.getValue().toUpperCase(),
+                                            operator: '='
+                                        }]);
+                                    }
+                                    //delete qe.combo.lastQuery;
                                 }
                             }
                         }
                     },
                     {xtype: "tbspacer"},
                     {
-                        xtype: "combo",
+                        xtype: "memorycombo",
                         itemId: "cboLotno",
                         labelAlign: "left",
                         fieldLabel: "Lot #",
                         labelWidth: 50,
                         width: 200,
-                        bind: {
-                            store: "{lotnos}"
-                        },
-                        valueField: "id",
-                        displayField: "id",
+                        store: 'memLotnos',
+                        valueField: "label",
+                        displayField: "label",
                         forceSelection: false,
                         selectOnFocus: false,
-                        pageSize: 100,
+                        pageSize: 50,
                         matchFieldWidth: false,
-                        queryMode: "remote",
-                        queryParam: "filter",
+                        queryMode: "local",
+                        //queryParam: "filter",
                         minChars: 1,
                         listConfig: {
                             loadindText: "Searching...",
                             emptyText: "No matching items found.",
                             width: 385
                         },
-                        triggers: {
-                            clear: {
-                                weight: -1,
-                                cls: "x-form-clear-trigger",
-                                tooltip: "Clear",
-                                hidden: true,
-                                handler: function(a){
-                                    this.clearValue();
-                                    this.collapse();
-                                    this.focus(10);
-                                }
-                            }
-                        },
+                        plugins:[{
+                            ptype: "cleartrigger"
+                        }],
                         tpl: '<tpl for="."><tpl if="[xindex] == 1"><table class="cbo-list"><tr><th width="60%">Lot #</th><th width="40%">On Hand</th></tr></tpl><tr class="x-boundlist-item"><td>{id}</td><td>{text}</td></tr><tpl if="[xcount-xindex]==0"></table></tpl></tpl>'},
                     {
                         xtype: "tbspacer"

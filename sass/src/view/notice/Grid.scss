@@ -22,9 +22,13 @@
   color: #333
 }
 
-.post-date {
+.date {
   font-weight:bold;
   color:#333;
+}
+
+i.hidden {
+  display: none;
 }
 
 .notice-grid .x-grid-rowbody {

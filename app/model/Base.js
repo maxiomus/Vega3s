@@ -5,3 +5,10 @@ Ext.define('Vega.model.Base', {
         namespace: 'Vega.model'
     }
 });
+
+function tr(value, record){
+    if(!Ext.isEmpty(value)){
+        return Ext.String.trim(value);
+    }
+    return value;
+};

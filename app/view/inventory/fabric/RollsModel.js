@@ -24,9 +24,7 @@ Ext.define('Vega.view.inventory.fabric.RollsModel', {
                 url: '/api/Combos/lotnos',
                 reader: {
                     type: 'json',
-                    rootProperty: 'data',
-                    totalProperty: 'total',
-                    successProperty: 'success'
+                    rootProperty: 'data'
                 }
             },
 

@@ -7,6 +7,14 @@ Ext.define("Vega.view.sales.PowController", {
 
     alias: "controller.pow",
 
+    control: {
+        '#': {
+            viewmodelready: function(a){
+                console.log(a)
+            }
+        }
+    },
+
     init: function(g){
         var multiview = g.lookupReference("multiview"),
             refs = multiview.getReferences(),
@@ -18,7 +26,7 @@ Ext.define("Vega.view.sales.PowController", {
     },
 
     initViewModel: function(b){
-        this.fireEvent("viewmodelready", this, b)
+        this.getView().fireEvent("viewmodelready", this, b);
     },
 
     onBeforeLoad: function(d, e, f){
@@ -26,13 +34,49 @@ Ext.define("Vega.view.sales.PowController", {
     },
 
     onLoad: function(store, records, successful, operation){
-        var me = this;
-
 
     },
 
-    onSelect: function(v, record, r, p){
+    onBeforeAdd: function(pow, tab, idx, e){
+        //console.log('ReviewController - beforeadd', tab.isXType('display'))
 
+        if(tab.isXType('display')){
+
+            //this.getView().relayEvents(tab, ['revise', 'accept']);
+            var topbar = tab.lookupReference('topbar'),
+                tvm = tab.getViewModel(),
+                rec = tvm.get('thePow'),
+                btnRevise = Ext.widget('button', {
+                    text: 'Revise',
+                    iconCls: 'fa fa-edit',
+                    hidden: false,
+                    scope: this,
+                    handler: function(btn){
+                        this.redirectTo('pow/edit/' + rec.data.powhId)
+                    }
+                });
+
+            console.log('PowController', rec.data.revision, rec.data.progress)
+
+            if(rec.data.revision != -1 && rec.data.progress != 'posted'){
+                if(Vega.user.inRole('cs') || Vega.user.inRole('revise') || Vega.user.inRole('administrators')){
+                    topbar.add(btnRevise);
+                }
+            }
+
+        }
+
+        if(tab.isXType('sales-edit-form')){
+            var buttons = tab.getDockedItems('toolbar[dock="top"] > button');
+
+            buttons[0].setHidden(true);
+            buttons[2].setHidden(false);
+
+        }
+    },
+
+    onSelect: function(v, record, r, p){
+        //console.log('onSelect PowController');
         var m = this.getView(),
             refs = m.lookupReference("multiview").getReferences(),
             u = refs.topbar,
@@ -49,8 +93,8 @@ Ext.define("Vega.view.sales.PowController", {
             s = refs.topbar.lookupReference("viewselection");
 
         l[0] = "pow";
-        l[1] = s.value != 1 ? "default" : "medium";
-        l[2] = record.get("PID");
+        l[1] = s.value != 2 ? "default" : "tiles";
+        l[2] = record.get("powhId");
 
         this.redirectTo(l.join("/"))
     },
@@ -84,19 +128,39 @@ Ext.define("Vega.view.sales.PowController", {
                 }
             });
         });*/
-        this.redirectTo("pow/tab/new");
+        //this.redirectTo("pow/tab/review/0");
     },
 
-    onRefreshClick: function(){
+    onClearFilters: function(b){
+        var me = this,
+            topbar = me.view.lookupReference("multiview").lookupReference("topbar"),
+            searchcombo = topbar.lookupReference('searchcombo'),
+            searchfield = topbar.lookupReference('searchfield'),
+            grid = me.view.lookupReference("multiview").lookupReference("grid");
+
+        searchcombo.setValue('');
+        searchcombo.getTrigger('clear').hide();
+        searchfield.setValue('');
+        searchfield.getTrigger('clear').hide();
+        grid.filters.clearFilters();
+    },
+
+    /**
+     *
+     * @param topbar {Ext.toolbar.Toolbar}
+     * @param widget {Ext.Component}
+     */
+    onActionView: function(topbar, widget){
+        var m = this.lookupReference("multiview"),
+            g = m.lookupReference("grid"),
+            s = g.getSelection()[0];
+
+        this.onTabOpen(null, s);
+    },
+
+    onActionRefresh: function(t,w){
+        //console.log(t, w)
         this.getStore("pows").reload();
-    },
-
-    onContextMenuOpenClick: function(d, c){
-        this.onTabOpen(null, d);
-    },
-
-    onContextMenuRefreshClick: function(d, c){
-        this.getStore("pows").load()
     },
 
     onContextMenuEditClick: function(d, c){
@@ -109,14 +173,14 @@ Ext.define("Vega.view.sales.PowController", {
 
     onTabOpen: function(i, h){
         var j = this,
-            f = j.view.lookupReference("multiview").lookupReference("icons"),
+            f = j.view.lookupReference("multiview").lookupReference("tiles"),
             g = Ext.fly(f.getNode(h)).query("i", false);
 
-        localStorage.setItem("pow-seen-"+h.data.PID, true);
+        localStorage.setItem("pow-seen-"+h.data.powhId, true);
         f.addItemCls(h, "visited");
         g[0].addCls("visited");
 
-        this.redirectTo("pow/tab/"+h.data.PID)
+        this.redirectTo("pow/tab/"+h.data.powhId);
     },
 
     onRowDblClick: function(g, i, j, h, f){
@@ -127,16 +191,16 @@ Ext.define("Vega.view.sales.PowController", {
         this.onTabOpen(null, h)
     },
 
-    onFilterItemChange: function(p, q, r, o){
-        var l = p.up("toolbar"),
-            m = l.down("gridsearchfield"),
-            n = l.down("searchcombo"),
-            j = p.getValue();
+    onFilterItemChange: function(combo, q, r, o){
+        var toolbar = combo.up("toolbar"),
+            m = toolbar.down("gridsearchfield"),
+            n = toolbar.down("searchcombo"),
+            j = combo.getValue();
 
         switch(j){
-            case "PowNo":
-            case "Descript":
-            case "UserID":
+            case "powno":
+            case "comments":
+            case "userId":
                 m.paramName = j;
                 m.show();
                 n.hide();
@@ -147,7 +211,8 @@ Ext.define("Vega.view.sales.PowController", {
                 m.hide()
         }
 
-        var k = this.getViewModel().getStore(j.toLowerCase());
+        var main = Vega.app.getMainView(),
+            k = main.getViewModel().getStore(j.toLowerCase());
 
         if(k != null){
             k.load();
@@ -189,7 +254,7 @@ Ext.define("Vega.view.sales.PowController", {
                         return false
                     }
                 });
-                console.log("onSearchClick", f, h.paramName);
+                //console.log("onSearchClick", f, h.paramName);
                 f.setValue(j);
                 f.setActive(true);
                 h.hasSearch = true;
@@ -209,7 +274,7 @@ Ext.define("Vega.view.sales.PowController", {
                 style: {height: "100%"},
                 width: "100%",
                 border: "none",
-                src: d.format("PDFHandler.ashx?index={0}&date={1}&file={2}", 2, d.date(c.active.data.CreateOn, "m/d/Y"), c.active.data.Link)
+                src: d.format("../services/PDFHandler.ashx?index={0}&date={1}&file={2}", 2, d.date(c.active.data.createdon), c.active.data.link)
             }
         })
     }

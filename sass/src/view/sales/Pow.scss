@@ -1,0 +1,15 @@
+.fa-filter-clear:before {
+  content: "\f0b0";
+  position: absolute;
+  font-size: 1.3em;
+  left: 1px;
+  //top: 1px;
+}
+.fa-filter-clear:after {
+  content: "\f00d";
+  position: absolute;
+  color: #cc3300;
+  font-size: 0.9em;
+  left: 10px;
+  top: 4px;
+}

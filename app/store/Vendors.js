@@ -8,7 +8,7 @@ Ext.define('Vega.store.Vendors', {
 
     // allow the grid to interact with the paging scroller by buffering
     //buffered: true,
-    pageSize: 100,
+    //pageSize: 100,
     autoLoad: false,
 
     proxy: {
@@ -16,12 +16,15 @@ Ext.define('Vega.store.Vendors', {
         url: '/api/Combos/vendors',
         reader: {
             type: 'json',
-            rootProperty: 'data',
-            totalProperty: 'total',
-            successProperty: 'success'
-        }
-    },
+            rootProperty: 'data'
+        },
 
-    remoteFilter: true
+        pageParam: null,
+        startParam: null,
+        limitParam: null
+        //sortParam: null,
+    }
+
+    //remoteFilter: true
     //remoteSort: true
 });

@@ -7,47 +7,27 @@ Ext.define("Vega.view.sales.View", {
         'Vega.view.sales.ViewModel'
     ],
 
-    alias: "widget.pow-view",
-
-    controller: "pow-view",
-    viewModel: {
-        type: "pow-view"
-    },
-
-    publishes: ["selectedPows"],
-
-    bind:{
-        store: "{pows}",
-        selection: "{selectedPows}"
-    },
-
-    config:{
-
-    },
+    alias: "widget.sales-view",
 
     scrollable: "y",
-    trackOver: false,
+    //loadMask: true,
+    //loadingHeight: 300,
+    //trackOver: false,
+    cls: "multi-view",
     loadMask: true,
-    loadingHeight: 300,
     overItemCls: "x-item-over",
     itemSelector: "div.thumb-wrap",
     preserveScrollOnRefresh: true,
     deferInitialRefresh: true,
 
-    cls: "multi-view",
-
     prepareData: function(f, d, e){
         Ext.apply(f, {
-            viewStatus: localStorage.getItem("pow-seen-"+f.PID)=="true"?"visited":""
+            viewStatus: localStorage.getItem("pow-seen-" + f.powhId) == "true" ? "visited" : ""
         });
         return f
     },
 
     listeners: {
-        select: {
-            fn: "onSelect",
-            scope: this.controller
-        },
         beforecontainerclick: function(){
             return false
         }
@@ -55,40 +35,33 @@ Ext.define("Vega.view.sales.View", {
 
     initComponent:function(){
         var me = this;
-        this.tpl = this.buildTemplate();
-        Ext.applyIf(me, {
-
-        });
+        //this.tpl = this.buildTemplate();
 
         me.callParent(arguments)
     },
 
     buildTemplate: function(){
         var b = new Ext.XTemplate('<tpl for=".">',
-            '<div class="thumb-wrap {viewStatus}" id="mView-{PID}">',
-            '<div class="thumb">',
-            '<img src="{linkImage}" title="{Title}" />',
-            "</div>",
-            '<div class="post-data">',
-            '<div class="post-title">POW # {PowNo} <i class="fa fa-check-square-o fa-lg viewIcon {viewStatus}"></i></div>',
-            '<div class="post-date">{CreateOn:date("M j,Y,g:i a")}</div>',
-            '<div class="post-author">Registered by {UserID:capitalize}</div>',
-            "</div>",
-            "<div>",
-            "<span>{Customer:uppercase}</span>",
-            "<span>{Status}</span>",
-            "<span>{Type}</span>",
-            "<span>{Division}</span>",
-            '<div style="font-size:11px;padding:4px;">{Descript:ellipsis(30)}</div>',
-            "</div>",
-            "</div>",
-            "</tpl>",
+            '<div class="thumb-wrap {viewStatus}" id="mView-{powhId}">',
+                '<div class="thumb">',
+                //'<img src="{linkImage}" title="{title}" />',
+                '</div>',
+                '<div class="post-data">',
+                    '<div class="post-title">POW # {powno} <i class="fa fa-check-square-o fa-lg viewIcon {viewStatus}"></i></div>',
+                    '<div class="post-date">{createdon:date("M j,Y,g:i a")}</div>',
+                    '<div class="post-author">Registered by {userId:capitalize}</div>',
+                '</div>',
+                '<div>',
+                    '<span>{customer:uppercase}</span>',
+                    '<span>{status}</span>',
+                    '<span>{ordertype}</span>',
+                    '<span>{division}</span>',
+                    '<span style="font-size:11px;padding:4px;">{comments:ellipsis(30)}</span>',
+                '</div>',
+            '</div>',
+            '</tpl>',
             '<div class="x-clear"></div>');
 
         return b
-    },
-
-    onSelect: function(g, f, e, h){
-
     }
 });

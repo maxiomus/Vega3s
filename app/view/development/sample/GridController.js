@@ -6,6 +6,10 @@ Ext.define('Vega.view.development.sample.GridController', {
 
     },
 
+    onRender: function(grid){
+
+    },
+
     /**
      *
      * @param sm

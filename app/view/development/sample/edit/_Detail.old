@@ -1,0 +1,113 @@
+
+Ext.define('Vega.view.development.sample.edit.Detail',{
+    extend: 'Ext.form.Panel',
+
+    requires: [
+        'Vega.view.development.sample.edit.DetailController',
+        'Vega.view.development.sample.edit.DetailModel',
+        'Ext.data.proxy.Memory',
+        'Ext.ux.form.field.MemoryCombo'
+    ],
+
+    alias: 'widget.sample-edit-detail',
+
+    controller: 'sample-edit-detail',
+    viewModel: {
+        type: 'sample-edit-detail'
+    },
+
+    layout: {
+        type: 'border'
+    },
+
+    initComponent: function(c){
+        var me = this;
+
+        Ext.applyIf(me, {
+            defaultType: 'container',
+            defaults: {
+
+            },
+            items: [{
+                region: 'north',
+                reference: 'north',
+                style: {
+                    borderBottom: 'solid',
+                    borderBottomColor: '#ccc',
+                    borderBottomWidth: '1px'
+                },
+                defaultType: 'container',
+                defaults: {
+                    layout: {
+                        type: 'hbox',
+                        padding: '0 0 0 5',
+                        align: 'middle'
+                    },
+                    defaultType: 'label',
+                    defaults: {
+                        margin: '0 5 0 0'
+                    }
+                },
+                items: [{
+                    items: [{
+                        text: 'C. Type',
+                        padding: '0 0 0 25',
+                        width: 125
+                    },{
+                        text: 'Style',
+                        width: 175
+                    },{
+                        text: 'Color',
+                        width: 175
+                    },{
+                        text: 'Qty',
+                        width: 80
+                    },{
+                        text: 'Cost',
+                        width: 80
+                    },{
+                        text: 'Ext. Cost',
+                        width: 100
+                    },{
+                        text: 'Total Cost',
+                        width: 100
+                    }]
+                },{
+                    items: [{
+                        text: 'Descript',
+                        padding: '0 0 0 25',
+                        width: 485
+                    },{
+                        text: 'UOM',
+                        width: 80
+                    }]
+                }]
+            },{
+                region: 'center',
+                reference: 'center'
+            },{
+                region: 'south',
+                reference: 'south',
+                style: {
+                    borderTop: 'solid',
+                    borderTopColor: '#ccc',
+                    borderTopWidth: '1px'
+                },
+                layout: {
+                    type: 'hbox',
+                    padding: 0,
+                    align: 'middle'
+                },
+                defaults: {
+
+                },
+                items: [{
+
+                }]
+            }]
+        });
+
+        me.callParent(arguments);
+        console.log(this.getReferences())
+    }
+});

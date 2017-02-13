@@ -19,6 +19,7 @@ Ext.define("Vega.view.dal.GridController", {
     },
 
     prepareData: function(d){
+        /*
         var c;
         switch(d.F_CATEGORY.toLowerCase()){
             case"body":
@@ -31,7 +32,11 @@ Ext.define("Vega.view.dal.GridController", {
                 c=d.F_DESC6;
                 break
         }
-        Ext.apply(d, {Title: c});
+
+        var b = d.F_CREATED_ON.getFullYear() + '/' + (d.F_CREATED_ON.getMonth() + 1) + '/' + d.F_CREATED_ON.getDate();
+
+        Ext.apply(d, {Title: c, F_PATH: b});
+        */
         return d;
     },
 
