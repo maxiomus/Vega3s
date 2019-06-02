@@ -11,11 +11,6 @@ Ext.define("Vega.view.sales.Review",{
 
     alias: 'widget.review',
 
-    config: {
-        //activeState: null,
-        //defaultActiveState: "default"
-    },
-
     controller: "review",
     viewModel: {
         type: "review"
@@ -24,7 +19,7 @@ Ext.define("Vega.view.sales.Review",{
     //session: true,
     cls: "shadow-panel",
     header: false,
-    margin: 8,
+    margin: '0 0 0 4',
 
     listeners: {
         beforeadd: 'onBeforeAdd',
@@ -38,7 +33,7 @@ Ext.define("Vega.view.sales.Review",{
         actview: 'onActionView',
         actnew: 'onActionNew',
         actrefresh: "onActionRefresh",
-        //actdelete: 'onActionDelete',
+        actdelete: 'onActionDelete',
         clearall: 'onClearFilters',
         //ctxmnuopenclick: "onContextMenuOpenClick",
         //ctxmnurefreshclick: "onContextMenuRefreshClick",
@@ -54,27 +49,31 @@ Ext.define("Vega.view.sales.Review",{
                 xtype: "multiview",
                 reference: "multiview",
                 title: "REVIEWS",
-                iconCls: "fa fa-file-text-o",
+                iconCls: "x-fa fa-file-text-o",
+
                 tbar: {
-                    xtype: "topbar",
+                    xtype: "sales-topbar",
                     reference: "topbar"
                 },
+
                 mainItems:[{
                     xtype: "sales-grid",
                     reference: "grid",
                     cls: 'review-grid',
                     scrollable: true,
-                    stateful:true,
-                    stateId: "review-grid",
-                    stateEvents: ["columnmove", "columnresize", "groupchange", "bodyresize"],
+
+                    //stateful:true,
+                    //stateId: "review-grid",
+                    //stateEvents: ["columnmove", "columnresize", "groupchange", "bodyresize"],
+
+                    publishes: ['selectedReview'],
+
                     bind: {
                         store: '{reviews}',
                         selection: "{selectedReview}"
                     },
+
                     viewConfig: {
-                        //height: 55,
-                        loadMask: true,
-                        //loadingHeight: 100,
                         stripeRows: true,
                         trackOver: true,
                         preserveScrollOnRefresh: true,
@@ -84,11 +83,11 @@ Ext.define("Vega.view.sales.Review",{
                             var cls = 'custom-row-style';
 
                             if(rec.data.progress == 'posted'){
-                                cls = cls + ' grid-row-accepted'
+                                cls = cls + ' grid-row-accepted';
                             }
 
                             if(rec.data.status == 'PENDING'){
-                                cls = cls + ' grid-row-pending'
+                                cls = cls + ' grid-row-pending';
                             }
 
                             return cls;
@@ -96,126 +95,9 @@ Ext.define("Vega.view.sales.Review",{
                     },
                     plugins: [{
                         ptype: "gridfilters"
-                    }],
-                    listeners: {
-                        reconfigure: function(grid, store, columns, oldStore, oldColumns){
-
-                        },
-                        afterrender: function(grid){
-
-                        }
-                    }
-                    /*
-                    columns: [{
-                        text: "ID",
-                        dataIndex: "powhId",
-                        locked: false,
-                        hidden: true,
-                        filter: {
-                            type: "number"
-                        }
-                    },
-                    {
-                        text: "Date",
-                        width: 140,
-                        dataIndex: "createdon",
-                        filter: {
-                            type: "date"
-                        },
-                        renderer: this.formatDate
-                    },
-                    {
-                        text: "P.O.W #",
-                        dataIndex: "powno",
-                        width: 140,
-                        filter: {
-                            type: "string"
-                        },
-                        renderer: function(g,e,f){
-                            var h = "";
-                            if(localStorage.getItem("pow-seen-" + f.data.powhId)){
-                                e.tdCls += "visited";
-                                h = ' <i class="fa fa-check-square-o fa-lg"></i>'
-                            }
-                            return g + h;
-                        }
-                    },
-                    {
-                        text: "Status",
-                        dataIndex: "status",
-                        width: 140,
-                        hidden: false,
-                        filter: {
-                            type: "string"
-                        }
-                    },
-                    {
-                        text: "Customer",
-                        dataIndex: "customer",
-                        width: 140,
-                        filter: {
-                            type: "string"
-                        },
-                        renderer: function(c, d){
-                            return Ext.util.Format.uppercase(c)
-                        }
-                    },
-                    {
-                        text: "Type",
-                        dataIndex: "ordertype",
-                        width: 140,
-                        hidden: false,
-                        filter: {
-                            type: "string"
-                        }
-                    },
-                    {
-                        text: "Division",
-                        dataIndex: "division",
-                        width: 140,
-                        filter: {
-                            type: "string"
-                        }
-                    },
-                    {
-                        text: "CXL Date",
-                        dataIndex: "cancelon",
-                        filter: {
-                            type: "date"
-                        }
-                    },
-                    {
-                        text: "User ID",
-                        dataIndex: "userId",
-                        width:140,
-                        hidden:false,
-                        filter: {
-                            type: "string"
-                        }
-                    },
-                    {
-                        text: "Progress",
-                        dataIndex: "progress",
-                        hidden: false,
-                        filter: {
-                            type: "string"
-                        }
-                    },
-                    {
-                        text: "Comments",
-                        dataIndex: "comments",
-                        flex:1,
-                        hidden:false,
-                        filter: {
-                            type: "string"
-                        }
                     }]
-                    */
                 },{
-                    /*
-                    xtype: "sales-view",
-                    reference: "icons"
-                    */
+
                 },{
                     xtype: "sales-view",
                     reference: "tiles",
@@ -228,8 +110,11 @@ Ext.define("Vega.view.sales.Review",{
                             '<div class="thumb">',
                                 //'<img src="{linkImage}" title="{Title}" />',
                             '</div>',
+                            '<tpl if="attachs &gt; 0">',
+                            '<div class="post-attach"></div>',
+                            '</tpl>',
                                 '<div class="post-data">',
-                                '<div class="post-title">POW # {powno} <i class="fa fa-check-square-o fa-lg viewIcon {viewStatus}"></i>  <i class="fa fa-thumbs-o-up fa-lg viewIcon {progress}"></i></div>',
+                                '<div class="post-title">POW # {powno} <i class="x-fa fa-check-square-o fa-lg viewIcon {viewStatus}"></i>  <i class="x-fa fa-thumbs-o-up fa-lg viewIcon {progress}"></i></div>',
                                 '<div class="post-date">{createdon:date("M j,Y,g:i a")}</div>',
                                 '<div class="post-author">Registered by {userId:capitalize}</div>',
                             '</div>',
@@ -262,15 +147,13 @@ Ext.define("Vega.view.sales.Review",{
                     reference: "display"
                 }],
 
-                bbar:[{
+                bbar:{
                     xtype: "pagingtoolbar",
                     bind: {
                         store: "{reviews}"
                     },
-                    style: {borderWidth: "0px"},
-                    dock: "bottom",
                     displayInfo: true
-                }]
+                }
             }]
         });
 
@@ -284,9 +167,7 @@ Ext.define("Vega.view.sales.Review",{
             display = refs.display,
             topbar = refs.topbar;
 
-        topbar.items.items[0].setHidden(false);
-
-        if(Vega.user.inRole('cs') || Vega.user.inRole('administrators')){
+        if(Vega.user.inRole('cs') || Vega.user.inRole('revise') || Vega.user.inRole('administrators')){
             topbar.actNew.setHidden(false);
             topbar.actEdit.setHidden(false);
             topbar.actEdit.setDisabled(true);
@@ -296,51 +177,20 @@ Ext.define("Vega.view.sales.Review",{
 
         me.contextmenu = Ext.create('Ext.menu.Menu', {
             items: [
+                topbar.actView,
                 topbar.actCopy,
                 topbar.actEdit,
                 topbar.actRefresh,
-                topbar.actView
+                topbar.actDelete
             ]
         });
-
-        topbar.insert(0, [{
-            xtype: "combo",
-            width: 112,
-            hideLabel: true,
-            displayField: "label",
-            valueField: "field",
-            value: "powno",
-            editable: false,
-            reference: "filterSelection",
-            bind: {
-                store: "{salesCategories}"
-            },
-            listeners: {
-                change: {
-                    fn: "onFilterItemChange",
-                    scope: this.controller
-                }
-            }
-        },{
-            xtype: "searchcombo",
-            reference: 'searchcombo',
-            width: 300,
-            searchAt: 'sales-grid',
-            hidden: true
-        },{
-            xtype: "gridsearchfield",
-            reference: 'searchfield',
-            width: 300,
-            grid: "grid",
-            paramName: "powno"
-        }]);
 
         topbar.insert(11, [
             {
                 xtype: "cycle",
                 ui: "default",
                 prependText: "Show:  ",
-                iconCls: "fa fa-filter",
+                iconCls: "x-fa fa-filter",
                 showText: true,
                 reference: "filterButton",
                 changeHandler: "onTypeChange",
@@ -348,19 +198,19 @@ Ext.define("Vega.view.sales.Review",{
                 menu: {
                     items: [{
                         text: "All",
-                        iconCls: "fa fa-filter",
+                        iconCls: "x-fa fa-filter",
                         type: null,
                         itemId: "all",
                         checked: false
                     },{
                         text: "In-Review",
-                        iconCls: "fa fa-filter",
+                        iconCls: "x-fa fa-filter",
                         type: 'review',
                         itemId: "review",
                         checked: true
                     },{
                         text: "Posted",
-                        iconCls: "fa fa-filter",
+                        iconCls: "x-fa fa-filter",
                         type: 'posted',
                         itemId: "posted",
                         checked: false

@@ -51,7 +51,7 @@ Ext.define('Vega.view.development.request.WorkModel', {
                 listeners: {
                     exception: function (proxy, response, operation) {
                         console.log('WorkRequests - Model', response, operation);
-                        Vega.util.Utils.showErrorMsg(response.status.toString() + ' - ' + response.statusText.toString())
+                        Vega.util.Utils.showErrorMsg(response.status.toString() + ' - ' + response.statusText.toString());
                     }
                 }
             }
@@ -60,9 +60,10 @@ Ext.define('Vega.view.development.request.WorkModel', {
         categories: {
             fields: ['label', 'field'],
             autoLoad: true,
+            pageSize: 0,
             proxy: {
                 type: 'ajax',
-                url: 'data/development/request/work/categories.json',
+                url: 'resources/data/development/request/work/categories.json',
                 reader: {
                     type: 'json',
                     rootProperty: 'data'
@@ -72,18 +73,14 @@ Ext.define('Vega.view.development.request.WorkModel', {
 
         styles: {
             fields: ['id', 'text'],
-            //pageSize: 100,
+            pageSize: 0,
             //remoteFilter: true,
             autoLoad: false,
 
             proxy: {
                 type: 'ajax',
                 url: '/api/Combos/styles',
-                /*
-                 pageParam: '',
-                 startParam: '',
-                 limitParam: '',
-                 */
+
                 reader: {
                     type: 'json',
                     rootProperty: 'data'
@@ -91,6 +88,7 @@ Ext.define('Vega.view.development.request.WorkModel', {
             }
         },
 
+        /*
         body: {
             fields: ["id", "text"],
             //storeId: 'customer',
@@ -106,19 +104,16 @@ Ext.define('Vega.view.development.request.WorkModel', {
                 }
             }
         },
+        */
 
         colors: {
             fields: ["id", "text"],
             //storeId: 'sizeCat',
             autoLoad: false,
+            pageSize: 0,
             proxy: {
                 type: 'ajax',
                 url: '/api/Combos/rawcolors',
-                /*
-                 pageParam: '',
-                 startParam: '',
-                 limitParam: '',
-                 */
                 reader: {
                     type: 'json',
                     rootProperty: 'data'
@@ -130,7 +125,7 @@ Ext.define('Vega.view.development.request.WorkModel', {
             fields: ["id", "text"],
             //storeId: 'customer',
             autoLoad: true,
-            pageSize: 999,
+            pageSize: 0,
             proxy: {
                 type: "ajax",
                 url: "/api/Combos/departments",
@@ -146,12 +141,11 @@ Ext.define('Vega.view.development.request.WorkModel', {
             fields: ["id", "text"],
             //storeId: 'customer',
             autoLoad: false,
+            pageSize: 0,
             proxy: {
                 type: "ajax",
-                url: "/api/Options/customers",
-                pageParam: '',
-                startParam: '',
-                limitParam: '',
+                url: "/api/Combos/customers",
+
                 reader: {
                     type: "json",
                     rootProperty: "data"
@@ -162,20 +156,20 @@ Ext.define('Vega.view.development.request.WorkModel', {
         type: {
             fields: ['id', 'text'],
             autoLoad: false,
-            pageSize: 999,
+            pageSize: 0,
             proxy: {
                 type: 'ajax',
-                url: 'data/development/request/work/workTypes.json'
+                url: 'resources/data/development/request/work/workTypes.json'
             }
         },
 
         priority: {
             fields: ['id', 'text'],
             autoLoad: false,
-            pageSize: 999,
+            pageSize: 0,
             proxy: {
                 type: 'ajax',
-                url: 'data/development/request/work/protoTypes.json'
+                url: 'resources/data/development/request/work/protoTypes.json'
             }
         },
 
@@ -183,14 +177,10 @@ Ext.define('Vega.view.development.request.WorkModel', {
             fields: ["id", "text"],
             //storeId: 'customer',
             autoLoad: true,
-
+            pageSize: 0,
             proxy: {
                 type: "ajax",
                 url: "/api/Combos/samplers",
-
-                pageParam: '',
-                startParam: '',
-                limitParam: '',
 
                 reader: {
                     type: "json",
@@ -203,12 +193,11 @@ Ext.define('Vega.view.development.request.WorkModel', {
             fields: ["id", "text"],
             //storeId: 'customer',
             autoLoad: true,
+            pageSize: 0,
             proxy: {
                 type: "ajax",
-                url: "/api/Options/users",
-                pageParam: '',
-                startParam: '',
-                limitParam: '',
+                url: "/api/Combos/users",
+
                 reader: {
                     type: "json",
                     rootProperty: "data",

@@ -66,9 +66,9 @@ Ext.define('Ext.ux.form.SearchComboBox', {
 
         me.callParent(arguments);
 
-        if(!!typeof(me.searchAt)){
+        if(!!typeof me.searchAt){
             var view = me.up('panel'),
-                grid = view.lookupReference(me.grid);
+                grid = view.lookupReference(me.searchAt);
 
             if(!grid){
                 grid = view.down('grid');
@@ -106,8 +106,21 @@ Ext.define('Ext.ux.form.SearchComboBox', {
                     return false
                 }
             });
+
+            if(e.type == 'list'){
+                if(e.menu != null){
+                    var selected = e.menu.items.findBy(function(item,key){
+                        return item.value == g.getValue();
+                    });
+                    selected.setChecked(false);
+                }
+            }
+            else if(e.type == 'string'){
+                e.setValue("");
+            }
+
             g.setValue("");
-            e.setValue("");
+
             e.setActive(false);
             g.hasSearch = false;
             g.getTrigger("clear").hide();
@@ -129,8 +142,20 @@ Ext.define('Ext.ux.form.SearchComboBox', {
                     return false
                 }
             });
-            //console.log("onSearchClick", f, h.paramName);
-            f.setValue(j);
+            console.log("onSearchClick", f, j, h.paramName);
+            if(f.type == 'list'){
+
+                if(f.menu != null){
+                    var selected = f.menu.items.findBy(function(item,key){
+                        return item.value == j;
+                    });
+                    selected.setChecked(true);
+                }
+            }
+            else if (f.type == 'string'){
+                f.setValue(j);
+            }
+
             f.setActive(true);
             h.hasSearch = true;
             h.getTrigger("clear").show();

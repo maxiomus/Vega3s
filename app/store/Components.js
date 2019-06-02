@@ -4,49 +4,66 @@
 
 Ext.define('Vega.store.Components', {
     extend: 'Ext.data.Store',
-
     // allow the grid to interact with the paging scroller by buffering
     //buffered: true,
     alias: 'store.Components',
 
-    storeId: 'Components',
     fields: [{
-        name: 'id',
+        name: 'descript',
         sortType: 'asUCString'
     },{
         name: 'text',
         sortType: 'asUCString'
+    },{
+        name: 'label',
+        sortType: 'asUCString'
     }],
 
+    storeId: 'Components',
+
     pageSize: 0,
-    remoteFilter: true,
+    autoLoad: true,
+
+    //remoteFilter: true,
     //remoteSort: true,
     //numFromEdge: 5,
     //trailingBufferZone: 100,
     //leadingBufferZone: 100,
-    autoLoad: false,
 
     proxy: {
         type: 'ajax',
         url: '/api/Combos/components',
-
-        /*
-        pageParam: '',
-        startParam: '',
-        limitParam: '',
-        */
-
         reader: {
             type: 'json',
             rootProperty: 'data'
         }
+    },
 
-        // Parameter name to send  filtering information in
-        //filterParam: 'query',
+    listeners: {
+        load: function(s){
 
-        //encodeFilters: function(filters) {
-        //    return filters[0].value;
-        //}
+            memComponents.on('load', function(s){
+                //console.log(s.getTotalCount(), s.getData())
+            });
+
+            memComponents.getProxy().setData(s.getRange());
+            //memComponents.reload();
+
+        }
+    }
+});
+
+var memComponents = Ext.create('Ext.data.Store', {
+    storeId: 'memComponents',
+    pageSize: 50,
+    remoteFilter: true,
+    proxy: {
+        type: 'memory',
+        enablePaging: true,
+        reader: {
+            type: 'json',
+            rootProperty: 'data'
+        }
     }
 });
 

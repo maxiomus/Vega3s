@@ -23,30 +23,33 @@ Ext.define('Vega.view.DisplayController', {
         //console.log('Template - beforeRender', c.id)
     },
 
-    onClose: function(btn){
+    onClose: function(btn, e){
         var me = this,
-            viewer = me.getView().up('viewer');
+            view = me.getView(),
+            viewer = view.ownerCt;
 
-        viewer.remove(me.getView());
+        viewer.remove(view);
     },
 
-    bookmarkTab: function(btn) {
+    bookmarkTab: function(btn,e) {
         this.addBookmark(this.view.active, this.view);
     },
 
-    printTab: function(btn){
+    printTab: function(btn,e){
 
         var iframe = this.view.getComponent('contentIframe');
 
         if(iframe){
             var cw = iframe.getEl().dom.contentWindow;
-
-            //console.log(iframe, cw);
+            //console.log(iframe, cw.document);
             cw.print();
         }
         else{
-            var innerPnl = this.view.items.items[0].ownerCt;
-            //console.log('printTab', innerPnl);
+            //var innerPnl = this.view.items.items[0].ownerCt;
+            //var img = innerPnl.down('image');
+
+            var innerPnl = this.view.getComponent('innerPnl');
+            //console.log(innerPnl)
             innerPnl.print();
         }
     }

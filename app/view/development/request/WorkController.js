@@ -1,5 +1,6 @@
 Ext.define('Vega.view.development.request.WorkController', {
     extend: 'Ext.app.ViewController',
+
     alias: 'controller.request-work',
 
     init: function(c){
@@ -126,7 +127,6 @@ Ext.define('Vega.view.development.request.WorkController', {
             display = refs.display;
 
         display.setActive(rec);
-
         //console.log('work', rec);
         this.redirectTo('request-work/default/' + rec.get('ID'));
     },
@@ -142,7 +142,7 @@ Ext.define('Vega.view.development.request.WorkController', {
 
         var i = h.getSelectionModel();
         if(!i.isSelected(g)){
-            i.select(g)
+            i.select(g);
         }
         this.view.contextmenu.showAt(l.getXY());
     },
@@ -162,7 +162,7 @@ Ext.define('Vega.view.development.request.WorkController', {
             case "Status":
                 n.paramName = j;
                 n.show();
-                m.hide()
+                m.hide();
                 break;
             default:
                 m.paramName = j;
@@ -174,7 +174,7 @@ Ext.define('Vega.view.development.request.WorkController', {
 
         if(store != null){
             store.load();
-            n.bindStore(store)
+            n.bindStore(store);
         }
     },
 
@@ -345,5 +345,5 @@ Ext.define('Vega.view.development.request.WorkController', {
             }
         });
     }
-    
+
 });

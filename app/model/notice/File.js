@@ -9,6 +9,7 @@ Ext.define('Vega.model.notice.File', {
             persist: false
         },
         {   name: 'name', mapping: 'file.name'},
+        {   name: 'type', mapping: 'file.type'},
         {   name: 'size', mapping: 'file.size'},
         {   name: 'created', mapping: 'file.created'},
         {   name: 'lastmod', mapping: 'file.lastmod'},
@@ -52,4 +53,4 @@ Ext.define('Vega.model.notice.File', {
             }
         }
     }
-})
+});

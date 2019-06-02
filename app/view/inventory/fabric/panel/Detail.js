@@ -6,11 +6,6 @@ Ext.define("Vega.view.inventory.fabric.panel.Detail", {
 
     alias: "widget.fabricrolldetail",
 
-    bind: {
-        store: "{rolldetails}"
-    },
-
-    loadMask: true,
     selType: "rowmodel",
 
     selModel: {
@@ -19,30 +14,39 @@ Ext.define("Vega.view.inventory.fabric.panel.Detail", {
     },
 
     viewConfig: {
-        trackOver: false
+        trackOver: false,
+        stripeRows: true,
+        //bufferedrenderer: false,
+        deferInitialRefresh: true
     },
 
     features: [{
-        id: "group",
-        ftype: "groupingsummary",
+        //id: "group",
+        ftype: "grouping",
         groupHeaderTpl: '{columnName}: {name} ({rows.length} Item{[values.rows.length > 1 ? "s" : ""]})',
         hideGroupedHeader: false,
         startCollapsed: false,
-        enableGroupMenu: true
+        enableGroupMenu: false,
+        showSummaryRow: true
     },
     {
         ftype: "summary",
         dock: "bottom"
     }],
 
-    columns: [{
-        xtype: "checkcolumn",
-        text: "",
+    plugins: [{
+        ptype : 'bufferedrenderer',
+        trailingBufferZone: 20,
+        leadingBufferZone: 40
+    }],
+
+    columns: [
+    {
+        xtype: 'checkcolumn',
+        text: '',
         dataIndex: "checkStatus",
         width: 40,
-        align: "center",
-        hidden: false,
-        disabled: false
+        align: "center"
     },
     {
         text: "ID",
@@ -75,7 +79,7 @@ Ext.define("Vega.view.inventory.fabric.panel.Detail", {
         align: "center",
         hideable: false,
         summaryRenderer: function (f, e, d) {
-            return "Total Yards:"
+            return "Total Yards:";
         }
     },
     {
@@ -91,7 +95,7 @@ Ext.define("Vega.view.inventory.fabric.panel.Detail", {
         align: "center",
         summaryType: "sum",
         summaryRenderer: function (f, e, d) {
-            return Ext.util.Format.number(f, "0,0.00")
+            return Ext.util.Format.number(f, "0,0.00");
         }
     },
     {
@@ -101,7 +105,7 @@ Ext.define("Vega.view.inventory.fabric.panel.Detail", {
         align: "center",
         summaryType: "sum",
         summaryRenderer: function (f, e, d) {
-            return Ext.util.Format.number(f, "0,0.00")
+            return Ext.util.Format.number(f, "0,0.00");
         }
     },
     {
@@ -111,7 +115,7 @@ Ext.define("Vega.view.inventory.fabric.panel.Detail", {
         align: "center",
         summaryType: "sum",
         summaryRenderer: function (f, e, d) {
-            return Ext.util.Format.number(f, "0,0.00")
+            return Ext.util.Format.number(f, "0,0.00");
         }
     },
     {
@@ -198,7 +202,7 @@ Ext.define("Vega.view.inventory.fabric.panel.Detail", {
     {
         text: "Barcode",
         dataIndex: "barcode",
-        width: 100,
+        width: 200,
         align: "center"
     },
     {
@@ -215,14 +219,14 @@ Ext.define("Vega.view.inventory.fabric.panel.Detail", {
     }],
 
     initComponent: function () {
-        var b = this;
-        b.dockedItems = b.buildDockedItems();
+        var me = this;
+        me.dockedItems = me.buildDockedItems();
 
-        Ext.applyIf(b, {
+        Ext.applyIf(me, {
 
         });
 
-        this.callParent(arguments);
+        me.callParent(arguments);
     },
 
     buildDockedItems: function(){
@@ -231,6 +235,10 @@ Ext.define("Vega.view.inventory.fabric.panel.Detail", {
         return [{
             xtype: "toolbar",
             dock: "top",
+            border: true,
+            style: {
+                borderTop: '1px solid #cfcfcf'
+            },
             items: [{
                 xtype: "combo",
                 itemId: "cboFabric",
@@ -295,18 +303,20 @@ Ext.define("Vega.view.inventory.fabric.panel.Detail", {
                 valueField: "label",
                 displayField: "label",
                 selectOnFocus: true,
-                pageSize: 50,
+                //pageSize: 50,
+                forceSelection: false,
+                autoLoadOnValue: true,
                 matchFieldWidth: false,
-                queryMode: "remote",
-                queryParam: "filter",
-                minChars: 1,
+                queryMode: 'local',
+                //queryParam: "filter",
+                //minChars: 1,
                 plugins: [{
                     ptype: "cleartrigger"
                 }],
                 tpl: '<tpl for="."><tpl if="[xindex] == 1"><table class="cbo-list"><tr><th width="50%">Lot #</th><th width="10%">WH</th><th width="40%">On Hand</th></tr></tpl><tr class="x-boundlist-item"><td>{label}</td><td>{descript}</td><td>{text}</td></tr><tpl if="[xcount-xindex]==0"></table></tpl></tpl>',
                 listConfig: {
                     loadindText: "Searching...",
-                    emptyText: "No matching items found.",
+                    emptyText: '<div style="padding: 5px;">No matching items found.</div>',
                     width: 340
                 },
                 listeners: {
@@ -320,28 +330,27 @@ Ext.define("Vega.view.inventory.fabric.panel.Detail", {
             },
             {
                 xtype: "button",
-                ui: "soft-blue",
+                ui: "blue",
                 text: "Select",
                 width: 90,
-                iconCls: "fa fa-refresh",
+                iconCls: "x-fa fa-refresh",
                 action: "refresh",
                 tooltip: "Refresh"
             },
             {
                 xtype: "button",
-                ui: "soft-blue",
+                //ui: "soft-blue",
                 text: "Check All",
-                iconCls: "fa fa-check-square-o",
+                iconCls: "x-fa fa-check-square-o",
                 action: "checkall"
             },
             {
                 xtype: "button",
-                ui: "soft-blue",
+                //ui: "soft-blue",
                 text: "Uncheck All",
-                iconCls: "fa fa-square-o",
+                iconCls: "x-fa fa-square-o",
                 action: "uncheckall"
             }]
-        }]
+        }];
     }
 });
-

@@ -5,10 +5,6 @@ Ext.define('Vega.view.ViewerController', {
         'Ext.app.route.Base'
     ],
 
-    alias: 'controller.viewer',
-
-    init: function() {
-
-    }
+    alias: 'controller.viewer'
     
 });

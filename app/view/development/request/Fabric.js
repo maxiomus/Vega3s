@@ -17,7 +17,7 @@ Ext.define('Vega.view.development.request.Fabric',{
 
     cls: 'request-fabric shadow-panel',
     header: false,
-    margin: 8,
+    margin: '0 0 0 4',
 
     session: true,
 
@@ -41,20 +41,25 @@ Ext.define('Vega.view.development.request.Fabric',{
                 xtype: "multiview",
                 reference: "multiview",
                 title: "Fabric Request",
-                iconCls: "fa fa-database",
-                tbar: [{
+                iconCls: "x-fa fa-database",
+                tbar: {
                     xtype: "topbar",
                     reference: "topbar"
-                }],
+                },
 
                 mainItems: [{
                     xtype: "grid",
                     reference: "fabric-grid",
                     scrollable: true,
                     flex: 2,
-                    //loadMask: true,
+
                     bind: {
                         store: '{requestfabrics}'
+                    },
+
+                    style: {
+                        borderTop: '1px solid #cfcfcf',
+                        borderBottom: '1px solid #cfcfcf'
                     },
 
                     columns: this.buildColumns(),
@@ -116,15 +121,15 @@ Ext.define('Vega.view.development.request.Fabric',{
                     reference: "display"
                 }],
 
-                bbar: [{
+                bbar: {
                     xtype: "pagingtoolbar",
                     bind: {
                         store: "{requestfabrics}"
                     },
-                    style: {borderWidth: "0px"},
-                    dock: "bottom",
+                    //width: '100%',
+                    //dock: "bottom",
                     displayInfo: true
-                }]
+                }
             }]
         });
 
@@ -140,7 +145,7 @@ Ext.define('Vega.view.development.request.Fabric',{
 
         var mnuItems = [f.actEdit, f.actRefresh];
 
-        var setting = Vega.app.getMainView().getViewModel().getStore('setting'),
+        var setting = Ext.getStore('Settings'),
             su = setting.findRecord('Property', me.getXType()).data.Value;
 
         //console.log('fabric', setting.first().data.Value)
@@ -156,8 +161,8 @@ Ext.define('Vega.view.development.request.Fabric',{
             items: mnuItems
         });
 
-        f.items.items[0].setHidden(false);
-        f.items.items[1].setHidden(false);
+        f.actClear.setHidden(false);
+        f.actNew.setHidden(false);
         f.items.last().setHidden(true);
 
         f.insert(0,
@@ -202,21 +207,21 @@ Ext.define('Vega.view.development.request.Fabric',{
 
         f.insert(15, [{
             xtype: 'button',
-            iconCls: 'fa fa-external-link-square',
+            iconCls: 'x-fa fa-external-link-square',
             text: 'Export',
             handler: function(b){
                 j.saveDocumentAs({
                     type: 'excel',
                     title: 'Fabric Request List',
-                    fileName: 'fabric request ' + Ext.Date.format(new Date(), 'Y-m-d') + '.xml'
-                })
+                    fileName: 'fabric request ' + Ext.Date.format(new Date(), 'Y-m-d') + '.xlsx'
+                });
             }
         },
         {
             xtype: "cycle",
             //ui: "default",
             prependText: "Show:  ",
-            iconCls: "fa fa-filter",
+            iconCls: "x-fa fa-filter",
             showText: true,
             reference: "filterButton",
             changeHandler: "onTypeChange",
@@ -224,19 +229,19 @@ Ext.define('Vega.view.development.request.Fabric',{
             menu: {
                 items: [{
                     text: "All",
-                    iconCls: "fa fa-filter",
+                    iconCls: "x-fa fa-filter",
                     type: null,
                     itemId: "all",
                     checked: false
                 },{
                     text: "WIP",
-                    iconCls: "fa fa-filter",
+                    iconCls: "x-fa fa-filter",
                     type: 'In Progress',
                     //itemId: "request",
                     checked: true
                 },{
                     text: "Complete",
-                    iconCls: "fa fa-filter",
+                    iconCls: "x-fa fa-filter",
                     type: 'Complete',
                     //itemId: "accept",
                     checked: false
@@ -278,14 +283,15 @@ Ext.define('Vega.view.development.request.Fabric',{
             lockable: true,
             filter: {type: "date"},
             editor: {
-                xtype: 'datefield'
+                xtype: 'datefield',
+                format: 'Y-m-d'
             },
             renderer: function(k, i, a){
                 if(k!=undefined){
-                    var d=new Date(k);
-                    function j(c){
+                    var d=new Date(k),
+                    j = function (c){
                         return c<10 ? "0"+c : c;
-                    }
+                    };
                     var l = j(d.getUTCMonth()+1)+"-"+j(d.getUTCDate())+"-"+d.getUTCFullYear();
                     i.tdAttr='data-qtip="'+l+'"';
                     return l;
@@ -301,14 +307,15 @@ Ext.define('Vega.view.development.request.Fabric',{
             filter: {type: "date"},
             editor: {
                 xtype: 'datefield',
+                format: 'Y-m-d',
                 allowBlank: false
             },
             renderer: function(k, i, a){
                 if(k!=undefined){
-                    var d=new Date(k);
-                    function j(c){
+                    var d=new Date(k),
+                    j = function (c){
                         return c<10 ? "0"+c : c;
-                    }
+                    };
                     var l = j(d.getUTCMonth()+1)+"-"+j(d.getUTCDate())+"-"+d.getUTCFullYear();
                     i.tdAttr='data-qtip="'+l+'"';
                     return l;
@@ -323,14 +330,15 @@ Ext.define('Vega.view.development.request.Fabric',{
             lockable: true,
             filter: {type: "date"},
             editor: {
-                xtype: 'datefield'
+                xtype: 'datefield',
+                format: 'Y-m-d'
             },
             renderer: function(k, i, a){
                 if(k!=undefined){
-                    var d=new Date(k);
-                    function j(c){
+                    var d=new Date(k),
+                    j = function(c){
                         return c<10 ? "0"+c : c;
-                    }
+                    };
                     var l = j(d.getUTCMonth()+1)+"-"+j(d.getUTCDate())+"-"+d.getUTCFullYear();
                     i.tdAttr='data-qtip="'+l+'"';
                     return l;
@@ -345,14 +353,15 @@ Ext.define('Vega.view.development.request.Fabric',{
             lockable: true,
             filter: {type: "date"},
             editor: {
-                xtype: 'datefield'
+                xtype: 'datefield',
+                format: 'Y-m-d'
             },
             renderer: function(k, i, a){
                 if(k!=undefined){
-                    var d=new Date(k);
-                    function j(c){
+                    var d=new Date(k),
+                    j = function(c){
                         return c<10 ? "0"+c : c;
-                    }
+                    };
                     var l = j(d.getUTCMonth()+1)+"-"+j(d.getUTCDate())+"-"+d.getUTCFullYear();
                     i.tdAttr='data-qtip="'+l+'"';
                     return l;
@@ -466,7 +475,7 @@ Ext.define('Vega.view.development.request.Fabric',{
             editor: {
                 xtype: 'textfield'
             },
-            hidden: true,
+            hidden: false,
             renderer: function(f, e, a){
                 return f;
             }
@@ -546,10 +555,10 @@ Ext.define('Vega.view.development.request.Fabric',{
             filter: {type: "date"},
             renderer: function(k, i, a){
                 if(k!=undefined){
-                    var d=new Date(k);
-                    function j(c){
+                    var d=new Date(k),
+                    j = function(c){
                         return c<10 ? "0"+c : c;
-                    }
+                    };
                     var l = j(d.getUTCMonth()+1)+"-"+j(d.getUTCDate())+"-"+d.getUTCFullYear();
                     i.tdAttr='data-qtip="'+l+'"';
                     return l;
@@ -569,15 +578,15 @@ Ext.define('Vega.view.development.request.Fabric',{
             filter: {type: "date"},
             renderer: function(k, i, a){
                 if(k!=undefined){
-                    var d=new Date(k);
-                    function j(c){
+                    var d=new Date(k),
+                    j = function(c){
                         return c<10 ? "0"+c : c;
-                    }
+                    };
                     var l = j(d.getUTCMonth()+1)+"-"+j(d.getUTCDate())+"-"+d.getUTCFullYear();
                     i.tdAttr='data-qtip="'+l+'"';
                     return l;
                 }
             }
-        }]
+        }];
     }
 });

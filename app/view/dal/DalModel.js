@@ -8,10 +8,6 @@ Ext.define("Vega.view.dal.DalModel", {
 
     alias: "viewmodel.dal",
 
-    data: {
-
-    },
-
     formulas: {
         currentComp: {
             bind: '{components.selection}',
@@ -30,6 +26,7 @@ Ext.define("Vega.view.dal.DalModel", {
     },
 
     stores: {
+        /*
         bodies: {
             fields: ['id', 'text'],
             pageSize: 25,
@@ -46,7 +43,20 @@ Ext.define("Vega.view.dal.DalModel", {
                 }
             }
         },
+        */
 
+        categories: {
+            fields: ["id", "text"],
+            autoLoad: true,
+            pageSize: 0,
+            proxy: {
+                type: 'ajax',
+                url: 'resources/data/dal/categories.json'
+            },
+            listeners: {load: "onCategoryLoad"}
+        },
+
+        /*
         styles: {
             fields: ['id', 'text'],
             pageSize: 25,
@@ -96,48 +106,16 @@ Ext.define("Vega.view.dal.DalModel", {
                 }
             }
         },
-
-        sides: {
-            fields: ['id', 'text'],
-            autoLoad: true,
-            //pageSize: 999,
-            proxy: {
-                type: 'ajax',
-                url: 'data/sideTypes.json'
-            }
-        },
-
-        bomtypes: {
-            fields: ["id", "text"],
-            autoLoad: true,
-            //pageSize: 999,
-            proxy: {
-                type: "ajax",
-                url: "/api/Combos/bomtypes",
-
-                pageParam: '',
-                startParam: '',
-                limitParam: '',
-
-                reader: {
-                    type: "json",
-                    rootProperty: 'data'
-                }
-            }
-        },
+        */
 
         customers: {
             fields: ["id", "text"],
             autoLoad: true,
             //pageSize: 999,
+            pageSize: 0,
             proxy: {
                 type: "ajax",
                 url: "/api/Combos/customers",
-
-                pageParam: '',
-                startParam: '',
-                limitParam: '',
-
                 reader: {
                     type: "json",
                     rootProperty: 'data'
@@ -148,14 +126,10 @@ Ext.define("Vega.view.dal.DalModel", {
         vendors: {
             fields: ["id", "text"],
             autoLoad: true,
-            //pageSize: 999,
+            pageSize: 0,
             proxy: {
                 type: "ajax",
                 url: "/api/Combos/vendors",
-
-                pageParam: '',
-                startParam: '',
-                limitParam: '',
 
                 reader: {
                     type: "json",
@@ -167,15 +141,11 @@ Ext.define("Vega.view.dal.DalModel", {
         themes: {
             fields: ["id", "text"],
 
-            //pageSize: 999,
+            pageSize: 0,
             autoLoad: true,
             proxy: {
                 type: "ajax",
                 url: "/api/Combos/themes",
-
-                pageParam: '',
-                startParam: '',
-                limitParam: '',
 
                 reader: {
                     type: "json",
@@ -188,16 +158,12 @@ Ext.define("Vega.view.dal.DalModel", {
             fields: ['id', 'text'],
             // allow the grid to interact with the paging scroller by buffering
             //buffered: true,
-            //pageSize: 999,
+            pageSize: 0,
             autoLoad: true,
 
             proxy: {
                 type: 'ajax',
                 url: '/api/Combos/pantones',
-
-                pageParam: '',
-                startParam: '',
-                limitParam: '',
 
                 reader: {
                     type: 'json',
@@ -209,14 +175,10 @@ Ext.define("Vega.view.dal.DalModel", {
         types: {
             fields: ["id", "text"],
             autoLoad: true,
-            //pageSize: 999,
+            pageSize: 0,
             proxy: {
                 type: "ajax",
-                url: "/api/Options/types",
-
-                pageParam: '',
-                startParam: '',
-                limitParam: '',
+                url: "/api/Combos/types",
 
                 reader: {
                     type: "json",
@@ -229,47 +191,46 @@ Ext.define("Vega.view.dal.DalModel", {
             }
         },
 
+        sides: {
+            fields: ['id', 'text'],
+            autoLoad: false
+        },
+
         fabricTypes: {
             fields: ['id', 'text'],
-            autoLoad: true,
-            pageSize: 9999,
-            proxy: {
-                type: 'ajax',
-                url: 'data/dal/fabricTypes.json',
-
-                pageParam: '',
-                startParam: '',
-                limitParam: ''
-            }
+            autoLoad: false
         },
 
         bodyTypes: {
             fields: ['id', 'text'],
-            autoLoad: true,
-            pageSize: 9999,
+            autoLoad: false
+            /*
+            pageSize: 0,
             proxy: {
-                type: 'ajax',
-                url: 'data/dal/bodyTypes.json',
+                type: "ajax",
+                url: "resources/data/dal/bodyTypes.json",
 
-                pageParam: '',
-                startParam: '',
-                limitParam: ''
+                reader: {
+                    type: "json",
+                    rootProperty: 'data'
+                }
             }
+            */
         },
 
-        categories: {
+        bomtypes: {
             fields: ["id", "text"],
             autoLoad: true,
-            pageSize: 9999,
+            pageSize: 0,
             proxy: {
-                type: 'ajax',
-                url: 'data/dal/categories.json',
+                type: "ajax",
+                url: "/api/Combos/bomtypes",
 
-                pageParam: '',
-                startParam: '',
-                limitParam: ''
-            },
-            listeners: {load: "onCategoryLoad"}
+                reader: {
+                    type: "json",
+                    rootProperty: 'data'
+                }
+            }
         },
 
         dals: {
@@ -278,15 +239,21 @@ Ext.define("Vega.view.dal.DalModel", {
             session: true,
             autoLoad: false,
             //autoSync: true,
-            remoteFilter: true,
+            //remoteFilter: true,
             remoteSort: true,
             pageSize: 50,
+
+            listeners: {
+                beforeload: function(s){
+                    s.setRemoteFilter(true);
+                }
+            },
 
             isDirty: function(){
                 var b=this.getModifiedRecords().length;
                 b=b||this.getNewRecords().length;
                 b=b||this.getRemovedRecords().length;
-                return !!b
+                return !!b;
             }
         },
 
@@ -295,4 +262,3 @@ Ext.define("Vega.view.dal.DalModel", {
         }
     }
 });
-

@@ -14,14 +14,6 @@ Ext.define("Vega.view.dashboard.Pows",{
         type: "dashboard-pows"
     },
 
-    config: {
-        //current: null
-    },
-
-    bind: {
-        store: '{Pows}'
-    },
-
     cls: 'dashboard-pow',
 
     scrollable: 'y',
@@ -34,15 +26,15 @@ Ext.define("Vega.view.dashboard.Pows",{
         padding: '0px 0 0 0px'
     },
 
+    bind: {
+        store: '{Pows}'
+    },
+
     initComponent: function(){
         var me = this;
 
         this.tpl = this.buildTpl();
         this.contextmenu = this.buildContextMenu();
-
-        Ext.applyIf(me, {
-
-        });
 
         me.callParent(arguments);
     },
@@ -58,7 +50,7 @@ Ext.define("Vega.view.dashboard.Pows",{
         return ['<tpl for=".">',
             //'<a href="#{Link}" style="text-decoration: none;">',
             '<div class="thumb-wrap">',
-                '<i style="vertical-align: middle" class="fa fa-dot-circle-o fa-2x"></i>',
+                '<i style="vertical-align: middle" class="x-fa fa-dot-circle-o fa-2x"></i>',
                 '<span>POW # {powno} {status} ({customer:uppercase}) - {createdon:date("M j,Y,g:i a")}</span>',
             '</div>',
             //'</a>',
@@ -76,7 +68,7 @@ Ext.define("Vega.view.dashboard.Pows",{
             items: [{
                 text: 'Refresh',
                 //glyph: 79,
-                iconCls: 'fa fa-refresh',
+                iconCls: 'x-fa fa-refresh',
                 //handler: this.onCtxMnuRefreshClick,
                 scope: this
             }]

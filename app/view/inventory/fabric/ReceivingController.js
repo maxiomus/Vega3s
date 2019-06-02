@@ -38,10 +38,14 @@ Ext.define('Vega.view.inventory.fabric.ReceivingController', {
                     load: 'onPohStoreLoad'
                 }
             }
-        })
+        });
     },
 
     onPohStoreLoad: function(store, records, successful, operation){
+
+    },
+
+    onReceivingBeforeload: function(store, operation) {
 
     },
 
@@ -174,7 +178,7 @@ Ext.define('Vega.view.inventory.fabric.ReceivingController', {
         Ext.apply(store.getProxy().extraParams, {
             style: record.data.style.trim(),
             color: record.data.color.trim(),
-            //lotno: lotno.getValue(),
+            lotno: record.data.lotno.trim(),
             pono: record.data.pono
         });
 

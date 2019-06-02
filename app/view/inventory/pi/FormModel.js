@@ -1,6 +1,11 @@
 Ext.define('Vega.view.inventory.pi.FormModel', {
     extend: 'Ext.app.ViewModel',
+
     alias: 'viewmodel.pi-form',
+
+    data: {
+        selection: null
+    },
 
     stores: {
         warehouses: {

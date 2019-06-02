@@ -19,9 +19,11 @@ Ext.define('Vega.view.inventory.pi.Form',{
     },
 
     session: true,
-
     trackResetOnLoad: true,
     //scrollable: 'y',
+    style: {
+        borderTop: '1px solid #cfcfcf'
+    },
 
     layout: {
         type: 'vbox',
@@ -29,119 +31,9 @@ Ext.define('Vega.view.inventory.pi.Form',{
         pack: 'start'
     },
 
-    minWidth: 1028,
-    //bodyPadding: 5,
-
     listeners: {
 
     },
-
-    dockedItems: [{
-        xtype: 'toolbar',
-        dock: 'top',
-        //reference: 'topbar',
-        defaults: {
-            ui: 'default'
-        },
-        items: [{
-            iconCls: 'fa fa-save',
-            //reference: 'save',
-            text: 'Save',
-            nextStep: 'save',
-            tooltip: 'Save the Data',
-            bind: {
-
-            },
-            handler: 'onSave'
-        },{
-            iconCls: 'fa fa-close',
-            text: 'Close',
-            //glyph:'xf0c7@FontAwesome',
-            tooltip: 'Close View',
-            handler: 'onClose'
-        },'-', {
-            xtype: 'buttongroup',
-            reference: 'groupCrud',
-            margin: -8,
-            padding: 0,
-            hidden: true,
-            items: [{
-                text: 'New',
-                iconCls: 'fa fa-plus-circle',
-                //glyph:'xf0c7@FontAwesome',
-                tooltip: 'Add Material',
-                reference: 'add',
-                //ui: 'default',
-                handler: 'onAddMaterialClick'
-            },{
-                text: 'Copy',
-                iconCls: 'fa fa-copy',
-                tooltip: 'Duplicate Material',
-                reference: 'copy',
-                bind: {
-                    disabled: '{!boms.selection}'
-                },
-                handler: 'onCopyMaterialClick'
-            },{
-                text: 'Edit',
-                iconCls: 'fa fa-edit',
-                tooltip: 'Edit Material',
-                reference: 'edit',
-                bind: {
-                    disabled: '{!boms.selection}'
-                },
-                handler: 'onEditMaterialClick'
-            },{
-                text: 'Delete',
-                iconCls: 'fa fa-remove',
-                tooltip: 'Delete Material',
-                reference: 'remove',
-                bind: {
-                    disabled: '{!boms.selection}'
-                },
-                handler: 'onDeleteMaterialClick'
-            }]
-        },'->',{
-            xtype: "cycle",
-            //ui: "default",
-            ui: 'bootstrap-btn-default',
-            //cls:"delete-focus-bg",
-            prependText: "Header: ",
-            iconCls: "fa fa-chevron-left",
-            //iconAlign: 'right',
-            showText: true,
-            reference: "positionBtn",
-            changeHandler: "onPositionChange",
-            //scope: this.controller,
-            menu: {
-                items: [{
-                    text: "Top",
-                    iconCls: "fa fa-chevron-up",
-                    //reference: 'top',
-                    itemId: "top",
-                    checked: false
-                },{
-                    text: "Right",
-                    iconCls: "fa fa-chevron-right",
-                    //reference: 'right',
-                    itemId: "right",
-                    checked: false
-                },{
-                    text: "Bottom",
-                    iconCls: "fa fa-chevron-down",
-                    //reference: 'bottom',
-                    itemId: "bottom",
-                    checked: false
-                },{
-                    text: "Left",
-                    iconCls: "fa fa-chevron-left",
-                    //reference: 'left',
-                    itemId: "left",
-                    checked: true
-                }]
-            }
-        }]
-    }],
 
     initComponent: function() {
         var me = this;
@@ -152,79 +44,133 @@ Ext.define('Vega.view.inventory.pi.Form',{
             '</tpl>'
         );
 
+        /*
+         var actNew = Ext.create('Ext.Action', {
+         text: "New",
+         tooltip: "Add New Item",
+         //reference: 'new',
+         iconCls: "x-fa fa-plus-circle",
+         handler: function(item, e){
+         this.fireEvent("actnew", this, item);
+         },
+         scope: this
+         }),
+         actEdit = Ext.create('Ext.Action', {
+         text: 'Edit',
+         tooltip: 'Edit Selected Item',
+         //reference: 'edit',
+         iconCls: 'x-fa fa-edit',
+         handler: function(item, e){
+         this.fireEvent("actedit", this, item);
+         },
+         scope: this
+         }),
+         actDelete = Ext.create('Ext.Action', {
+         text: "Delete",
+         tooltip: "Delete Selected Item",
+         //reference: 'delete',
+         iconCls: "x-fa fa-minus-circle",
+         //disabled: true,
+         handler: function(item, e){
+         this.fireEvent("actdelete", this, item);
+         },
+         scope: this
+         }),
+         actCopy = Ext.create('Ext.Action', {
+         text: 'Copy',
+         tooltip: 'Copy Selected Item',
+         //reference: 'edit',
+         iconCls: 'x-fa fa-copy',
+         handler: function(item, e){
+         this.fireEvent("actcopy", this, item);
+         },
+         scope: this
+         });
+         */
+
+        var btnNew = {
+            text: 'New',
+            iconCls: 'x-fa fa-plus-circle',
+            //glyph:'xf0c7@FontAwesome',
+            tooltip: 'Add Item',
+            //reference: 'add',
+            //ui: 'default',
+            handler: 'onAddItemClick',
+            scope: this.controller
+        },
+        btnCopy = {
+            text: 'Copy',
+            iconCls: 'x-fa fa-copy',
+            tooltip: 'Copy Item',
+            //reference: 'copy',
+            bind: {
+                disabled: '{!selection}'
+            },
+            handler: 'onCopyItemClick',
+            scope: this.controller
+        },
+        btnEdit = {
+            text: 'Edit',
+            iconCls: 'x-fa fa-edit',
+            tooltip: 'Edit Item',
+            //reference: 'edit',
+            bind: {
+                disabled: '{!selection}'
+            },
+            handler: 'onEditItemClick',
+            scope: this.controller
+        },
+        btnDelete = {
+            text: 'Delete',
+            iconCls: 'x-fa fa-remove',
+            tooltip: 'Delete Item',
+            //reference: 'remove',
+            bind: {
+                disabled: '{!selection}'
+            },
+            handler: 'onDeleteItemClick',
+            scope: this.controller
+        };
+        var btnsConfig = [btnNew, btnCopy, btnEdit, btnDelete];
+
+        me.dockedItems = [{
+            xtype: 'toolbar',
+            dock: 'top',
+            //reference: 'topbar',
+            defaults: {
+                ui: 'default'
+            },
+            items: [{
+                iconCls: 'x-fa fa-save',
+                //reference: 'save',
+                text: 'Save',
+                nextStep: 'save',
+                tooltip: 'Save the Data',
+                bind: {
+
+                },
+                handler: 'onSave'
+            },{
+                iconCls: 'x-fa fa-close',
+                text: 'Close',
+                //glyph:'xf0c7@FontAwesome',
+                tooltip: 'Close View',
+                handler: 'onClose'
+            },'-', {
+                xtype: 'buttongroup',
+                reference: 'groupCrud',
+                margin: -8,
+                hidden: false,
+                items: btnsConfig
+            }]
+        }],
+
         Ext.applyIf(me, {
-            /*
-             dockedItems: [{
-             xtype: "toolbar",
-             //reference: "topbar",
-             dock: "top",
-             items: [{
-             xtype: "textfield",
-             reference: "search",
-             itemId: "search",
-             name: "pono",
-             fieldLabel: "P.O #",
-             width: 300,
-             labelWidth: 40,
-             plugins: [{
-             ptype: "cleartrigger"
-             }],
-             triggers: {
-             search: {
-             weight: 1,
-             cls: "x-form-search-trigger",
-             tooltip: "Search",
-             handler: function(a){
-             a.fireEvent("triggersearch", this);
-             }
-             }
-             }
-             },
-             {
-             xtype: "tbspacer",
-             width: 1
-             },
-             {
-             xtype: "button",
-             ui: "default",
-             text: "Search",
-             iconCls: "fa fa-refresh",
-             width: 90,
-             action: "refresh",
-             listeners: {
-             click: "onSearchClicked"
-             }
-             },
-             {
-             xtype: "button",
-             ui: "default",
-             text: "Save",
-             iconCls: "fa fa-save",
-             width: 90,
-             action: "save",
-             listeners: {
-
-             }
-             },
-             "->",
-             {
-             xtype: "button",
-             ui: "default",
-             text: "Print",
-             iconCls: "fa fa-print",
-             width: 90,
-             action: "print",
-             listeners: {
-
-             }
-             }]
-             }],
-             */
             items: [{
                 xtype: "container",
                 //title: "P.I",
                 reference: "piheader",
-                //iconCls: "fa fa-calculator",
+                //iconCls: "x-fa fa-calculator",
                 layout: {
                     type: 'responsivecolumn',
                     states: {
@@ -297,6 +243,7 @@ Ext.define('Vega.view.inventory.pi.Form',{
                     },{
                         xtype: 'datefield',
                         name: 'pidate',
+                        format: 'Y-m-d',
                         fieldLabel: 'P.I Date',
                         //editable: false,
                         bind: {
@@ -359,6 +306,7 @@ Ext.define('Vega.view.inventory.pi.Form',{
                         readOnly: true,
                         selectOnFocus: false,
                         //editable: false,
+                        format: 'Y-m-d h:i a',
                         bind: {
                             value: '{thePhysical.createTime}'
                         }
@@ -417,6 +365,7 @@ Ext.define('Vega.view.inventory.pi.Form',{
                         readOnly: true,
                         selectOnFocus: false,
                         //editable: false,
+                        format: 'Y-m-d h:i a',
                         bind: {
                             value: '{thePhysical.updateTime}'
                         }
@@ -427,154 +376,163 @@ Ext.define('Vega.view.inventory.pi.Form',{
             {
                 xtype: 'panel',
                 title: 'Items',
-                iconCls: 'fa fa-list',
+                iconCls: 'x-fa fa-list',
                 //height: '100%',
                 flex: 1,
+
                 layout: {
                     type: 'fit'
                 },
                 items: [{
                     xtype: 'pi-view',
-                    reference: "pis",
+                    reference: "piview",
                     //width: '80%',
-                    //scrollable: 'y',
+                    scrollable: true,
                     margin: 5,
                     cls: 'pi-view',
                     bind: {
+                        selection: '{selection}',
                         store: "{thePhysical.pis}"
                     },
+                    listeners: {
+                        select: 'onItemSelect',
+                        itemcontextmenu: 'onItemContextMenu',
+                        itemdblclick: {
+                            fn: 'onItemDblClick'
+                        }
+                    },
                     tpl: new Ext.XTemplate(
-                        '<div class="item-boxer" style="width:1400px;">',
-                        '<div class="box-row">',
-                        '<div class="box ab center" style="width:30px;">Line</div>',
-                        '<div class="box ab center" style="width:160px;">Style</div>',
-                        '<div class="box">',
-                        '<div class="item-boxer">',
-                        '<div class="box nb" style="width:70px;"></div>',
-                        '<div class="box nb" style="width:70px;"></div>',
-                        '<div class="box nb" style="width:70px;"></div>',
-                        '<div class="box nb" style="width:70px;"></div>',
-                        '<div class="box nb" style="width:70px;"></div>',
-                        '<div class="box nb" style="width:70px;"></div>',
-                        '<div class="box nb" style="width:70px;"></div>',
-                        '<div class="box nb" style="width:82px;"></div>',
-                        '</div>',
-                        '</div>',
-                        '<div class="box ab center" style="width:70px;">UOM</div>',
-                        '<div class="box ab center" style="width:120px;">WH/Lot#</div>',
-                        '<div class="box ab center" style="width:120px;">P.I Date</div>',
-                        '<div class="box ab">',
-                        '<div class="item-boxer">',
-                        '<div class="box rb center" style="width:100px;">Lot Memo</div>',
-                        '<div class="box rb center" style="width:110px;">PO #</div>',
-                        '<div class="box nb" style="width:120px;"></div>',
-                        '</div>',
-                        '</div>',
-                        '</div>',
-                        '<div class="box-row">',
-                        '<div class="box nb" style="width:30px;"></div>',
-                        '<div class="box ab center" style="width:160px;">Color</div>',
-                        '<div class="box">',
-                        '<div class="item-boxer">',
-                        '<div class="box nb" style="width:70px;"></div>',
-                        '<div class="box nb" style="width:70px;"></div>',
-                        '<div class="box nb" style="width:70px;"></div>',
-                        '<div class="box nb" style="width:70px;"></div>',
-                        '<div class="box nb" style="width:70px;"></div>',
-                        '<div class="box nb" style="width:70px;"></div>',
-                        '<div class="box nb" style="width:70px;"></div>',
-                        '<div class="box nb" style="width:82px;"></div>',
-                        '</div>',
-                        '</div>',
-                        '<div class="box ab center" style="width:70px;">Total Qty</div>',
-                        '<div class="box ab center" style="width:120px;">Price</div>',
-                        '<div class="box ab center" style="width:120px;">User/Update</div>',
-                        '<div class="box ab">',
-                        '<div class="item-boxer">',
-                        '<div class="box rb center" style="width:100px;">St/Loc</div>',
-                        '<div class="box rb center" style="width:110px;">ID</div>',
-                        '<div class="box nb" style="width:120px;"></div>',
-                        '</div>',
-                        '</div>',
-                        '</div>',
+                        '<div class="item-boxer" style="width:1400px;margin: 1px;">',
+                            '<div class="box-row">',
+                                '<div class="box ab center" style="width:30px;">Line</div>',
+                                '<div class="box ab center" style="width:160px;">Style</div>',
+                                '<div class="box">',
+                                    '<div class="item-boxer">',
+                                        '<div class="box nb" style="width:70px;"></div>',
+                                        '<div class="box nb" style="width:70px;"></div>',
+                                        '<div class="box nb" style="width:70px;"></div>',
+                                        '<div class="box nb" style="width:70px;"></div>',
+                                        '<div class="box nb" style="width:70px;"></div>',
+                                        '<div class="box nb" style="width:70px;"></div>',
+                                        '<div class="box nb" style="width:70px;"></div>',
+                                        '<div class="box nb" style="width:82px;"></div>',
+                                    '</div>',
+                                '</div>',
+                                '<div class="box ab center" style="width:70px;">UOM</div>',
+                                '<div class="box ab center" style="width:120px;">WH/Lot#</div>',
+                                '<div class="box ab center" style="width:120px;">P.I Date</div>',
+                                '<div class="box ab">',
+                                    '<div class="item-boxer">',
+                                        '<div class="box rb center" style="width:100px;">Lot Memo</div>',
+                                        '<div class="box rb center" style="width:110px;">PO #</div>',
+                                        '<div class="box nb" style="width:120px;"></div>',
+                                    '</div>',
+                                '</div>',
+                            '</div>',
+                            '<div class="box-row">',
+                                '<div class="box nb" style="width:30px;"></div>',
+                                '<div class="box ab center" style="width:160px;">Color</div>',
+                                '<div class="box">',
+                                    '<div class="item-boxer">',
+                                        '<div class="box nb" style="width:70px;"></div>',
+                                        '<div class="box nb" style="width:70px;"></div>',
+                                        '<div class="box nb" style="width:70px;"></div>',
+                                        '<div class="box nb" style="width:70px;"></div>',
+                                        '<div class="box nb" style="width:70px;"></div>',
+                                        '<div class="box nb" style="width:70px;"></div>',
+                                        '<div class="box nb" style="width:70px;"></div>',
+                                        '<div class="box nb" style="width:82px;"></div>',
+                                    '</div>',
+                                '</div>',
+                                '<div class="box ab center" style="width:70px;">Total Qty</div>',
+                                '<div class="box ab center" style="width:120px;">Price</div>',
+                                '<div class="box ab center" style="width:120px;">User/Update</div>',
+                                '<div class="box ab">',
+                                    '<div class="item-boxer">',
+                                        '<div class="box rb center" style="width:100px;">Status/Loc</div>',
+                                        '<div class="box rb center" style="width:110px;">ID</div>',
+                                        '<div class="box nb" style="width:120px;"></div>',
+                                    '</div>',
+                                '</div>',
+                            '</div>',
                         '</div>',
                         '<tpl for=".">',
-                        '<div class="item-selector">',
-                        '<div class="item-boxer" style="width:1400px;">',
-                        '<div class="box-row">',
-                        '<div class="box ab" style="width:30px;">{lineseq}</div>',
-                        '<div class="box ab" style="width:160px;">{style:trim}</div>',
-                        '<div class="box ab">',
-                        '<div class="item-boxer">',
-                        '<div class="box rb center" style="width:70px;">{sz1}</div>',
-                        '<div class="box rb center" style="width:70px;">{sz2}</div>',
-                        '<div class="box rb center" style="width:70px;">{sz3}</div>',
-                        '<div class="box rb center" style="width:70px;">{sz4}</div>',
-                        '<div class="box rb center" style="width:70px;">{sz5}</div>',
-                        '<div class="box rb center" style="width:70px;">{sz6}</div>',
-                        '<div class="box rb center" style="width:70px;">{sz7}</div>',
-                        '<div class="box nb center" style="width:70px;">{sz8}</div>',
-                        '</div>',
-                        '</div>',
-                        '<div class="box ab center" style="width:70px;">{uom:trim}</div>',
-                        '<div class="box ab" style="width:120px;">{wareHouse:trim}</div>',
-                        '<div class="box ab" style="width:120px;">{logdate:date("Y-m-d")}</div>',
-                        '<div class="box ab" style="width:330px;">{memo}</div>',
-                        '</div>',
-                        '<div class="box-row">',
-                        '<div class="box ab" style="width:30px;"></div>',
-                        '<div class="box ab" style="width:160px;">{color:trim}</div>',
-                        '<div class="box ab">',
-                        '<div class="item-boxer">',
-                        '<div class="box rb right" style="width:70px;">{unit1}</div>',
-                        '<div class="box rb right" style="width:70px;">{unit2}</div>',
-                        '<div class="box rb right" style="width:70px;">{unit3}</div>',
-                        '<div class="box rb right" style="width:70px;">{unit4}</div>',
-                        '<div class="box rb right" style="width:70px;">{unit5}</div>',
-                        '<div class="box rb right" style="width:70px;">{unit6}</div>',
-                        '<div class="box rb right" style="width:70px;">{unit7}</div>',
-                        '<div class="box nb right" style="width:70px;">{unit8}</div>',
-                        '</div>',
-                        '</div>',
-                        '<div class="box ab right" style="width:70px;">{totalUnit}</div>',
-                        '<div class="box ab" style="width:120px;">{lotno:trim}</div>',
-                        '<div class="box ab" style="width:120px;">{userName:trim}</div>',
-                        '<div class="box ab">',
-                        '<div class="item-boxer">',
-                        '<div class="box rb" style="width:100px;">{status:trim}</div>',
-                        '<div class="box rb" style="width:110px;">{pono}</div>',
-                        '<div class="box nb" style="width:120px;">{updateDate:date("Y-m-d h:i")}</div>',
-                        '</div>',
-                        '</div>',
-                        '</div>',
-                        '<div class="box-row">',
-                        '<div class="box" style="width:30px;"></div>',
-                        '<div class="box" style="width:160px;"></div>',
-                        '<div class="box ab">',
-                        '<div class="item-boxer">',
-                        '<div class="box rb right" style="width:70px;">{oh1}</div>',
-                        '<div class="box rb right" style="width:70px;">{oh2}</div>',
-                        '<div class="box rb right" style="width:70px;">{oh3}</div>',
-                        '<div class="box rb right" style="width:70px;">{oh4}</div>',
-                        '<div class="box rb right" style="width:70px;">{oh5}</div>',
-                        '<div class="box rb right" style="width:70px;">{oh6}</div>',
-                        '<div class="box rb right" style="width:70px;">{oh7}</div>',
-                        '<div class="box nb right" style="width:70px;">{oh8}</div>',
-                        '</div>',
-                        '</div>',
-                        '<div class="box ab right" style="width:70px;">{ohs}</div>',
-                        '<div class="box ab" style="width:120px;">{price:usMoney}</div>',
-                        '<div class="box ab" style="width:120px;">{userTime:date("Y-m-d h:i")}</div>',
-                        '<div class="box ab">',
-                        '<div class="item-boxer">',
-                        '<div class="box rb" style="width:100px;">{location}</div>',
-                        '<div class="box rb" style="width:110px;">{inventoryId}</div>',
-                        '<div class="box nb" style="width:120px;">{ref:trim}</div>',
-                        '</div>',
-                        '</div>',
-                        '</div>',
-                        '</div>',
-                        '</div>',
+                            '<div class="item-selector">',
+                                '<div class="item-boxer" style="width:1400px;">',
+                                '<div class="box-row">',
+                                    '<div class="box ab" style="width:30px;">{lineseq}</div>',
+                                    '<div class="box ab" style="width:160px;">{style:trim}</div>',
+                                        '<div class="box ab">',
+                                            '<div class="item-boxer">',
+                                            '<div class="box rb center" style="width:70px;">{sz1}</div>',
+                                            '<div class="box rb center" style="width:70px;">{sz2}</div>',
+                                            '<div class="box rb center" style="width:70px;">{sz3}</div>',
+                                            '<div class="box rb center" style="width:70px;">{sz4}</div>',
+                                            '<div class="box rb center" style="width:70px;">{sz5}</div>',
+                                            '<div class="box rb center" style="width:70px;">{sz6}</div>',
+                                            '<div class="box rb center" style="width:70px;">{sz7}</div>',
+                                            '<div class="box nb center" style="width:70px;">{sz8}</div>',
+                                            '</div>',
+                                        '</div>',
+                                    '<div class="box ab center" style="width:70px;">{uom:trim}</div>',
+                                    '<div class="box ab" style="width:120px;">{wareHouse:trim}</div>',
+                                    '<div class="box ab" style="width:120px;">{logdate:date("Y-m-d")}</div>',
+                                    '<div class="box ab" style="width:330px;">{memo}</div>',
+                                '</div>',
+                                '<div class="box-row">',
+                                    '<div class="box ab" style="width:30px;"></div>',
+                                    '<div class="box ab" style="width:160px;">{color:trim}</div>',
+                                    '<div class="box ab">',
+                                        '<div class="item-boxer">',
+                                            '<div class="box rb right" style="width:70px;">{unit1}</div>',
+                                            '<div class="box rb right" style="width:70px;">{unit2}</div>',
+                                            '<div class="box rb right" style="width:70px;">{unit3}</div>',
+                                            '<div class="box rb right" style="width:70px;">{unit4}</div>',
+                                            '<div class="box rb right" style="width:70px;">{unit5}</div>',
+                                            '<div class="box rb right" style="width:70px;">{unit6}</div>',
+                                            '<div class="box rb right" style="width:70px;">{unit7}</div>',
+                                            '<div class="box nb right" style="width:70px;">{unit8}</div>',
+                                        '</div>',
+                                    '</div>',
+                                    '<div class="box ab right" style="width:70px;">{totalUnit}</div>',
+                                    '<div class="box ab" style="width:120px;">{lotno:trim}</div>',
+                                    '<div class="box ab" style="width:120px;">{userName:trim}</div>',
+                                    '<div class="box ab">',
+                                        '<div class="item-boxer">',
+                                            '<div class="box rb" style="width:100px;">{status:trim}</div>',
+                                            '<div class="box rb" style="width:110px;">{pono}</div>',
+                                            '<div class="box nb" style="width:120px;">{updateDate:date("Y-m-d h:i")}</div>',
+                                        '</div>',
+                                    '</div>',
+                                '</div>',
+                                '<div class="box-row">',
+                                    '<div class="box" style="width:30px;"></div>',
+                                    '<div class="box" style="width:160px;"></div>',
+                                    '<div class="box ab">',
+                                        '<div class="item-boxer">',
+                                            '<div class="box rb right" style="width:70px;">{oh1}</div>',
+                                            '<div class="box rb right" style="width:70px;">{oh2}</div>',
+                                            '<div class="box rb right" style="width:70px;">{oh3}</div>',
+                                            '<div class="box rb right" style="width:70px;">{oh4}</div>',
+                                            '<div class="box rb right" style="width:70px;">{oh5}</div>',
+                                            '<div class="box rb right" style="width:70px;">{oh6}</div>',
+                                            '<div class="box rb right" style="width:70px;">{oh7}</div>',
+                                            '<div class="box nb right" style="width:70px;">{oh8}</div>',
+                                        '</div>',
+                                    '</div>',
+                                    '<div class="box ab right" style="width:70px;">{ohs}</div>',
+                                    '<div class="box ab" style="width:120px;">{price:usMoney}</div>',
+                                    '<div class="box ab" style="width:120px;">{userTime:date("Y-m-d h:i")}</div>',
+                                    '<div class="box ab">',
+                                        '<div class="item-boxer">',
+                                            '<div class="box rb" style="width:100px;">{location}</div>',
+                                            '<div class="box rb" style="width:110px;">{inventoryId}</div>',
+                                            '<div class="box nb" style="width:120px;">{ref:trim}</div>',
+                                            '</div>',
+                                        '</div>',
+                                    '</div>',
+                                '</div>',
+                            '</div>',
                         '</tpl>'
                     )
                     /*
@@ -596,5 +554,11 @@ Ext.define('Vega.view.inventory.pi.Form',{
         });
 
         me.callParent(arguments);
+
+        me.contextmenu = Ext.create('Ext.menu.Menu', {
+            items: [
+                btnEdit, btnCopy, btnDelete
+            ]
+        });
     }
 });

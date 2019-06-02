@@ -24,9 +24,9 @@ Ext.define('Vega.model.fabric.RollDetail', {
         { name: 'lotno', type: 'string'},
         { name: 'rollno', type: 'string'},
         { name: 'inventoryId', type: 'int'},
-        { name: 'unit1', type: 'float'},
-        { name: 'alloc_qty_total', type: 'float'},
-        { name: 'alloc_qty', type: 'float'},
+        { name: 'unit1', type: 'number'},
+        { name: 'alloc_qty_total', type: 'number'},
+        { name: 'alloc_qty', type: 'number'},
         { name: 'actual_yn', type: 'string'},
         { name: 'cuttable', type: 'string'},
         { name: 'prelimL', type: 'string'},
@@ -56,7 +56,7 @@ Ext.define('Vega.model.fabric.RollDetail', {
 
          },*/
         batchActions: true,
-        timeout: 120000,
+        timeout: 900000,
         url: '/api/RollDetails',
 
         reader: {

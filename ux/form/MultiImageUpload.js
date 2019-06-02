@@ -367,9 +367,10 @@ Ext.define('Ext.ux.form.MultiImageUpload', {
             category = fieldset.title.toLowerCase(),
             previewImage = fieldset.down('image[name="' + category  + 'img"]'),
             form = me.up('sales-edit-form'),
-            rec = form.getViewModel().get('theStyle');
+            win = me.up('edit-window'),
+            rec = win.getViewModel().get('theStyle');
 
-        //console.log(me, me.up('sales-edit-form'));
+        //console.log('addFilesToQueue', form, rec);
         if(!files[0].name){
             me.blobToFile(files[0], Vega.util.Utils.generateGUID()+'.'+files[0].type.split('/').pop())
         }

@@ -14,7 +14,7 @@ Ext.define('Vega.view.inventory.pi.View',{
         type: 'pi-view'
     },
 
-    scrollable: "y",
+    //scrollable: "y",
     //loadMask: true,
     //loadingHeight: 300,
     //trackOver: false,
@@ -24,18 +24,23 @@ Ext.define('Vega.view.inventory.pi.View',{
     itemSelector: "div.item-selector",
     preserveScrollOnRefresh: true,
     deferInitialRefresh: true,
+    publishes: ['selection'],
+
+    config: {
+        selection: null
+    },
 
     prepareData: function(f, d, e){
         Ext.apply(f, {
             //viewStatus: localStorage.getItem("pow-seen-" + f.powhId) == "true" ? "visited" : ""
         });
 
-        return f
+        return f;
     },
 
     listeners: {
         beforecontainerclick: function(){
-            return false
+            return false;
         }
     },
 

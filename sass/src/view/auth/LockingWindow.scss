@@ -1,0 +1,231 @@
+$dialog-login-background-color: #83c748;
+$create-account-background-color: #a1a1a2;
+$dialog-trigger-color: #e5e5e5;
+
+$auth-color: #fff;
+$auth-background-color: #123d40;
+$auth-background-image: url(get-resource-path('images/auth-background.jpg'));
+
+@include extjs-panel-ui(
+  $ui: 'auth',
+  //$ui-background-color: transparent,
+  $ui-body-background-color: transparentize($auth-background-color, 0.75),
+  $ui-body-color: $auth-color
+  //$ui-body-padding: 24px
+);
+
+.auth-locked-window{
+    .x-window-body {
+		position: fixed;
+		left: 0px;
+		top: 0px;
+		z-index: -1;
+		/* Preserve aspet ratio */
+		min-width: 100%;
+		min-height: 100%;
+  	    //background: url('images/lock-screen-background.jpg') no-repeat center center fixed;
+		-webkit-background-size: cover; /* For WebKit*/
+		-moz-background-size: cover;    /* Mozilla*/
+		-o-background-size: cover;      /* Opera*/
+		//background-size: cover;         /* Generic*/
+      	//background-repeat: repeat;
+
+		background: url('images/lock-screen-background.jpg') no-repeat;
+		background-size: cover;
+	    background-position: center;
+
+  	}
+      &.x-window-default{
+  	    border: none;
+  	    border-radius: 0;
+  	    padding: 0;
+  	}
+
+  .x-form-text-default{
+	padding: 15px;
+  }
+
+  .register-page-back-button,
+  .register-page-back-button .x-frame-mc{
+	background-color: $lightest-color;
+	border:none;
+	padding:5px 0 0 0;
+	.x-btn-inner-default-small{
+	  padding : 0;
+	  height:20px;
+	  color: $base-color;
+	  &:hover{
+		text-decoration:underline;
+	  }
+	}
+	&.x-btn-pressed.x-btn-default-small{
+	  background-color: transparent;
+	}
+  }
+  .trigger-glyph-noop {
+	cursor:default;
+  }
+  .x-form-trigger{
+	text-align:right;
+	width:50px;
+  }
+  .password-trigger,
+  .auth-email-trigger,
+  .auth-password-trigger,
+  .auth-envelope-trigger{
+	&:before{
+	  top: 14px;
+	  left:-18px;
+	  position: relative;
+	  color: $dialog-trigger-color;
+	  font-size: 30px;
+	}
+
+	&.password-trigger:before,
+	&.auth-password-trigger:before{
+	  content: "\f023";
+	}
+	&.auth-email-trigger:before{
+	  content: "\f007";
+	}
+	&.auth-envelope-trigger:before{
+	  content: "\f0e0";
+	}
+  }
+  .checkbox-remember-me {
+	color: $auth-color !important;
+  }
+  .seperator{
+	text-align: center;
+	color: $create-account-background-color;
+	font-family: "Open Sans";
+	display: inline-block;
+	background: $lightest-color;
+	position: relative;
+	z-index: 1;
+	padding: 0 8px;
+  }
+
+  .link-forgot-password {
+	line-height:32px;
+	color: $base-color;
+	text-decoration:none;
+	margin-left:5px;
+	&:hover{
+	  text-decoration:underline;
+	}
+  }
+
+  .x-btn{
+	.x-btn-icon-el{
+	  &:before{
+		right: 10px;
+		font-size: 24px;
+		position: absolute;
+	  }
+	}
+  }
+
+  .auth-facebook-button .x-fa{
+	color: $lightest-color;
+	font-size: 24px;
+	top:10px;
+	right: 13px;
+  }
+
+  .auth-login-button .x-fa,
+  .auth-resetpassword-button .x-fa{
+	font-size: 32px;
+	right: 11px;
+	top:10px;
+	line-height: 16px;
+  }
+
+  .auth-create-account-button .x-fa {
+	color: $lightest-color;
+	right: 24px;
+	top:10px;
+  }
+
+  .outer-div{
+	width:100%;
+	text-align: center;
+	&:after{
+	  content: " ";
+	  width:100%;
+	  height: 1px;
+	  //background-color: $blank-page-color;
+	  position:absolute;
+	  left: 0;
+	  top: 9px;
+	}
+  }
+
+  .fa-vega-logo:before {
+	content: "\f1ca";
+	position: absolute;
+	font-size: 3.8em;
+	right: 16px;
+	bottom: 34px;
+  }
+
+  .fa-vega-logo:after {
+	content: "\f1db";
+	position: absolute;
+	//color: #cc3300;
+	font-size: 6.0em;
+	right: 4px;
+	bottom: 24px;
+  }
+
+  .auth-header,
+  .auth-footer {
+	color: $auth-color;
+	text-align: center;
+	padding: 16px;
+
+	a {
+	  color: $auth-color;
+	  text-decoration: none;
+	}
+  }
+
+  .auth-header {
+	.logo {
+	  @include single-text-shadow;
+	  color: $auth-color;
+	  line-height: 1;
+	}
+
+	.title, .caption {
+	  white-space: nowrap;
+	}
+
+	.title {
+	  color: $auth-color;
+	  font-size: 31px;
+	  font-weight: bold;
+	}
+
+	.caption {
+	  font-size: 15px;
+	  text-transform: uppercase;
+	}
+  }
+
+  .auth-footer {
+	.logo {
+	  font-size: 18px;
+	  margin-right: 2px;
+	  margin-left: -4px;
+
+	  &::before {
+		vertical-align: middle;
+	  }
+	}
+
+	.label {
+	  font-weight: bold;
+	}
+  }
+}

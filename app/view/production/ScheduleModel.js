@@ -55,7 +55,7 @@ Ext.define('Vega.view.production.ScheduleModel', {
             autoLoad: false,
             proxy: {
                 type: "ajax",
-                url: "/api/Options/customers",
+                url: "/api/Combos/customers",
                 reader: {
                     type: "json",
                     rootProperty: "data",

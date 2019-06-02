@@ -3,27 +3,38 @@ Ext.define('Vega.model.Tna', {
 
     fields: [
         { name: 'tnaId', type: 'int'},
-        { name: 'planId', type: 'int'},
         { name: 'lineseq', type: 'int', persist: false,
             calculate: function(data){
                 return data.priority / 10;
             }
         },
-        { name: 'customer', type: 'string' },
-        { name: 'activity', type: 'string'},
-        { name: 'descript', type: 'string'},
-        { name: 'due', type: 'date'},
+        { name: 'customer', type: 'string', allowNull: true },
+        { name: 'activity', type: 'string', allowNull: true},
+        { name: 'descript', type: 'string', allowNull: true},
         { name: 'duration', type: 'int'},
         { name: 'priority', type: 'int'},
-        { name: 'coordinator', type: 'string'},
-        { name: 'active', type: 'boolean'}
+        { name: 'coordinator', type: 'string', allowNull: true},
+        { name: 'active', type: 'boolean'},
+        {
+            name: 'roleId',
+            reference: {
+                parent: 'Tnarole',
+                //
+                //type: 'sales.Powh',
+                //association: 'stylesByHeader',
+                //role: 'tnarole',
+                //field: 'roleId',
+                inverse: 'tnas'
+            }
+        }
     ],
 
     idProperty: 'tnaId',
+    identifier: 'negative',
 
     proxy: {
         type: 'rest',
-        url: '/api/Tna',
+        url: '/api/Tna/',
 
         pageParam: '',
         startParam: '',
@@ -46,4 +57,4 @@ Ext.define('Vega.model.Tna', {
             }
         }
     }
-})
+});

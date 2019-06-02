@@ -1,8 +1,12 @@
 Ext.define('Vega.model.Powh', {
     extend: 'Vega.model.Base',
 
+    requires: [
+        'Ext.Date'
+    ],
+
     fields: [
-        { name: 'powhId'},
+        { name: 'powhId', type: 'int' },
         { name: 'powno', type: 'string'},
         { name: 'revision', type: 'int'},
         { name: 'ordertype', type: 'string'},
@@ -23,23 +27,23 @@ Ext.define('Vega.model.Powh', {
         { name: 'content', type: 'string'},
         { name: 'sizes', type: 'string'},
         { name: 'ratio', type: 'string'},
-        { name: 'cxldate', type: 'date', dateFormat: 'c'},
-        { name: 'dcdate', type: 'date', dateFormat: 'c'},
+        { name: 'cxldate', type: 'date', dateFormat: 'c', dateWriteFormat: 'Y-m-d'},
+        { name: 'dcdate', type: 'date', dateFormat: 'c', dateWriteFormat: 'Y-m-d'},
         { name: 'userId', type: 'string'},
         { name: 'createdon', type: 'date', dateFormat: 'c'},
         { name: 'updatedby', type: 'string'},
         { name: 'updatedon', type: 'date', dateFormat: 'c'},
         { name: 'comments', type: 'string', allowNull: true },
         { name: 'buyer', type: 'string'},
-        { name: 'routing', type: 'date', dateFormat: 'c'},
+        { name: 'routing', type: 'date', dateFormat: 'c', dateWriteFormat: 'Y-m-d'},
         { name: 'factory', type: 'string'},
         { name: 'incidentals', type: 'string'},
         { name: 'link', type: 'string', allowNull: true },
         { name: 'remarks', type: 'string', allowNull: true },
         { name: 'submissions', type: 'string'},
-        { name: 'confirmon', type: 'date', dateFormat: 'c'},
-        { name: 'reviseon', type: 'date', dateFormat: 'c'},
-        { name: 'cancelon', type: 'date', dateFormat: 'c'},
+        { name: 'confirmon', type: 'date', dateFormat: 'c', dateWriteFormat: 'Y-m-d'},
+        { name: 'reviseon', type: 'date', dateFormat: 'c', dateWriteFormat: 'Y-m-d'},
+        { name: 'cancelon', type: 'date', dateFormat: 'c', dateWriteFormat: 'Y-m-d'},
         { name: 'submits', type: 'string', allowNull: true},
         { name: 'progress', type: 'string'}
     ],
@@ -63,13 +67,7 @@ Ext.define('Vega.model.Powh', {
     proxy: {
         type: 'rest',
         url: '/api/Powh/',
-
-        /*
-        pageParam: '',
-        startParam: '',
-        limitParam: '',
-        */
-
+        timeout: 300000,
         reader: {
             type: 'json',
             rootProperty: 'data'
@@ -82,12 +80,10 @@ Ext.define('Vega.model.Powh', {
             allowSingle: true // set false to send a single record in array
         },
 
-        extraParams: {},
-
         listeners: {
             exception: function (proxy, response, operation) {
                 console.log(response, operation);
             }
         }
     }
-})
+});

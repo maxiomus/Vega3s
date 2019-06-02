@@ -14,22 +14,29 @@ Ext.define("Vega.view.sales.View", {
     //loadingHeight: 300,
     //trackOver: false,
     cls: "multi-view",
-    loadMask: true,
+    //loadMask: true,
     overItemCls: "x-item-over",
     itemSelector: "div.thumb-wrap",
     preserveScrollOnRefresh: true,
     deferInitialRefresh: true,
 
+    padding: '7 0 0 7',
+
+    style: {
+        borderTop: '1px solid #cfcfcf',
+        borderBottom: '1px solid #cfcfcf'
+    },
+
     prepareData: function(f, d, e){
         Ext.apply(f, {
             viewStatus: localStorage.getItem("pow-seen-" + f.powhId) == "true" ? "visited" : ""
         });
-        return f
+        return f;
     },
 
     listeners: {
         beforecontainerclick: function(){
-            return false
+            return false;
         }
     },
 
@@ -37,9 +44,9 @@ Ext.define("Vega.view.sales.View", {
         var me = this;
         //this.tpl = this.buildTemplate();
 
-        me.callParent(arguments)
-    },
-
+        me.callParent(arguments);
+    }
+    /*
     buildTemplate: function(){
         var b = new Ext.XTemplate('<tpl for=".">',
             '<div class="thumb-wrap {viewStatus}" id="mView-{powhId}">',
@@ -47,7 +54,7 @@ Ext.define("Vega.view.sales.View", {
                 //'<img src="{linkImage}" title="{title}" />',
                 '</div>',
                 '<div class="post-data">',
-                    '<div class="post-title">POW # {powno} <i class="fa fa-check-square-o fa-lg viewIcon {viewStatus}"></i></div>',
+                    '<div class="post-title">POW # {powno} <i class="x-fa fa-check-square-o fa-lg viewIcon {viewStatus}"></i></div>',
                     '<div class="post-date">{createdon:date("M j,Y,g:i a")}</div>',
                     '<div class="post-author">Registered by {userId:capitalize}</div>',
                 '</div>',
@@ -64,4 +71,5 @@ Ext.define("Vega.view.sales.View", {
 
         return b
     }
+    */
 });

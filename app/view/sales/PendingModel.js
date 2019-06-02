@@ -20,8 +20,9 @@ Ext.define('Vega.view.sales.PendingModel', {
                 value: 'pending',
                 type: 'string'
             }]
-        },
+        }
 
+        /*
         factories: {
             fields: ['id', 'label'],
             //storeId: 'factories',
@@ -51,6 +52,7 @@ Ext.define('Vega.view.sales.PendingModel', {
             },
             autoLoad: true
         }
+        */
     }
 
 });

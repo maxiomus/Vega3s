@@ -1,0 +1,50 @@
+Ext.define('Ext.overrides.calendar.store.EventSource', {
+    override: 'Ext.calendar.store.EventSource',
+
+    setRange: function(start, end) {
+        var me = this,
+            range = me.range,
+            map = me.calendarMap,
+            source = me.getSource(),
+            success = true,
+            allCached = true,
+            cached, store, id, loads,
+            hasAny;
+
+        // overrides...
+        if(start.isRange){
+            end = start.end;
+            start = start.start;
+        }
+        // end-override
+
+        me.range = new Ext.calendar.date.Range(start, end);
+
+        for (id in map) {
+            hasAny = true;
+            store = me.getEventsForCalendar(map[id]);
+            // The store doesn't have the immediate range
+            cached = store.hasRangeCached(start, end);
+            allCached = allCached && cached;
+            store.setRange(start, end);
+            if (!cached) {
+                loads = loads || [];
+                store.on('load', function(s, records, successful) {
+                    Ext.Array.remove(loads, s);
+                    success = success && successful;
+                    if (loads.length === 0) {
+                        me.doBulkLoad(success);
+                    }
+                }, null, {single: true});
+                loads.push(store);
+                me.activeLoad = true;
+            }
+        }
+
+        if (hasAny && allCached) {
+            me.checkData(true);
+        } else if (loads) {
+            me.fireEvent('beforeload', me);
+        }
+    }
+})

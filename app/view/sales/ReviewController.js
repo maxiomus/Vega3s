@@ -27,13 +27,19 @@ Ext.define('Vega.view.sales.ReviewController', {
                 beforeload: {
                     fn: 'onStoreLoad'
                     //single: true,
+                },
+                load: {
+                    fn: function(s){
+                        //s.setRemoteFilter(true);
+                    },
+                    single: true
                 }
             }
         }
     },
 
     initViewModel: function(b){
-        this.fireEvent("viewmodelready", this, b)
+        this.fireEvent("viewmodelready", this, b);
     },
 
 
@@ -68,10 +74,10 @@ Ext.define('Vega.view.sales.ReviewController', {
                 if(Vega.user.inRole('cs') || Vega.user.inRole('revise') || Vega.user.inRole('administrators')){
                     topbar.add({
                         text: 'Revise',
-                        iconCls: 'fa fa-edit',
+                        iconCls: 'x-fa fa-edit',
                         hidden: false,
                         handler: function(btn){
-                            this.redirectTo('review/edit/' + rec.data.powhId)
+                            this.redirectTo('review/edit/' + rec.data.powhId);
                         },
                         scope: this
                     });
@@ -81,7 +87,7 @@ Ext.define('Vega.view.sales.ReviewController', {
                     if(Vega.user.inRole('revise') || Vega.user.inRole('administrators')){
                         topbar.add({
                             text: 'Submit',
-                            iconCls: 'fa fa-arrow-circle-o-up',
+                            iconCls: 'x-fa fa-arrow-circle-o-up',
                             hidden: false,
                             handler: 'onSubmit',
                             scope: this
@@ -129,7 +135,7 @@ Ext.define('Vega.view.sales.ReviewController', {
             g = h ? h.split("/") : [];
         //console.log(h, g.pop());
 
-        this.redirectTo('review/copy/' + g.pop())
+        this.redirectTo('review/copy/' + g.pop());
     },
 
     onActionEdit: function(topbar,b) {
@@ -137,7 +143,48 @@ Ext.define('Vega.view.sales.ReviewController', {
             g = h ? h.split("/") : [];
         //console.log(h, g.pop());
 
-        this.redirectTo('review/edit/' + g.pop())
+        this.redirectTo('review/edit/' + g.pop());
+    },
+
+    onActionDelete: function(topbar){
+        var me = this,
+            m = me.lookupReference("multiview"),
+            g = m.lookupReference("grid"),
+            d = g.getSelection()[0];
+
+        Ext.Msg.show({
+            title:'Warning!',
+            message: 'Are you sure you want to delete this?',
+            buttons: Ext.Msg.OKCANCEL,
+            icon: Ext.Msg.QUESTION,
+            fn: function(btn) {
+                if (btn === 'ok') {
+                    var processMask = new Ext.LoadMask({
+                        msg: 'Saving... Please wait',
+                        target: me.getView()
+                    });
+                    //grid.getStore().remove(rec);
+                    d.drop();
+
+                    processMask.show();
+                    g.getStore().sync({
+                        success: function(batch, opt) {
+                            processMask.hide('', function() {
+                                Ext.Msg.alert('Status', 'Changes saved successfully.');
+                            });
+                        },
+                        failure: function(batch, opt) {
+
+                        },
+                        callback: function(batch, opt) {
+
+                        }
+                    });
+                    //var batch = me.getView().getSession().getSaveBatch();
+                    //me.processBatch(batch);
+                }
+            }
+        });
     },
 
     /**
@@ -148,56 +195,14 @@ Ext.define('Vega.view.sales.ReviewController', {
     onActionView: function(topbar, widget){
         var m = this.lookupReference("multiview"),
             g = m.lookupReference("grid"),
-            s = g.getSelection()[0];
+            v = m.lookupReference('tiles'),
+            s = g.getSelection().length != 0 ? g.getSelection() : v.getSelection();
 
-        this.onTabOpen(null, s);
+        this.onTabOpen(null, s[0]);
     },
 
     onActionRefresh: function(){
         this.getStore("reviews").reload();
-    },
-
-    onClearFilters: function(b){
-        var me = this,
-            topbar = me.view.lookupReference("multiview").lookupReference("topbar"),
-            searchcombo = topbar.lookupReference('searchcombo'),
-            searchfield = topbar.lookupReference('searchfield'),
-            grid = me.view.lookupReference("multiview").lookupReference("grid");
-
-        searchcombo.setValue('');
-        searchcombo.getTrigger('clear').hide();
-        searchfield.setValue('');
-        searchfield.getTrigger('clear').hide();
-        grid.filters.clearFilters();
-    },
-
-    onFilterItemChange: function(combo, q, r, o){
-        var toolbar = combo.up("toolbar"),
-            m = toolbar.down("gridsearchfield"),
-            n = toolbar.down("searchcombo"),
-            j = combo.getValue();
-
-        switch(j){
-            case "powno":
-            case "comments":
-            case "userId":
-                m.paramName = j;
-                m.show();
-                n.hide();
-                break;
-            default:
-                n.paramName = j;
-                n.show();
-                m.hide()
-        }
-
-        var main = Vega.app.getMainView(),
-            k = main.getViewModel().getStore(j.toLowerCase());
-
-        if(k != null){
-            k.load();
-            n.bindStore(k)
-        }
     },
 
     onSubmit: function(btn){
@@ -220,12 +225,6 @@ Ext.define('Vega.view.sales.ReviewController', {
             alignTarget: view.up('viewer').up('maincontainerwrap').ownerCt,
             //defaultAlign: 'c-c',
             //animateTarget: btn.id,
-
-            viewModel: {
-                formulas: {
-
-                }
-            },
 
             layout: {
                 type: 'vbox',
@@ -303,7 +302,7 @@ Ext.define('Vega.view.sales.ReviewController', {
                             }
                         },
                         failure: function(response, options) {
-                            Ext.Msg.alert(response.status.toString(), response.statusText + ', an error occurred during your request. Please try again.' );
+                            Ext.Msg.alert(response.statusText, response.status + ' - ' + response.responseText );
                         },
                         callback: function(response, opotions) {
 
@@ -330,7 +329,6 @@ Ext.define('Vega.view.sales.ReviewController', {
             view.up('viewer').up('maincontainerwrap').mask();
         });
 
-
     },
 
     onSelect: function(sm, rec, idx, e){
@@ -340,9 +338,11 @@ Ext.define('Vega.view.sales.ReviewController', {
 
         refs.display.setActive(rec);
 
-        //console.log(refs);
-        if(!refs.preview.hidden){
-            this.loadIframe(refs.display ,rec.get('powhId'));
+        if(refs.preview.hidden){
+            refs.display.removeAll();
+        }
+        else {
+            refs.display.loadIframe();
         }
 
         var l = [],
@@ -357,7 +357,7 @@ Ext.define('Vega.view.sales.ReviewController', {
     },
 
     onTabOpen: function(i, h){
-        //console.log('onTabOpen', i, h);
+
         var j = this,
             f = j.view.lookupReference("multiview").lookupReference("tiles"),
             g = Ext.fly(f.getNode(h)).query("i", false);
@@ -381,11 +381,12 @@ Ext.define('Vega.view.sales.ReviewController', {
         l.stopEvent();
 
         var i = h.getSelectionModel();
-        if(!i.isSelected(g)){
-            i.select(g)
+        if(!i.isSelected(j)){
+            i.select(j);
         }
 
-        this.view.contextmenu.showAt(l.getXY())
+        this.view.contextmenu.items.items[4].setHidden(!(Vega.user.userOwn(j.data.userId) || Vega.user.inRole('administrators')));
+        this.view.contextmenu.showAt(l.getXY());
     },
 
     onReviseTab: function(p, rec){
@@ -417,13 +418,6 @@ Ext.define('Vega.view.sales.ReviewController', {
             type: "string"
         });
 
-        /*Ext.each(columns, function(column){
-            y = column.filter;
-            if(column.dataIndex === "progress"){
-                return false;
-            }
-        });
-        */
         if(aItem.type == null){
             //filters.clearFilters(false);
             grid.getStore().clearFilter();
@@ -433,23 +427,6 @@ Ext.define('Vega.view.sales.ReviewController', {
             //y.setValue(aItem.type);
             //y.setActive(true);
         }
-    },
-
-    loadIframe: function(display, id){
-        var xf = Ext.util.Format;
-
-        display.removeAll(true);
-        display.add({
-            xtype: "component",
-            itemId: "contentIframe",
-            autoEl: {
-                tag: "iframe",
-                style: {height: "100%"},
-                width: "100%",
-                border: "none",
-                src: xf.format('../services/PowPreviewPrint.ashx?ID={0}', id)
-            }
-        });
     }
-    
+
 });

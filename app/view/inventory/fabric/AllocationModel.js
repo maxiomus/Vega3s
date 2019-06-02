@@ -14,19 +14,23 @@ Ext.define('Vega.view.inventory.fabric.AllocationModel', {
 
     stores: {
         'lotnos': {
-            fields: ['id', 'text'],
-
+            fields: ['label', 'text'],
             // allow the grid to interact with the paging scroller by buffering
             //buffered: true,
-            pageSize: 50,
-            //numFromEdge: 5,
-            //trailingBufferZone: 100,
-            //leadingBufferZone: 100,
+            //pageSize: 50,
+
             autoLoad: false,
+
+            //buffered: true,
 
             proxy: {
                 type: 'ajax',
                 url: '/api/Combos/lotnos',
+
+                pageParam: '',
+                startParam: '',
+                limitParam: '',
+
                 reader: {
                     type: 'json',
                     rootProperty: 'data',
@@ -35,18 +39,17 @@ Ext.define('Vega.view.inventory.fabric.AllocationModel', {
                 }
             },
 
-            remoteFilter: true,
+            //remoteFilter: true,
 
             listeners: {
                 load: function(store){
-                    console.log('lot store', store);
+                    //console.log('lot store', store);
                 }
             }
         },
 
         'fabricrequirements': {
             model: 'fabric.Requirement',
-
             //storeId: 'requirements',
             autoLoad: false,
             // destroy the store if the grid is destroyed

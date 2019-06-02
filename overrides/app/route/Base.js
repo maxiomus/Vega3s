@@ -22,6 +22,14 @@ Ext.define('Ext.app.route.Base', {
         //viewModel.bind('{tab}', me.onTabChange, me)
     },
 
+    onBeforeTabChange: function(tabs, newTab, oldTab){
+
+        if(oldTab != null && oldTab.isXType("form")){
+            //console.log(newTab, oldTab)
+            //return false;
+        }
+    },
+
     onTabChange: function(tabpanel, newTab, oldTab, eOpts){
         //console.log('Base - onTabChange', tabpanel, newTab);
         this.redirectTo(this.getTabRoute(tabpanel, newTab));
@@ -76,6 +84,8 @@ Ext.define('Ext.app.route.Base', {
 
         if(tab){
             //console.log('Base', tab.getXType());
+            var tvm = tab.getViewModel();
+
             if(tab.isXType("multiview")){
                 var mode = "",
                     ctn = tab.lookupReference("center"),
@@ -95,6 +105,15 @@ Ext.define('Ext.app.route.Base', {
                 }
 
                 route[1] = mode;
+
+                var xtypes = ['grid', 'gridpanel', 'dataview'];
+                //console.log(grid, grid.getXType(), grid.superclass.getXType())
+                if(xtypes.indexOf(grid.superclass.getXType()) == -1) {
+                    if(xtypes.indexOf(grid.getXType()) == -1){
+                        grid = grid.down();
+                    }
+                }
+                //console.log(grid, grid.getXType())
                 if(grid && grid.getSelectionModel().getSelection().length > 0){
                     var p = grid.getSelectionModel().getSelection();
 
@@ -106,21 +125,30 @@ Ext.define('Ext.app.route.Base', {
             else if (tab.isXType("sales-edit-form")){
                 route[1] = tab.opMode;
 
-                if(tab.getViewModel().get('srcPowhId') != null){
-                    route[2] = tab.getViewModel().get('srcPowhId');
+                if(tvm.get('srcPowhId') != null){
+                    route[2] = tvm.get('srcPowhId');
                 }
 
             }
-            else if (tab.isXType("sample-edit-form")){
-                route[1] = tab.reference;
-                if(tab.getViewModel().get('theStyle').id > 0) {
-                    route[2] = tab.getViewModel().get('theStyle').id;
+            else if (tab.isXType("style-edit-form")){
+                route[1] = tab.opMode;
+
+                if(tvm.get('theSample').id > 0) {
+                    route[2] = tvm.get('theSample').id;
                 }
+                else {
+                    if(tab.opMode == 'import'){
+                        if(tvm.get('srcId') != null){
+                            route[2] = tvm.get('srcId');
+                        }
+                    }
+                }
+
             }
             else if (tab.isXType("pi-form")){
-                route[1] = tab.reference;
-                if(tab.getViewModel().get('thePhysical').id > 0) {
-                    route[2] = tab.getViewModel().get('thePhysical').id;
+                route[1] = tab.opMode;
+                if(tvm.get('thePhysical').id > 0) {
+                    route[2] = tvm.get('thePhysical').id;
                 }
             }
             else if(tab.inTab){
@@ -199,9 +227,9 @@ Ext.define('Ext.app.route.Base', {
             hash = Ext.util.History.getToken();
 
         var bookmark = Ext.create('Vega.model.Bookmark', {
-            Module: xf.uppercase(hash.split('/')[0].replace('!', '')),
-            Title: record.data.Title,
-            Location: hash
+            //Module: xf.uppercase(hash.split('/')[0].replace('#', '')),
+            //Title: record.data.Title,
+            //Location: hash
         });
         /*
         store.add(bookmark);
@@ -211,14 +239,16 @@ Ext.define('Ext.app.route.Base', {
             }
         });*/
 
+        var fieldname = record.getIdProperty();
+        console.log(record.getFields())
         Ext.Ajax.request({
             //url: Ext.urlAppend(proxy.url + '.' + proxy.format + encodeURIComponent('')),
             url: '/api/Bookmarks',
             method: 'POST',
             params: {
                 //filters: Ext.encode([{type: 'string', value: record.get('UserName'), field: 'UserName'}])
-                UserName: 'tech',
-                Title: record.data.Title || record.data.PowNo,
+                UserName: Vega.user.data.Userid,
+                Title: record.data.Title || record.data.powno,
                 Module: xf.uppercase(hash.split('/')[0].replace('!', '')),
                 Location: xf.capitalize(hash.split('/')[1]),
                 Link: hash
@@ -263,7 +293,7 @@ Ext.define('Ext.app.route.Base', {
         //console.log('loadDetail', record.getId());
         Ext.Ajax.request({
             //url: Ext.urlAppend(proxy.url + '.' + proxy.format + encodeURIComponent('')),
-            url: Ext.String.urlAppend(proxy.url + encodeURIComponent(record.getId())),
+            url: Ext.String.urlAppend(proxy.url + '/' + encodeURIComponent(record.getId())),
             method: 'GET',
             params: {
                 //filters: Ext.encode([{type: 'string', value: record.get('UserName'), field: 'UserName'}])
@@ -298,7 +328,7 @@ Ext.define('Ext.app.route.Base', {
 
         //console.log('downloadItems', recordIds);
 
-        location.href = '/api/FileStreams/download?items=' + Ext.encode(recordIds);
+        location.href = '/api/FileStreams/download?' + Ext.Object.toQueryString({ids: recordIds});
 
         // No need to use Ajax request for download files...
         /*Ext.Ajax.request({

@@ -27,8 +27,8 @@ Ext.define('Vega.view.dashboard.FavoriteController', {
         /*Ext.each(climates, function(rec){
          recordIds.push(rec.getId());
          });*/
-        console.log('FavoriteController - onBeforeStoreLoad', Vega.user);
-        store.getProxy().setExtraParams({username:Vega.user.data.Userid});
+        //console.log('FavoriteController - onBeforeStoreLoad', Vega.user);
+        store.getProxy().setExtraParams({username: Vega.user.data.Userid});
     },
 
     /**
@@ -80,11 +80,11 @@ Ext.define('Vega.view.dashboard.FavoriteController', {
     },
 
     onContextMenuAddClick: function(record, item){
-        console.log(record);
+        //console.log(record);
     },
 
     onContextMenuRefreshClick: function(record, item){
-        console.log(record);
+        //console.log(record);
         record.store.load();
     },
 
@@ -99,7 +99,6 @@ Ext.define('Vega.view.dashboard.FavoriteController', {
             icon: Ext.Msg.QUESTION,
             fn: function(btn){
                 if(btn === 'yes'){
-                    console.log(record);
 
                     //tells the Proxy to destroy the Model. Performs a DELETE request to /users/123
                     record.store.remove(record);

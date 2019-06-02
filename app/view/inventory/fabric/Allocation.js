@@ -27,16 +27,22 @@ Ext.define("Vega.view.inventory.fabric.Allocation", {
 
     cls: "shadow-panel",
     header: false,
-    margin: 8,
+    margin: '0 0 0 4',
 
     initComponent: function(){
         var me = this;
+
         Ext.applyIf(me, {
             items: [{
-                xtype: "form",
+                //xtype: "form",
+                //reference: "mainform",
                 title: "Fabric Allocation",
-                reference: "mainform",
-                iconCls: "fa fa-exchange",
+                iconCls: "x-fa fa-exchange",
+
+                style: {
+                    borderTop: '1px solid #cfcfcf'
+                },
+
                 layout: {
                     type: "vbox",
                     align: "stretch"
@@ -86,7 +92,7 @@ Ext.define("Vega.view.inventory.fabric.Allocation", {
                         xtype: "button",
                         ui: "default",
                         text: "Search",
-                        iconCls: "fa fa-refresh",
+                        iconCls: "x-fa fa-refresh",
                         scale: "small",
                         width: 90,
                         action: "refresh",
@@ -98,7 +104,7 @@ Ext.define("Vega.view.inventory.fabric.Allocation", {
                         xtype: "button",
                         ui: "default",
                         text: "Save",
-                        iconCls: "fa fa-save",
+                        iconCls: "x-fa fa-save",
                         scale: "small",
                         width: 90,
                         action: "save",
@@ -111,7 +117,7 @@ Ext.define("Vega.view.inventory.fabric.Allocation", {
                         xtype: "button",
                         ui: "default",
                         text: "Print",
-                        iconCls: "fa fa-print",
+                        iconCls: "x-fa fa-print",
                         scale: "small",
                         width: 90,
                         action: "print",
@@ -120,6 +126,7 @@ Ext.define("Vega.view.inventory.fabric.Allocation", {
                         }
                     }]
                 }],
+
                 items: [{
                     xtype: "fabricrequirements",
                     reference: "requirements",
@@ -127,6 +134,9 @@ Ext.define("Vega.view.inventory.fabric.Allocation", {
                     height: 240,
                     //margin: "5 0 0 0",
                     border: true,
+                    style: {
+                        borderTop: '1px solid #cfcfcf'
+                    },
                     listeners: {
                         select: "onRowSelected",
                         deselect: "onRowDeselected"
@@ -136,11 +146,10 @@ Ext.define("Vega.view.inventory.fabric.Allocation", {
                     xtype: "fabricrolldetail",
                     reference: "details",
                     title: "Roll Detail",
-                    flex: 1,
-                    border: true,
-                    listeners: {
-
-                    }
+                    bind: {
+                        store: "{rolldetails}"
+                    },
+                    flex: 1
                 }]
             }]
         });

@@ -4,7 +4,8 @@ Ext.define('Vega.model.settings.Activity', {
     fields: [
         {   name: 'activity', type: 'string' },
         {   name: 'descript', type: 'string' },
-        {   name: 'duration', type: 'int' }
+        {   name: 'duration', type: 'number' },
+        {   name: 'active', type: 'boolean' }
     ],
 
     //idProperty: 'fileId',
@@ -36,4 +37,4 @@ Ext.define('Vega.model.settings.Activity', {
             }
         }
     }
-})
+});

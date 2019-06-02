@@ -1,0 +1,188 @@
+.request-view {
+  background: white;
+  font: 11px Arial, Helvetica, sans-serif;
+}
+
+.request-view .thumb-wrap {
+  -moz-border-radius:.3em;
+  -webkit-border-radius:.3em;
+  border-radius:.3em;
+
+  background: #fff;
+  border: 1px solid #ddd;
+  position: relative;
+  margin: 0 10px 10px 0;
+  float: left;
+  width: 190px;
+  height: 308px;
+  padding: 2px;
+  cursor: pointer;
+}
+
+.request-view .thumb-wrap span
+{
+  display: block;
+  overflow: hidden;
+  text-align: left;
+  padding: 4px;
+  font-size: 11px;
+  border-bottom: 1px solid #dadadb;
+}
+
+.request-view .thumb {
+  -moz-border-radius:.3em;
+  -webkit-border-radius:.3em;
+  border-radius:.3em;
+
+  float: left;
+  position: absolute;
+  top: 25px; left: 7px;
+  z-index: 7;
+  margin: 1px;
+  padding: 4px;
+  //max-width: 440px;
+}
+
+.request-view .thumb img
+{
+  padding: 3px 5px 2px 3px;
+  margin: 2px 5px 0 2px;
+  float:left;
+  width: 64px;
+  height: 64px;
+}
+
+.request-view .post-attach {
+  position: relative;
+  top: 25px; right: 5px;
+
+  //margin: 1px;
+  //padding: 2px;
+}
+
+.request-view .post-attach:before {
+  content: '\f0c6';
+  font-family: FontAwesome;
+  font-size: 2.0em;
+  color: #6593cf;
+  position: absolute;
+  z-index: 99;
+  top: 0px;
+  right: 0px;
+}
+
+.request-view div.post-data {
+  -moz-border-radius:.3em;
+  -webkit-border-radius:.3em;
+  border-radius:.3em;
+
+  background:#f1f2f4;
+  border:1px solid #dadadb;
+  padding: 4px;
+
+  margin-bottom: 2px;
+}
+
+.request-view .post-title
+{
+  font-size: 12px;
+  font-weight: bold;
+  color: #157fcc;
+  padding: 2px 0px 4px 0px;
+  /*   background: transparent url(../../../POWS/2012_07 POW/07_06/thumbs/1461f6d6-58c7-4404-8ef8-e2854dcb703f_thumb.png) no-repeat 0 1px; */
+  /*   background:transparent url(../../../Resources/images/CrystalClear/22x22/actions/news_subscribe.png) no-repeat 0 1px; */
+}
+
+.request-view .post-author {
+
+  color:#555;
+  padding-bottom: 4px;
+  font-size:11px;
+}
+
+.request-view .post-date {
+
+  color:#555;
+  padding-bottom: 1px;
+  font-size:11px;
+}
+
+.request-view .post-content
+{
+  font-size: 11px;
+  color: #555;
+  //padding: 2px 0px 2px 0px;
+  /*   background: transparent url(../../../POWS/2012_07 POW/07_06/thumbs/1461f6d6-58c7-4404-8ef8-e2854dcb703f_thumb.png) no-repeat 0 1px; */
+  /*   background:transparent url(../../../Resources/images/CrystalClear/22x22/actions/news_subscribe.png) no-repeat 0 1px; */
+}
+
+.request-view .thumb .true
+{
+  float: right;
+  color: #ff0000;
+  font-size: 1.0em;
+  padding-top: 2px;
+  font-weight: bolder;
+  z-index: 7;
+  opacity:0.4;
+  -moz-opacity:0.4;
+  -khtml-opacity:0.4;
+  filter:alpha(opacity=40); /* For IE8 and earlier */
+}
+
+.request-view .thumb .false
+{
+  visibility: hidden;
+  position: absolute;
+  top: 25px; left: 7px;
+  z-index: 7;
+}
+
+.request-view .x-item-over {
+  -moz-border-radius:.3em;
+  -webkit-border-radius:.3em;
+  border-radius:.3em;
+
+  border:1px solid #6593cf;
+  background: #DFEDFF;
+  padding: 2px;
+
+}
+
+.request-view .x-item-selected {
+  -moz-border-radius:.3em;
+  -webkit-border-radius:.3em;
+  border-radius:.3em;
+  color:#1A4D8F;
+  border: 1px solid #6593cf;
+  background: #FFEFBB;
+  //background: #DFEDFF;
+  padding: 2px;
+
+}
+
+.request-view .x-item-selected .thumb {
+  background: transparent;
+}
+
+.request-view .x-item-selected span {
+  //color:#1A4D8F;
+}
+
+.request-view .loading-indicator {
+  font-size:11px;
+  background-image:url(loading.gif);
+  background-repeat: no-repeat;
+  background-position: left;
+  padding-left:20px;
+  margin:10px;
+}
+
+.request-view .deleteIcon
+{
+  float: right;
+  background:#f1f2f4;
+  cursor: pointer;
+  padding: 2px 4px 6px 2px;
+  border:1px solid #dadadb;
+}

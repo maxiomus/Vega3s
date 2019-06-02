@@ -44,7 +44,7 @@ Ext.define("Vega.view.inventory.fabric.panel.ReceivingList", {
                 dataIndex: "style",
                 width: 120,
                 summaryRenderer: function (f, a, e) {
-                    return "Total:"
+                    return "Total:";
                 }
             },
             {
@@ -135,16 +135,15 @@ Ext.define("Vega.view.inventory.fabric.panel.ReceivingList", {
                 }
             },
             {
+                xtype: 'datecolumn',
                 text: "Rec. Date",
                 dataIndex: "logdate",
                 width: 100,
+                format: 'Y-m-d',
                 align: "center",
                 editor: {
                     xtype: "datefield",
-                    format: "m-d-Y"
-                },
-                renderer: function (a) {
-                    return Ext.util.Format.date(a, "m-d-Y");
+                    format: "Y-m-d"
                 }
             },
             {
@@ -248,19 +247,12 @@ Ext.define("Vega.view.inventory.fabric.panel.ReceivingList", {
                 align: "center"
             },
             {
+                xtype: 'datecolumn',
                 text: "User Time",
                 dataIndex: "userTime",
                 width: 100,
-                align: "center",
-                renderer: function (a) {
-                    if (a != null) {
-                        var d = new Date(a);
-                        function f(c) {
-                            return c < 10 ? "0" + c : c
-                        }
-                        return f(d.getUTCMonth() + 1) + "-" + f(d.getUTCDate()) + "-" + d.getUTCFullYear();
-                    }
-                }
+                format: 'Y-m-d',
+                align: "center"
             },
             {
                 text: "Update Date",
@@ -269,11 +261,12 @@ Ext.define("Vega.view.inventory.fabric.panel.ReceivingList", {
                 align: "center",
                 renderer: function (a) {
                     if (a != null) {
-                        var d = new Date(a);
-                    function f(c) {
-                        return c < 10 ? "0" + c : c
-                    }
-                        return f(d.getUTCMonth() + 1) + "-" + f(d.getUTCDate()) + "-" + d.getUTCFullYear();
+                        var d = new Date(a),
+                        f = function(c) {
+                            return c < 10 ? "0" + c : c;
+                        };
+                        
+                        return f(d.getUTCFullYear() + '-' + d.getUTCMonth() + 1) + "-" + f(d.getUTCDate());
                     }
                 }
             }]
@@ -282,5 +275,3 @@ Ext.define("Vega.view.inventory.fabric.panel.ReceivingList", {
         this.callParent(arguments);
     }
 });
-
-

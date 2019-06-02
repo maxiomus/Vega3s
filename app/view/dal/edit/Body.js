@@ -58,7 +58,7 @@ Ext.define('Vega.view.dal.edit.Body', {
             text: 'Save',
             formBind: true,
             //glyph: 86,
-            iconCls: 'fa fa-save',
+            iconCls: 'x-fa fa-save',
             handler: function(btn){
                 me.fireEvent('saveclick', btn, me);
             }
@@ -66,7 +66,7 @@ Ext.define('Vega.view.dal.edit.Body', {
             action: 'close',
             text: 'Close',
             //glyph: 88,
-            iconCls: 'fa fa-close',
+            iconCls: 'x-fa fa-close',
             handler: function(btn){
                 btn.up('window').close();
             }
@@ -194,8 +194,8 @@ Ext.define('Vega.view.dal.edit.Body', {
             }
         },{
             xtype: 'actioncolumn',
-            text: '<i class="fa fa-close fa-lg red-txt"></i>',
-            //iconCls: 'fa fa-close red-txt',
+            text: '<i class="x-fa fa-close fa-lg red-txt"></i>',
+            //iconCls: 'x-fa fa-close red-txt',
             width: 50,
             align: 'center',
             menuDisabled: true,
@@ -204,7 +204,7 @@ Ext.define('Vega.view.dal.edit.Body', {
                 //icon: 'resources/images/shared/icon-error.png',
                 //glyph: 45,
                 //ui: 'default',
-                iconCls: 'fa fa-remove red-txt',
+                iconCls: 'x-fa fa-remove red-txt',
                 tooltip: 'Remove',
                 handler: function(view, rowIndex, colIndex) {
                     //var store = grid.getStore();
@@ -223,6 +223,7 @@ Ext.define('Vega.view.dal.edit.Body', {
     },
 
     buildFields: function(){
+        /*
         var memBodies = Ext.create('Ext.data.Store', {
             pageSize: 50,
             remoteFilter: true,
@@ -265,7 +266,7 @@ Ext.define('Vega.view.dal.edit.Body', {
                 }
             }
         });
-
+        */
         return [{
             xtype: 'combo',
             name: 'F_CATEGORY',
@@ -288,21 +289,12 @@ Ext.define('Vega.view.dal.edit.Body', {
             autoLoadOnValue: true,
             queryMode: "local",
             //queryParam: "filter",
-            triggerAction: 'all',
-            minChars: 1,
+            //triggerAction: 'all',
+            //minChars: 1,
             matchFieldWidth: true,
             plugins: [{
                 ptype: "cleartrigger"
-            }],
-            listeners: {
-                triggerClear: function(combo){
-
-                },
-
-                select: function(combo, rec, e){
-
-                }
-            }
+            }]
         },{
             xtype: "textfield",
             name: 'F_DESC5',
@@ -322,20 +314,22 @@ Ext.define('Vega.view.dal.edit.Body', {
             //width: 160,
             hideTrigger: true,
             bind: {
-                store: '{bodies}',
+                //store: '{bodies}',
                 value: '{components.selection.F_OWNER}',
                 disabled: '{!components.selection}'
             },
+            store: 'memBodies',
+            remoteStore: 'Bodies',
             valueField: "id",
             displayField: "id",
             forceSelection: false,
             selectOnFocus: true,
-            pageSize: 25,
-            queryMode: "remote",
-            queryParam: "filter",
+            pageSize: 50,
+            queryMode: "local",
+            //queryParam: "filter",
             //triggerAction: 'last',
             //lastQuery: '',
-            minChars: 1,
+            //minChars: 1,
             matchFieldWidth: false,
             listConfig: {
                 loadindText: 'Searching...',
@@ -346,14 +340,8 @@ Ext.define('Vega.view.dal.edit.Body', {
                 ptype: "cleartrigger"
             }],
             listeners: {
-                triggerClear: function(combo){
-
-                },
                 beforequery: function(qe){
                     delete qe.combo.lastQuery;
-                },
-                select: function(combo, rec, e){
-
                 }
             }
         },{
@@ -387,7 +375,7 @@ Ext.define('Vega.view.dal.edit.Body', {
             //lastQuery: '',
             //filterPickList: true,
             //pageSize: 25,
-            minChars: 1,
+            //minChars: 1,
             matchFieldWidth: false,
             listConfig: {
                 loadindText: 'Searching...',
@@ -396,7 +384,14 @@ Ext.define('Vega.view.dal.edit.Body', {
             },
             plugins: [{
                 ptype: "cleartrigger"
-            }]
+            }],
+            listeners: {
+                render: function(c){
+                    c.on('focus', function () {
+                        c.expand();
+                    });
+                }
+            }
         },{
             xtype: "tagfield",
             name: 'F_DESC2',
@@ -418,7 +413,8 @@ Ext.define('Vega.view.dal.edit.Body', {
             //lastQuery: '',
             //filterPickList: true,
             //pageSize: 25,
-            minChars: 1,
+            //minChars: 1,
+            autoLoadOnValue: true,
             matchFieldWidth: false,
             listConfig: {
                 loadindText: 'Searching...',

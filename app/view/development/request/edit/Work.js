@@ -30,13 +30,10 @@ Ext.define('Vega.view.development.request.edit.Work',{
 
     layout: 'auto',
 
-    dockedItems: [{
-
-    }],
-
     initComponent: function(c){
         var me = this;
 
+        /*
         var memComponents = Ext.create('Ext.data.Store', {
             pageSize: 50,
             remoteFilter: true,
@@ -100,13 +97,17 @@ Ext.define('Vega.view.development.request.edit.Work',{
             }
         });
 
-        Ext.apply(remoteComponents.getProxy().extraParams, {
+        Ext.apply(Ext.getStore('Components').getProxy().extraParams, {
             type: 'FABRICS'
         });
 
-        Ext.apply(remoteColors.getProxy().extraParams, {
+        Ext.apply(Ext.getStore('remoteRawColors').getProxy().extraParams, {
             type: 'FABRICS'
         });
+        */
+
+        Ext.getStore('memComponents').clearFilter();
+        Ext.getStore('memComponents').filter('text', 'FABRICS');
 
         Ext.applyIf(me, {
             fieldDefaults: {
@@ -345,7 +346,7 @@ Ext.define('Vega.view.development.request.edit.Work',{
                     },
                     //flex: 1,
                     items: [{
-                        xtype: "memorycombo",
+                        xtype: "combo",
                         name: 'Fabric',
                         //itemId: "Prints",
                         fieldLabel: "Fabric",
@@ -361,24 +362,40 @@ Ext.define('Vega.view.development.request.edit.Work',{
                             //store: '{components}',
                             value: '{theWork.Fabric}'
                         },
-                        store: memComponents,
-                        autoSelect: false,
+                        store: 'memComponents',
+                        //autoSelect: false,
                         autoLoadOnValue: true,
                         //forceSelection: false,
-                        selectOnFocus: true,
-                        selectOnTab: true,
+                        //selectOnFocus: true,
+                        //selectOnTab: true,
                         pageSize: 50,
                         minChars: 0,
                         queryMode: 'local',
+                        triggerAction: 'query',
                         //queryParam: "filter",
-                        //triggerAction: 'all',
-                        lastQuery: '',
+                        //lastQuery: '',
                         matchFieldWidth: false,
                         listConfig: {
                             loadindText: 'Searching...',
                             emptyText: 'No matching items found.',
                             width: 340
                         },
+                        tpl: '<tpl for=".">' +
+                        '<tpl if="[xindex] == 1">' +
+                        '<table class="cbo-list">' +
+                        '<tr>' +
+                        '<th width="35%">Mat Type</th>' +
+                        '<th width="65%">Code #</th>' +
+                        '</tr>' +
+                        '</tpl>' +
+                        '<tr class="x-boundlist-item">' +
+                        '<td>{text}</td>' +
+                        '<td>{label}</td>' +
+                        '</tr>' +
+                        '<tpl if="[xcount-xindex]==0">' +
+                        '</table>' +
+                        '</tpl>' +
+                        '</tpl>',
                         plugins: [{
                             ptype: "cleartrigger"
                         }],
@@ -405,7 +422,7 @@ Ext.define('Vega.view.development.request.edit.Work',{
                             }
                         }
                     },{
-                        xtype: "memorycombo",
+                        xtype: "combo",
                         name: 'Color',
                         //itemId: "cboColor",
                         fieldLabel: "Color",
@@ -414,7 +431,7 @@ Ext.define('Vega.view.development.request.edit.Work',{
                         //width: 160,
                         //autoSelect: false,
                         hideTrigger: true,
-                        store: memColors,
+                        store: 'memRawColors',
                         bind: {
                             //store: '{colors}',
                             value: '{theWork.Color}'
@@ -427,8 +444,8 @@ Ext.define('Vega.view.development.request.edit.Work',{
                         pageSize: 50,
                         minChars: 0,
                         queryMode: 'local',
+                        triggerAction: 'query',
                         //queryParam: "filter",
-                        //triggerAction: 'all',
                         //lastQuery: '',
                         matchFieldWidth: false,
                         listConfig: {
@@ -449,7 +466,7 @@ Ext.define('Vega.view.development.request.edit.Work',{
                         '</tpl>' +
                         '<tr class="x-boundlist-item">' +
                         '<td>{label}</td>' +
-                        '<td>{descript}</td>' +
+                        '<td>{text}</td>' +
                         '</tr>' +
                         '<tpl if="[xcount-xindex]==0">' +
                         '</table>' +
@@ -472,7 +489,7 @@ Ext.define('Vega.view.development.request.edit.Work',{
                                         store.clearFilter();
 
                                         store.filter([{
-                                            property: 'descript',
+                                            property: 'text',
                                             value: cboStyle.getValue(),
                                             operator: '='
                                         }]);
@@ -509,7 +526,7 @@ Ext.define('Vega.view.development.request.edit.Work',{
                         allowBlank: false,
                         //labelWidth: 50,
                         //width: 160,
-                        hideTrigger: true,
+                        //hideTrigger: true,
                         bind: {
                             store: '{dept}',
                             value: '{theWork.Dept}'
@@ -565,7 +582,7 @@ Ext.define('Vega.view.development.request.edit.Work',{
                         matchFieldWidth: true,
                         listeners: {
                             change: function(c){
-                                console.log(c.getStore())
+                                console.log(c.getStore());
                             }
                         },
                         listConfig: {
@@ -625,7 +642,7 @@ Ext.define('Vega.view.development.request.edit.Work',{
                                 //c.bindStore(s);
                             },
                             focus: function(c){
-                                c.getStore().filter('text', 'Sample Cutter')
+                                c.getStore().filter('text', 'Sample Cutter');
                             },
                             scope: this
                         },
@@ -800,15 +817,13 @@ Ext.define('Vega.view.development.request.edit.Work',{
                     items: [{
                         name: 'CreatedOn',
                         fieldLabel: 'Date Created',
-                        bind: '{theWork.CreatedOn}',
-                        allowBlank: false
+                        bind: '{theWork.CreatedOn}'
                     },{
                         xtype: 'textfield',
                         name: 'UserID',
                         fieldLabel: 'Created By',
                         bind: '{theWork.UserID}',
-                        margin: '0 0 0 20',
-                        allowBlank: false
+                        margin: '0 0 0 20'
                     }]
                 },{
                     xtype: 'fieldcontainer',
@@ -826,15 +841,13 @@ Ext.define('Vega.view.development.request.edit.Work',{
                     items: [{
                         name: 'UpdatedOn',
                         fieldLabel: 'Date Modified',
-                        bind: '{theWork.UpdatedOn}',
-                        allowBlank: true
+                        bind: '{theWork.UpdatedOn}'
                     },{
                         xtype: 'textfield',
                         name: 'UpdateUser',
                         fieldLabel: 'Updated By',
                         bind: '{theWork.UpdateUser}',
-                        margin: '0 0 0 20',
-                        allowBlank: true
+                        margin: '0 0 0 20'
                     }]
                 }]
             }]

@@ -28,12 +28,15 @@ Ext.define('Ext.overrides.util.Filter', {
  */
 Ext.define('Ext.overrides.util.Filter', {
     override: 'Ext.util.Filter',
+
     getState: function() {
         var me = this,
             state = this.callParent(arguments);
+
         if (me.type) {
             state.type = me.type;
         }
+
         return state;
     }
 });

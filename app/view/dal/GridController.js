@@ -1,6 +1,6 @@
 Ext.define("Vega.view.dal.GridController", {
     extend: 'Ext.app.ViewController',
-    
+
     alias: "controller.dal-grid",
 
     init: function(b){},
@@ -11,7 +11,7 @@ Ext.define("Vega.view.dal.GridController", {
         var h=this.getView(),
         k=h.titleTpl;
         if(!k.isTemplate){
-            h.titleTpl=k=new Ext.XTemplate(k)
+            h.titleTpl=k=new Ext.XTemplate(k);
         }
 
         var j=Ext.Object.chain(g.data);

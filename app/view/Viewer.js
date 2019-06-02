@@ -18,8 +18,8 @@ Ext.define("Vega.view.Viewer",{
         type: "viewer"
     },
 
-    maxTabWidth: 230,
-    minTabWidth: 160,
+    maxTabWidth: 180,
+    minTabWidth: 50,
     minWidth: 300,
     border: false,
 
@@ -27,13 +27,14 @@ Ext.define("Vega.view.Viewer",{
 
     tabBar: {
         defaults: {
-            //flex: 1, // if you want them to stretch all the way
+            flex: 1, // if you want them to stretch all the way
             height: 36, // set the height,
             //padding: 6, // set the padding
             textAlign: 'left',
+            width: '100%', // set the width for text ellipsis works when tab size smaller than text...
             border: true,
             style: {
-                border: '2px solid #ccc'
+                //border: '1px solid #ccc'
             }
         }
     },
@@ -42,24 +43,23 @@ Ext.define("Vega.view.Viewer",{
         pluginId: 'tabclosemenu',
         ptype: 'tabclosemenu'
     },{
-        pluginId: 'tabscrollermenu',
-        ptype: 'tabscrollermenu'
-    },{
         pluginId: 'tabreorderer',
         ptype: 'tabreorderer'
-    }],
+    }
+    /*{
+        pluginId: 'tabscrollermenu',
+        ptype: 'tabscrollermenu'
+    }
+    */
+    ],
 
     listeners: {
+        beforetabchange: 'onBeforeTabChange',
         tabchange: 'onTabChange'
     },
 
     initComponent: function() {
         var me = this;
-        //console.log('Viewer - initComponent');
-
-        Ext.applyIf(me, {
-
-        });
 
         me.callParent(arguments);
     }

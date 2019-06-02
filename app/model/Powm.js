@@ -10,7 +10,7 @@ Ext.define('Vega.model.Powm', {
         { name: 'matcolor', type: 'string', allowNull: true },
         { name: 'matdesc', type: 'string', allowNull: true },
         { name: 'matvendor', type: 'string', allowNull: true },
-        { name: 'matcost', type: 'float', allowNull: true },
+        { name: 'matcost', type: 'number', allowNull: true },
         { name: 'lineseq', type: 'int'},
         { name: 'descript', type: 'string', persist: false,
             calculate: function(data){
@@ -45,6 +45,13 @@ Ext.define('Vega.model.Powm', {
     identifier: 'negative',
 
     autoLoad: false,
+
+    validators: {
+        matcode: { type: 'length', max: 64 },
+        matcolor: { type: 'length', max: 64 },
+        matdesc: { type: 'length', max: 512 }
+        //cost: { type: 'range', min: 1 },
+    },
 
     proxy: {
         //$configStrict: false,

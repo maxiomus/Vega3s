@@ -9,8 +9,8 @@ Ext.define("Vega.view.sales.PowController", {
 
     control: {
         '#': {
-            viewmodelready: function(a){
-                console.log(a)
+            viewmodelready: function(a,b){
+                //console.log(a,b)
             }
         }
     },
@@ -23,12 +23,15 @@ Ext.define("Vega.view.sales.PowController", {
             i = j.getActiveItem();
 
         refs.center.getLayout().setActiveItem(k.getValue());
+
+        //console.log(Vega.app.getMainView().getViewModel().getStore('salesCategories'))
     },
 
     initViewModel: function(b){
         this.getView().fireEvent("viewmodelready", this, b);
     },
 
+    /*
     onBeforeLoad: function(d, e, f){
 
     },
@@ -36,6 +39,7 @@ Ext.define("Vega.view.sales.PowController", {
     onLoad: function(store, records, successful, operation){
 
     },
+    */
 
     onBeforeAdd: function(pow, tab, idx, e){
         //console.log('ReviewController - beforeadd', tab.isXType('display'))
@@ -43,22 +47,22 @@ Ext.define("Vega.view.sales.PowController", {
         if(tab.isXType('display')){
 
             //this.getView().relayEvents(tab, ['revise', 'accept']);
+            //console.log('PowController', rec.data.revision, rec.data.progress)
             var topbar = tab.lookupReference('topbar'),
                 tvm = tab.getViewModel(),
-                rec = tvm.get('thePow'),
-                btnRevise = Ext.widget('button', {
+                rec = tvm.get('thePow');
+
+            if(rec.data.revision != -1 && rec.data.progress != 'posted'){
+                var btnRevise = Ext.widget('button', {
                     text: 'Revise',
-                    iconCls: 'fa fa-edit',
+                    iconCls: 'x-fa fa-edit',
                     hidden: false,
                     scope: this,
                     handler: function(btn){
-                        this.redirectTo('pow/edit/' + rec.data.powhId)
+                        this.redirectTo('pow/edit/' + rec.data.powhId);
                     }
                 });
 
-            console.log('PowController', rec.data.revision, rec.data.progress)
-
-            if(rec.data.revision != -1 && rec.data.progress != 'posted'){
                 if(Vega.user.inRole('cs') || Vega.user.inRole('revise') || Vega.user.inRole('administrators')){
                     topbar.add(btnRevise);
                 }
@@ -79,14 +83,16 @@ Ext.define("Vega.view.sales.PowController", {
         //console.log('onSelect PowController');
         var m = this.getView(),
             refs = m.lookupReference("multiview").getReferences(),
-            u = refs.topbar,
+            //u = refs.topbar,
             q = refs.preview,
             o = refs.display;
             o.setActive(record);
 
-        //console.log(refs);
-        if(!q.hidden){
-            this.loadIframe(o);
+        if(q.hidden){
+            o.removeAll();
+        }
+        else {
+            o.loadIframe();
         }
 
         var l = [],
@@ -96,17 +102,28 @@ Ext.define("Vega.view.sales.PowController", {
         l[1] = s.value != 2 ? "default" : "tiles";
         l[2] = record.get("powhId");
 
-        this.redirectTo(l.join("/"))
+        this.redirectTo(l.join("/"));
     },
 
+    /**
+     *
+     * @param h this - Ext.view.View
+     * @param j record - Ext.data.Model
+     * @param k item - HTMLElement
+     * @param g index - Number
+     * @param l e - Ext.event.Event
+     */
     onItemContextMenu:function(h, j, k, g, l){
         l.stopEvent();
 
         var i = h.getSelectionModel();
-        if(!i.isSelected(g)){
-            i.select(g)
+        if(!i.isSelected(j)){
+            i.select(j);
         }
-        this.view.contextmenu.showAt(l.getXY())
+
+        this.view.contextmenu.items.items[1].setHidden(j.data.progress == 'posted');
+
+        this.view.contextmenu.showAt(l.getXY());
     },
 
     onNewClick: function(b){
@@ -131,20 +148,6 @@ Ext.define("Vega.view.sales.PowController", {
         //this.redirectTo("pow/tab/review/0");
     },
 
-    onClearFilters: function(b){
-        var me = this,
-            topbar = me.view.lookupReference("multiview").lookupReference("topbar"),
-            searchcombo = topbar.lookupReference('searchcombo'),
-            searchfield = topbar.lookupReference('searchfield'),
-            grid = me.view.lookupReference("multiview").lookupReference("grid");
-
-        searchcombo.setValue('');
-        searchcombo.getTrigger('clear').hide();
-        searchfield.setValue('');
-        searchfield.getTrigger('clear').hide();
-        grid.filters.clearFilters();
-    },
-
     /**
      *
      * @param topbar {Ext.toolbar.Toolbar}
@@ -163,12 +166,26 @@ Ext.define("Vega.view.sales.PowController", {
         this.getStore("pows").reload();
     },
 
+    onActionCopy: function(topbar, a){
+        var h = Ext.util.History.getToken(),
+            g = h ? h.split("/") : [];
+        //console.log(h, g.pop());
+
+        var path = 'review/copy/';
+
+        if(Vega.user.inRole('sales')){
+            path = 'request/copy/';
+        }
+
+        this.redirectTo(path + g.pop());
+    },
+
     onContextMenuEditClick: function(d, c){
 
     },
 
     onContextMenuBookmarkClick: function(d, c){
-        this.addBookmark(d, this.getView())
+        this.addBookmark(d, this.getView());
     },
 
     onTabOpen: function(i, h){
@@ -184,98 +201,10 @@ Ext.define("Vega.view.sales.PowController", {
     },
 
     onRowDblClick: function(g, i, j, h, f){
-        this.onTabOpen(null, i)
+        this.onTabOpen(null, i);
     },
 
     onItemDblClick: function(g, h, j, f, i){
-        this.onTabOpen(null, h)
-    },
-
-    onFilterItemChange: function(combo, q, r, o){
-        var toolbar = combo.up("toolbar"),
-            m = toolbar.down("gridsearchfield"),
-            n = toolbar.down("searchcombo"),
-            j = combo.getValue();
-
-        switch(j){
-            case "powno":
-            case "comments":
-            case "userId":
-                m.paramName = j;
-                m.show();
-                n.hide();
-                break;
-            default:
-                n.paramName = j;
-                n.show();
-                m.hide()
-        }
-
-        var main = Vega.app.getMainView(),
-            k = main.getViewModel().getStore(j.toLowerCase());
-
-        if(k != null){
-            k.load();
-            n.bindStore(k)
-        }
-    },
-
-    onClearClick: function(g){
-        var f = this.getView().down("grid"),
-            h = f.getColumns();
-
-        if(g.hasSearch){
-            var e;
-            Ext.each(h, function(a){
-                e = a.filter;
-                if(a.dataIndex===g.paramName){
-                    return false
-                }
-            });
-            g.setValue("");
-            e.setValue("");
-            e.setActive(false);
-            g.hasSearch = false;
-            g.getTrigger("clear").hide();
-            g.updateLayout()
-        }
-    },
-
-    onSearchClick: function(h){
-        var g = this.getView().down("grid"),
-            i = g.getColumns(),
-            j = h.getValue();
-
-            if(!Ext.isEmpty(j)){
-                var f;
-                Ext.each(i, function(a){
-                    if(a.dataIndex === h.paramName){
-                        f = a.filter;
-                        return false
-                    }
-                });
-                //console.log("onSearchClick", f, h.paramName);
-                f.setValue(j);
-                f.setActive(true);
-                h.hasSearch = true;
-                h.getTrigger("clear").show();
-                h.updateLayout()
-            }
-    },
-
-    loadIframe: function(c){
-        var d = Ext.util.Format;
-        c.removeAll();
-        c.add({
-            xtype: "component",
-            itemId: "contentIframe",
-            autoEl: {
-                tag: "iframe",
-                style: {height: "100%"},
-                width: "100%",
-                border: "none",
-                src: d.format("../services/PDFHandler.ashx?index={0}&date={1}&file={2}", 2, d.date(c.active.data.createdon), c.active.data.link)
-            }
-        })
+        this.onTabOpen(null, h);
     }
 });

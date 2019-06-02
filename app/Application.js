@@ -8,7 +8,7 @@ Ext.define('Vega.Application', {
 
     stores: [
         // TODO: add global / shared stores here
-        'NavigationTree', 'Styles', 'Components', 'Colors', 'Vendors', 'RawMatTypes', 'Warehouses'
+        'NavigationTree', 'Styles', 'Components', 'StyleColors', 'RawColors', 'Colors', 'Bodies', 'RawMatTypes', 'Bomnos', 'Lotnos', 'Vendors', 'Customers', 'Warehouses', 'Settings'
     ],
 
     controllers: [
@@ -16,10 +16,11 @@ Ext.define('Vega.Application', {
     ],
 
     views: [
-        'pages.Error404Window', 'authentication.Login', 'main.Main'
+        'pages.Error404Window', 'auth.Login', 'main.Main'
     ],
 
     name: 'Vega',
+
     defaultToken: 'dashboard',
     enableQuickTips: true,
     glyphFontFamily: 'Pictos',
@@ -27,7 +28,8 @@ Ext.define('Vega.Application', {
     config: {
         appready: false,
         user: null,
-        prevNode: null
+        prevNode: null,
+        sp: null
     },
 
     init: function(){
@@ -45,20 +47,56 @@ Ext.define('Vega.Application', {
             cls: 'x-splash-icon'
         });
 
+        /*
+        //Fires before a network request is made to retrieve a data object.
+        Ext.Ajax.on('beforerequest', function (con, opt) {
+
+            //To show the mask
+            Ext.getBody().mask('Server loading... Please wait');
+
+        }, this);
+
+        //Fires if the request was successfully completed and hide the mask.
+        Ext.Ajax.on('requestcomplete', function (con, res, opt) {
+
+            //To hide the mask
+            Ext.getBody().unmask();
+
+        }, this);
+
+        //Fires if an error HTTP status was returned from the server  and hide the mask.
+        Ext.Ajax.on('requestexception', function (con, response, opt) {
+
+            //To hide the mask
+            Ext.getBody().unmask();
+
+        }, this);
+        */
+
         console.log('Application.js - init method');
     },
 
     launch: function () {
         // TODO - Launch the application
+
         var me = this;
 
-        Ext.Ajax.timeout = 3600000;
+        Ext.Ajax.timeout = 900000;
         //Ext.tip.QuickTipManager.init();
         //Ext.GlobalEvents.fireEvent('beforemainviewrender');
 
+        /*
+        var sp = Ext.create('Ext.state.LocalStorageProvider');
+        Ext.state.Manager.setProvider(sp);
+
+        sp.on('statechange', function(sp, key, value){
+            console.log('statechange', key, value);
+        });
+        */
+
         Ext.Ajax.request({
-            //url: '/api/Sessions',
-            url: '/security/checkLogin.ashx',
+            url: '/api/Sessions',
+            //url: '/security/checkLogin.ashx',
             scope: this,
             success: function(response, options) {
                 // decode response
@@ -69,8 +107,10 @@ Ext.define('Vega.Application', {
                     // has session...add to application stack
                     //Vega.LoggedInUser = Ext.create( 'Vega.model.security.User', result.data );
                     //Ext.util.Cookies.set('loggedInUser', result.data);
-                    this.onUser(
-                        Vega.user = Ext.create('Vega.model.authentication.User', result.data)
+                    Ext.getStore('Settings').load();
+
+                    me.onUser(
+                        Vega.user = Ext.create('Vega.model.auth.User', result.data)
                     );
 
                     Vega.util.SessionMonitor.start();
@@ -83,7 +123,7 @@ Ext.define('Vega.Application', {
             },
             failure: function(response, options) {
                 //console.log(response);
-                Ext.Msg.alert(response.status.toString(), response.statusText + ', an error occurred during your request. Please try again.' );
+                Ext.Msg.alert(response.statusText, response.status + ' - ' + response.responseText );
             },
             callback: function(response, opotions) {
                 //console.log('checkLogin - callback', response);
@@ -95,6 +135,7 @@ Ext.define('Vega.Application', {
     },
 
     onUser: function(user){
+
         Vega.app.setAppready(true);
         this.fireEvent('appready', this, user);
         //Ext.getBody().unmask();

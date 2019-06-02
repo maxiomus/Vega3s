@@ -11,4 +11,4 @@ function tr(value, record){
         return Ext.String.trim(value);
     }
     return value;
-};
+}

@@ -30,9 +30,12 @@ Ext.define("Vega.view.dal.Dal", {
 
     cls: "shadow-panel",
     header: false,
-    margin: 8,
+    margin: '0 0 0 4',
 
     session: true,
+
+    //stateful: true,
+    //stateId: "dal-view",
 
     listeners: {
         //newclick: "onNewClick",
@@ -45,6 +48,7 @@ Ext.define("Vega.view.dal.Dal", {
         actview: "onActionView",
         actrefresh: "onActionRefresh",
         actsave: 'onActionSave',
+        actdelete: 'onActionDelete',
         clearall: 'onClearFilters',
         //ctxmnuopenclick: "onContextmenuOpenClick",
         //ctxmnurefreshclick: "onContextMenuRefreshClick",
@@ -62,11 +66,11 @@ Ext.define("Vega.view.dal.Dal", {
                 xtype: "multiview",
                 reference: "multiview",
                 title: "D.A.L",
-                iconCls: "fa fa-th-large",
-                tbar: [{
+                iconCls: "x-fa fa-th-large",
+                tbar: {
                     xtype: "topbar",
                     reference: "topbar"
-                }],
+                },
                 mainItems: [{
                     xtype: "dal-grid",
                     reference: "grid",
@@ -87,6 +91,8 @@ Ext.define("Vega.view.dal.Dal", {
                 {
                     xtype: "dal-view",
                     reference: "icons",
+                    focusable: true,
+                    tabIndex: 1,
                     //mode: 'MULTI',
                     bind: {
                         store: '{dals}'
@@ -95,28 +101,32 @@ Ext.define("Vega.view.dal.Dal", {
                     tpl: new Ext.XTemplate(
                         '<tpl for=".">',
                         // Break every four quarters
-                        '<div class="thumb-wrap" id="{ID}">',
+                        '<div class="thumb-wrap" id="mView-{ID}">',
                             '<div class="thumb">',
                                 '<img class="{F_BFLAG}" src="{[this.getSrcPath(values,xcount)]}" />',
-                                '<div class="{F_BFLAG}">Rejected</div>',
-                        //'<div class="thumb-icon"></div>',
+                                //'<div class="{F_BFLAG}">Rejected</div>',
+                                //'<div class="thumb-icon"></div>',
                                 '<div class="thumb-title-container">',
                                     '<div>' +
                                     '<span class="thumb-title">{Title}</span>' +
-                                    '<span class="{[this.isSold(values)]}">&nbsp;&nbsp;<i class="fa fa-tag fa-lg blue-txt"></i><span style="font-size: 10px; color: #878ea2;"> {F_DESC8}</span></span>' +
+                                    '<span class="{[this.isSold(values)]}">&nbsp;&nbsp;<i class="x-fa fa-tag fa-lg blue-txt"></i><span style="font-size: 10px; color: #878ea2;"> {F_DESC8}</span></span>' +
                                     '</div>' +
                                     '<div class="thumb-small">' +
                                         '<span>{F_CATEGORY}</span>' +
                                         '<div class="{[this.isBody(values)]}">' +
+                                            '<div>Ref #: {F_OWNER:ellipsis(30)}</div>' +
+                                            '<div>Type: {F_DESC2:ellipsis(30)}</div>' +
+                                        '</div>' +
+                                        '<div class="{[this.isPrint(values)]}">' +
+                                            '<div>Colorway: {F_DESC10:ellipsis(30)}</div>' +
+                                            '<div>Theme: {F_DESC9:ellipsis(30)}</div>' +
+                                        '</div>' +
+                                        '<div class="{[this.isPhoto(values)]}">' +
                                             '<div>Body: {F_DESC5:ellipsis(30)}</div>' +
                                             '<div>Print #: {F_DESC6:ellipsis(30)}</div>' +
                                         '</div>' +
-                                        '<div class="{[this.isPrint(values)]}">' +
-                                            '<div>Colorway: {F_DESC9:ellipsis(30)}</div>' +
-                                            '<div>Theme: {F_DESC10:ellipsis(30)}</div>' +
-                                        '</div>' +
                                         '<div>' +
-                                            '<i class="fa fa-calendar"></i> <i class="fa fa-clock-o"></i> {F_CREATED_ON:date("m-d-Y g:i A")}' +
+                                            '<i class="x-fa fa-calendar"></i> <i class="x-fa fa-clock-o"></i> {F_CREATED_ON:date("m-d-Y g:i A")}' +
                                             //'by <span>{F_USERID}</span>' +
                                         '</div>' +
                                     '</div>' +
@@ -128,7 +138,7 @@ Ext.define("Vega.view.dal.Dal", {
                     {
                         isBody: function(a){
                             var str = 'HIDDEN';
-                            if(a.F_CATEGORY.toLowerCase() == 'photos'){
+                            if(a.F_CATEGORY.toLowerCase() == 'body'){
                                 str = '';
                             }
                             return str;
@@ -136,6 +146,13 @@ Ext.define("Vega.view.dal.Dal", {
                         isPrint: function(a){
                             var str = 'HIDDEN';
                             if(a.F_CATEGORY.toLowerCase() == 'prints'){
+                                str = '';
+                            }
+                            return str;
+                        },
+                        isPhoto: function(a){
+                            var str = 'HIDDEN';
+                            if(a.F_CATEGORY.toLowerCase() == 'photos'){
                                 str = '';
                             }
                             return str;
@@ -188,7 +205,7 @@ Ext.define("Vega.view.dal.Dal", {
                         //'<a class="link" href="{linkUrl}">',
                         '<div class="thumb">',
                         '<img class="{F_BFLAG}" src="{[this.getSrcPath(values, xcount)]}" title="{F_DESC1}" />',
-                        '<div class="{F_BFLAG}">Rejected</div>',
+                        //'<div class="{F_BFLAG}">Rejected</div>',
                         '</div>',
                         '<span>{Title:ellipsis(11)}</span>',
                         //'</a>',
@@ -227,60 +244,86 @@ Ext.define("Vega.view.dal.Dal", {
                     reference: "display",
                     scrollable: true,
                     cls: "display-preview",
-                    tpl: new Ext.XTemplate('<div class="display-data">',
-                        '<span class="display-date">{F_CREATED_ON:this.formatDate}</span>',
-                        '<div class="display-title">{F_CATEGORY} # - {Title}</div>',
-                        '<div class="display-author">by {F_USERID}</div>',
-                        '</div>',
-                        '<div class="details">',
-                        '<img src="{[this.getSrcPath(values)]}?w=264&h=288" height="264" width="288" />',
-                        '<div class="details-info">',
-                        "<span><b>Description:  </b>{F_DESC1}</span>",
-                        "<span><b>Style #:  </b>{F_STYLE}</span>",
-                        "<span><b>Theme:  </b>{F_DESC9}</span>",
-                        "<span><b>Colorway:  </b>{F_DESC10}</span>",
-                        "<span><b>Body #:  </b>{F_DESC5}</span>",
-                        "<span><b>Code #:  </b>{F_DESC6}</span>",
-                        "<span><b>Color:  </b>{F_DESC3}</span>",
-                        "<span><b>Account:  </b>{F_DESC8}</span>",
-                        "<span><b>Side:  </b>{F_MFLAG}</span>",
-                        "<span><b>Type:  </b>{F_DESC2}</span>",
-                        "<span><b>Vendor:  </b>{F_DESC4}</span>",
-                        "<span><b>Price:  </b>{F_DESC7:usMoney}</span>",
-                        "<span><b>Original:  </b>{F_OWNER}</span>",
-                        "<span><b>Modified By:  </b>{F_MOD_USER_ID:capitalize}</span>",
-                        "<span><b>Last Modified:  </b>{F_UPDATED_ON:this.formatDate}</span>",
-                        "</div>",
-                        {
-                            getStyle: function(a, b){
-                                return a.F_TYPE != null && a.F_SIZE != null ? a.F_STYLE : (a.F_OWNER ? a.F_OWNER + ' ' : '') + a.F_STYLE;
-                            },
-                            getBody: function(a, b){
-                                return Ext.util.Format.stripScripts(a);
-                            },
-                            defaultValue: function(a){
-                                return a?a: "Unknown";
-                            },
-                            getSrcPath: function(a){
-                                var str;
-                                if(!Ext.isEmpty(a.F_NAME) && !Ext.isEmpty(a.F_TYPE)) {
-                                    //str = '../' + a.F_LINK + a.F_PATH + '/' + a.ID + '/' + a.F_NAME.replace(/(\.[^.]+)$/, "_medium$1");
-                                    str = '../' + a.F_LINK + a.F_PATH + '/' + a.ID + '/' + a.F_NAME;
-                                }
-                                else {
-                                    str = '../' + a.F_LINK + a.F_PATH + '/' + a.F_LOCATION + a.F_EXT;
-                                }
+                    style: {
+                        borderTop: '1px solid #cfcfcf',
+                        borderBottom: '1px solid #cfcfcf'
+                    },
+                    items: [{
+                        xtype: 'container',
+                        itemId: 'innerPnl',
+                        tpl: new Ext.XTemplate('<div class="display-data">',
+                            '<span class="display-date">{F_CREATED_ON:this.formatDate}</span>',
+                            '<div class="display-title">{F_CATEGORY} # - {Title}</div>',
+                            '<div class="display-author">by {F_USERID}</div>',
+                            '</div>',
+                            '<div class="details">',
+                                //'<img src="{[this.getSrcPath(values)]}?w=528&h=576" />',
+                                '<img style="max-width: 50%;max-height: 50%;" src="{[this.getSrcPath(values)]}?w=350" />',
+                                '<div class="details-info">',
+                                    '<div><b>Description:  </b>{F_DESC1}</div>',
+                                    "<tpl if='FID == \"1\" '>",
+                                        '<div><b>Body #:  </b>{F_DESC5}</div>',
+                                        '<div><b>Ref #:  </b>{F_OWNER}</div>',
+                                        '<div><b>Fabric Type:  </b>{F_MFLAG}</div>',
+                                        '<div><b>Body Type:  </b>{F_DESC2}</div>',
 
-                                return str;
-                                //return a.replace(/(\.[^.]+)$/, "_medium$1");
-                            },
-                            formatDate: function(a){
-                                if(!a){
-                                    return "";
+                                        '<div><b>Price:  </b>{F_DESC7:usMoney}</div>',
+                                    "<tpl elseif='FID == \"2\"'>",
+                                        '<div><b>Print Code #:  </b>{F_DESC6}</div>',
+                                        '<div><b>Color:  </b>{F_DESC3}</div>',
+                                        '<div><b>Type:  </b>{F_DESC2}</div>',
+                                        '<div><b>Side:  </b>{F_MFLAG}</div>',
+                                        '<div><b>Vendor:  </b>{F_DESC4}</div>',
+                                        '<div><b>Account:  </b>{F_DESC8}</div>',
+                                        '<div><b>Theme:  </b>{F_DESC9}</div>',
+                                        '<div><b>Colorway:  </b>{F_DESC10}</div>',
+                                    "<tpl else>",
+                                        '<div><b>Style #:  </b>{F_STYLE}</div>',
+                                        '<div><b>Body #:  </b>{F_DESC5}</div>',
+                                        '<div><b>Print Code #:  </b>{F_DESC6}</div>',
+                                        '<div><b>Color:  </b>{F_DESC3}</div>',
+                                        '<div><b>Account:  </b>{F_DESC8}</div>',
+                                        '<div><b>Sample ID:  </b>{F_OWNER}</div>',
+                                    "</tpl>",
+
+                                    "<tpl if='FID == \"1\" || FID == \"2\"'>",
+                                    "</tpl>",
+
+                                    '<div><b>Modified By:  </b>{F_MOD_USER_ID:capitalize}</div>',
+                                    '<div><b>Last Modified:  </b>{F_UPDATED_ON:this.formatDate}</div>',
+                                '</div>',
+                            '</div>',
+                            {
+                                getStyle: function(a, b){
+                                    return a.F_TYPE != null && a.F_SIZE != null ? a.F_STYLE : (a.F_OWNER ? a.F_OWNER + ' ' : '') + a.F_STYLE;
+                                },
+                                getBody: function(a, b){
+                                    return Ext.util.Format.stripScripts(a);
+                                },
+                                defaultValue: function(a){
+                                    return a?a: 'Unknown';
+                                },
+                                getSrcPath: function(a){
+                                    var str;
+                                    if(!Ext.isEmpty(a.F_NAME) && !Ext.isEmpty(a.F_TYPE)) {
+                                        //str = '../' + a.F_LINK + a.F_PATH + '/' + a.ID + '/' + a.F_NAME.replace(/(\.[^.]+)$/, "_medium$1");
+                                        str = '../' + a.F_LINK + a.F_PATH + '/' + a.ID + '/' + a.F_NAME;
+                                    }
+                                    else {
+                                        str = '../' + a.F_LINK + a.F_PATH + '/' + a.F_LOCATION + a.F_EXT;
+                                    }
+
+                                    return str;
+                                    //return a.replace(/(\.[^.]+)$/, "_medium$1");
+                                },
+                                formatDate: function(a){
+                                    if(!a){
+                                        return "";
+                                    }
+                                    return Ext.Date.format(a, "M j,Y,g: i A");
                                 }
-                                return Ext.Date.format(a, "M j,Y,g: i A");
-                            }
-                        })
+                            })
+                    }]
                 }],
                 bbar: this.buildBottomBar()
             }]
@@ -296,35 +339,30 @@ Ext.define("Vega.view.dal.Dal", {
             k = o.display,
             topbar = o.topbar;
 
-        //Clear all Button...
-        topbar.items.items[0].setHidden(false);
-        //Save Button...
-        topbar.items.items[3].setHidden(false);
+        //var setting = Ext.getStore('Settings');
+        //var su = setting.findRecord('Property', me.getXType()).data.Value;
 
-        me.contextmenu = Ext.create("Ext.menu.Menu", {
-            items: [
-                topbar.actView,
-                topbar.actRefresh,
-            {
-                text: "Download",
-                iconCls: "fa fa-download",
-                handler: this.onCtxMnuDownloadClick,
-                scope: this
-            },
+        var mnuItems = [topbar.actView,
             {
                 text: "Edit",
-                iconCls: "fa fa-edit",
-                disabled: false,
+                iconCls: "x-fa fa-edit",
                 handler: this.onCtxMnuEditClick,
                 scope: this
             },
+            topbar.actRefresh,
             {
-                text: "Delete",
-                iconCls: "fa fa-edit",
-                disabled: false,
-                handler: this.onCtxMnuDeleteClick,
+                text: "Download",
+                iconCls: "x-fa fa-download",
+                handler: this.onCtxMnuDownloadClick,
                 scope: this
-            }]
+            },
+            topbar.actDelete];
+
+        //Clear all Button...
+        topbar.items.items[0].setHidden(false);
+
+        me.contextmenu = Ext.create("Ext.menu.Menu", {
+            items: mnuItems
         });
 
         topbar.insert(0,
@@ -336,8 +374,11 @@ Ext.define("Vega.view.dal.Dal", {
                 displayField: "text",
                 value: "Body #",
                 editable: false,
+                queryMode: 'local',
                 reference: "filterSelection",
-                bind: {store: "{categories}"},
+                bind: {
+                    store: "{categories}"
+                },
                 listeners: {
                     change: "onFilterItemChange",
                     scope: this.controller
@@ -348,11 +389,7 @@ Ext.define("Vega.view.dal.Dal", {
                 reference: 'searchcombo',
                 width: 300,
                 hidden: true,
-                searchAt: 'dal-grid',
-                listeners: {
-                    //triggerclear: "onClearClick",
-                    //triggersearch: "onSearchClick"
-                }
+                searchAt: 'dal-grid'
             },
             {
                 xtype: "gridsearchfield",
@@ -366,8 +403,8 @@ Ext.define("Vega.view.dal.Dal", {
             [{
                 xtype: "cycle",
                 ui: "default",
-                prependText: "Show:  ",
-                iconCls: "fa fa-filter",
+                prependText: "Show: ",
+                iconCls: "x-fa fa-filter",
                 showText: true,
                 reference: "filterButton",
                 changeHandler: "onTypeChange",
@@ -375,7 +412,7 @@ Ext.define("Vega.view.dal.Dal", {
                 menu: {
                     items: [{
                         text: "All",
-                        iconCls: "fa fa-filter",
+                        iconCls: "x-fa fa-filter",
                         type: null,
                         itemId: "all",
                         checked: true
@@ -448,38 +485,36 @@ Ext.define("Vega.view.dal.Dal", {
                     hidden: true,
                     dataIndex: "F_NAME"
                 }]
-            },"-", {
+            },"-",{
                 xtype: 'button',
                 tooltip: 'Body Illustration Image Upload',
                 ui: 'bootstrap-btn-default',
-                iconCls: 'fa fa-pencil',
+                iconCls: 'x-fa fa-pencil',
                 handler: 'onOpenBodyClick',
                 scope: this.controller
             },{
                 xtype: 'button',
                 tooltip: 'Components Image Upload',
                 ui: 'bootstrap-btn-default',
-                iconCls: 'fa fa-flickr',
+                iconCls: 'x-fa fa-flickr',
                 handler: 'onOpenComponentClick',
                 scope: this.controller
             },{
                 xtype: 'button',
                 tooltip: 'Photo Upload',
                 ui: 'bootstrap-btn-default',
-                iconCls: 'fa fa-camera',
+                iconCls: 'x-fa fa-camera',
                 handler: 'onOpenPhotoClick',
                 scope: this.controller
             }]);
 
         //this.updateStoreSorters();
 
-        this.relayEvents(topbar, ['actview', 'actrefresh', 'actsave', 'clearall']);
+        this.relayEvents(topbar, ['actview', 'actrefresh', 'actdelete', 'actsave', 'clearall']);
         this.relayEvents(k, ["open"], 'tab');
         this.relayEvents(m, ["rowdblclick", "itemcontextmenu"]);
         this.relayEvents(n, ["itemdblclick", "itemcontextmenu", 'viewready']);
         this.relayEvents(p, ["itemdblclick", "itemcontextmenu"]);
-
-
     },
 
     buildBottomBar: function(){
@@ -487,25 +522,24 @@ Ext.define("Vega.view.dal.Dal", {
             arr = [[25], [50], [100], [300], [500]],
             b = Ext.create("widget.combo", {
             name: "perpage",
-            reference: 'pageSizer',
+            //reference: 'pageSizer',
             width: 76,
             store: new Ext.data.ArrayStore({
                 fields: ["id"],
                 data: arr
             }),
-            mode: "local",
+            queryMode: "local",
             //value: "15",
             matchFieldWidth: true,
-            triggerAction: "all",
             displayField: "id",
             valueField: "id",
             editable: false,
             forceSelection: true
         });
 
-        b.on('render', function(c, e){
+        b.on('afterrender', function(c, e){
             var store = me.getViewModel().getStore("dals");
-            c.setValue(store.getPageSize())
+            c.setValue(store.getPageSize());
         }, this);
 
         b.on("select", function(e, a){
@@ -515,52 +549,51 @@ Ext.define("Vega.view.dal.Dal", {
             //console.log("combo select", f)
         }, this);
 
-        return[{
+        return {
             xtype: "pagingtoolbar",
-            dock: "bottom",
             name: "pagingtb",
-            displayInfo: true,
             bind: {
                 store: "{dals}"
             },
-            style: {borderWidth: "0px"},
-            items: ["-", b, "Per Page"]
-        },'-',{
-            xtype: 'button',
-            iconCls: 'fa fa-search-plus',
-            text: 'Original',
-            enableToggle: true,
-            toggleHandler: function(btn, pressed){
+            //dock: "bottom",
+            displayInfo: true,
+            items: ['-', b, 'Per Page','-',{
+                xtype: 'button',
+                iconCls: 'x-fa fa-search-plus',
+                text: 'Original',
+                enableToggle: true,
+                toggleHandler: function(btn, pressed){
 
-                var r = pressed ? arr.unshift([15]) : arr.shift();
-                //console.log(arr,r);
-                b.setDisabled(pressed);
-                b.getStore().setData(arr);
-                b.setValue(pressed ? [15] : [50]);
-                b.fireEvent('select', b);
-            }
-        },{
-            xtype: 'button',
-            text: 'Cust. Info',
-            name: 'btnCustInfo',
-            iconCls: 'fa fa-info-circle',
-            hidden: true,
-            enableToggle: true,
-            disabled: true,
-            toggleHandler: function(btn, pressed){
-                var store = me.getViewModel().getStore("dals"),
-                    strUrl = pressed ? '/api/Dals/acct' : '/api/Dals'
+                    var r = pressed ? arr.unshift([15]) : arr.shift();
+                    //console.log(arr,r);
+                    b.setDisabled(pressed);
+                    b.getStore().setData(arr);
+                    b.setValue(pressed ? [15] : [50]);
+                    b.fireEvent('select', b);
+                }
+            },{
+                xtype: 'button',
+                text: 'Cust. Info',
+                name: 'btnCustInfo',
+                iconCls: 'x-fa fa-info-circle',
+                hidden: true,
+                enableToggle: true,
+                disabled: true,
+                toggleHandler: function(btn, pressed){
+                    var store = me.getViewModel().getStore("dals"),
+                        strUrl = pressed ? '/api/Dals/acct' : '/api/Dals';
 
-                //console.log(store)
-                //store.getProxy().setUrl(strUrl);
-                //store.load();
-            }
-        }]
+                    //console.log(store)
+                    //store.getProxy().setUrl(strUrl);
+                    //store.load();
+                }
+            }]
+        };
     },
 
     onDestroy: function(){
         this.contextmenu.destroy();
-        this.callParent(arguments)
+        this.callParent(arguments);
     },
 
     onCtxMnuOpenClick: function(i, h){
@@ -582,7 +615,7 @@ Ext.define("Vega.view.dal.Dal", {
         //j=g.lookupReference("grid"),
             e=j.getSelectionModel().getSelection()[0];
 
-        this.fireEvent("ctxmnurefreshclick", e, i)
+        this.fireEvent("ctxmnurefreshclick", e, i);
     },
 
     onCtxMnuDownloadClick: function(i, h){
@@ -591,7 +624,7 @@ Ext.define("Vega.view.dal.Dal", {
             j = ctn.getLayout().getActiveItem(),
 
         //j=g.lookupReference("grid"),
-            e=j.getSelectionModel().getSelection()[0];
+            e=j.getSelectionModel().getSelection();
 
         this.fireEvent("ctxmnudownloadclick", e, i);
     },
@@ -639,8 +672,8 @@ Ext.define("Vega.view.dal.Dal", {
                 h.push({
                     property: a.getDataIndex(),
                     direction: a.getDirection()
-                })
-            })
+                });
+            });
         }
         return h;
     },
@@ -649,7 +682,7 @@ Ext.define("Vega.view.dal.Dal", {
         var c = this.getSorters(),
         d = this.getViewModel();
         if(c.length > 0){
-            d.getStore("dals").sort(c)
+            d.getStore("dals").sort(c);
         }
     }
 });

@@ -106,23 +106,6 @@ Ext.define('Ext.ux.toggleslide.ToggleSlide', {
     {
         var me = this;
         me.callParent(arguments);
-        
-        me.addEvents(
-                /**
-                 * @event beforechange Fires before this toggle is changed.
-                 * @param {Ext.form.Checkbox} this This toggle
-                 * @param {Boolean|String} state The next toggle state value if boolean
-                 *            mode else the label for the next state
-                 */
-                'beforechange',
-                
-                /**
-                 * @event change Fires when the toggle is on or off.
-                 * @param {Ext.form.Checkbox} this This toggle
-                 * @param {Boolean|String} state the new toggle state value, boolean if
-                 *            in boolean mode else the label
-                 */
-                'change');
     },
     
     

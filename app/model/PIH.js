@@ -3,12 +3,12 @@ Ext.define('Vega.model.PIH', {
 
     fields: [
         { name: 'pino', type: 'int' },
-        { name: 'pidate', type: 'date', format: 'c' },
+        { name: 'pidate', type: 'date', dateFormat: 'c' },
         { name: 'memo', type: 'string' },
         { name: 'createUser', type: 'string', convert: tr },
-        { name: 'createTime', type: 'date', format: 'c' },
+        { name: 'createTime', type: 'date', dateFormat: 'c' },
         { name: 'updateUser', type: 'string' },
-        { name: 'updateTime', type: 'date', format: 'c' },
+        { name: 'updateTime', type: 'date', dateFormat: 'c' },
         { name: 'warehouse', type: 'string', convert: tr },
         { name: 'alter_pack', type: 'string' },
         { name: 'tagNumber', type: 'string' },
@@ -17,7 +17,8 @@ Ext.define('Vega.model.PIH', {
         { name: 'user1', type: 'string' },
         { name: 'user2', type: 'string' },
         { name: 'user3', type: 'string' },
-        { name: 'user4', type: 'string' }
+        { name: 'user4', type: 'string' },
+        { name: 'userId', type: 'string', mapping: 'createUser', persist: false}
     ],
 
     idProperty: 'pino',

@@ -44,6 +44,7 @@
   background: #ffffff;
   border: 1px solid #dddddd;
   float: left;
+  position: relative;
   padding: 3px;
   margin: 0 10px 10px 0;
   width: 200px;
@@ -77,6 +78,25 @@
   //float:left;
   //width: 64px;
   //height: 64px;
+}
+
+.multi-view .post-attach {
+  position: relative;
+  top: 25px; right: 5px;
+
+  //margin: 1px;
+  //padding: 2px;
+}
+
+.multi-view .post-attach:before {
+  content: '\f0c6';
+  font-family: FontAwesome;
+  font-size: 2.0em;
+  color: #6593cf;
+  position: absolute;
+  z-index: 99;
+  top: 0px;
+  right: 0px;
 }
 
 .multi-view .accepted
@@ -142,6 +162,9 @@
 }
 
 .multi-view .post-data {
+  -moz-border-radius:.3em;
+  -webkit-border-radius:.3em;
+  border-radius:.3em;
   background:#f1f2f4;
   padding: 0px 0px 0px 6px;
   border:1px solid #dadadb;
@@ -207,7 +230,8 @@
   //border: 1px solid #6593cf;
   //background: #C1DDF2;
   border: 1px solid #6593cf;
-  background: #DFEDFF;
+  background: #FFEFBB;
+  //background: #DFEDFF;
   //padding: 1px;
   -moz-border-radius:.3em;
   -webkit-border-radius:.3em;
@@ -342,7 +366,7 @@
 
 .comment-view .x-item-over {
   border:0px solid #6593cf;
-  background: #DFEDFF url(images/row-over.gif) repeat-x left top;
+  background: #DFEDFF;
   padding: 2px;
   -moz-border-radius:.4em;
   -webkit-border-radius:.4em;
@@ -350,8 +374,9 @@
 }
 
 .comment-view .x-item-selected {
-  background: #DFEDFF;
   border: 0px solid #6593cf;
+  background: #FFEFBB;
+  //background: #DFEDFF;
   padding: 2px;
   -moz-border-radius:.4em;
   -webkit-border-radius:.4em;

@@ -158,7 +158,7 @@ Ext.define("Ext.ux.form.MultiUpload",{
 
                 plugins: [{
                     ptype: 'rowediting',
-                    clicksToEdit: 1,
+                    clicksToEdit: 2,
                     listeners: {
                         beforeedit: function(editor, context){
                             context.cancel = !me.enableEdit;
@@ -172,9 +172,10 @@ Ext.define("Ext.ux.form.MultiUpload",{
                     emptyText: 'Drop Files Here',
                     plugins: [{
                         ddGroup: 'file-group',
-                        ptype: 'gridviewdragdrop',
-                        enableDrop: true,
-                        dragText: 'Drag and drop to reorganize'
+                        ptype: 'gridviewdragdrop'
+                        //enableDrop: true,
+                        //dragText: 'Drag and drop to reorganize',
+
                     }],
                     prepareData: function(data, idx, record){
                         return data;
@@ -187,14 +188,14 @@ Ext.define("Ext.ux.form.MultiUpload",{
                             me.updateStatus();
                         },
                         drop: function(node, data, overModel, dropPosition, eOpts){
-                            data.view.refresh();
+                            this.getStore().each(function(rec,idx){
+                                var fname = rec.data.F_NAME.split(".").shift();
+                                rec.set('RORDER', idx+1);
+                                rec.set('F_NAME', fname.slice(0, fname.length - 1)+(idx+1)+rec.data.F_EXT);
+                                rec.set('F_MFLAG', idx > 1 ? null : (idx == 0 ? 'FRONT' : 'BACK'));
+                            })
+                            //data.view.refresh();
                         }
-                    }
-                },
-
-                listeners: {
-                    afterrender: function(grid){
-
                     }
                 }
             },{
@@ -204,10 +205,7 @@ Ext.define("Ext.ux.form.MultiUpload",{
                 width: '35%',
                 scrollable: 'y',
                 split: {
-                    size: 3,
-                    style: {
-
-                    }
+                    size: 3
                 },
                 layout: {
                     type: 'vbox',
@@ -225,6 +223,11 @@ Ext.define("Ext.ux.form.MultiUpload",{
         });
 
         me.callParent(arguments);
+    },
+
+    onDestroy: function(){
+        var  me = this;
+        me.callParent();
     },
 
     listeners: {

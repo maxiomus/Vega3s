@@ -16,7 +16,7 @@ Ext.define('Vega.view.inventory.pi.PhysicalController', {
     },
 
     onActionNew: function(b){
-        this.redirectTo("physical/edit");
+        this.redirectTo("physical/new");
     },
 
     onActionEdit: function(b, c){
@@ -60,7 +60,7 @@ Ext.define('Vega.view.inventory.pi.PhysicalController', {
     },
 
     onContextMenuBookmarkClick: function(d, c){
-        this.addBookmark(d, this.getView())
+        this.addBookmark(d, this.getView());
     },
 
     onClearFilters: function(b){
@@ -110,9 +110,9 @@ Ext.define('Vega.view.inventory.pi.PhysicalController', {
 
         var i = h.getSelectionModel();
         if(!i.isSelected(g)){
-            i.select(g)
+            i.select(g);
         }
-        this.view.contextmenu.showAt(l.getXY())
+        this.view.contextmenu.showAt(l.getXY());
     }
-    
+
 });

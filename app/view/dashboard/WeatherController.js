@@ -52,7 +52,7 @@ Ext.define('Vega.view.dashboard.WeatherController', {
                  sessionStorage.setItem(key, value);
                  });*/
 
-                var cities = [];
+                var cities = [extraData];
                 Ext.each(options, function(item){
                     cities.push(item.DataValue);
                 });
@@ -103,7 +103,8 @@ Ext.define('Vega.view.dashboard.WeatherController', {
         var me = this;
         console.log('callback - loadMyClimate', this, cities);
 
-        me.setMyClimates(!Ext.isEmpty(cities) ? cities : extraData);
+        //me.setMyClimates(!Ext.isEmpty(cities) ? cities : extraData);
+        me.setMyClimates(cities);
 
         console.log(me.getViewModel());
         var store = me.getViewModel().getStore('climates');
@@ -112,7 +113,7 @@ Ext.define('Vega.view.dashboard.WeatherController', {
             run: function(){
                 store.load();
             },
-            interval: 600000,
+            interval: 300000,
             args: [
                 store
             ]
@@ -141,13 +142,13 @@ Ext.define('Vega.view.dashboard.WeatherController', {
         //this.view.grid.setCurrentPost(this.view.grid.getSelectionModel().getSelection());
 
         var climates = this.getView().getMyClimates();
-        var recordIds = [];
+        //var recordIds = [];
 
         /*Ext.each(climates, function(rec){
          recordIds.push(rec.getId());
          });*/
-        console.log('WeatherController - onBeforeStoreLoad', climates);
-        store.getProxy().setExtraParams({id:climates.toString()});
+        //console.log('WeatherController - onBeforeStoreLoad', climates);
+        store.getProxy().setExtraParams({id: climates.toString()});
     },
 
     /**
@@ -249,7 +250,7 @@ Ext.define('Vega.view.dashboard.WeatherController', {
 
         var window = Ext.widget('window', {
             title: 'Add City',
-            iconCls: 'fa fa-cloud',
+            iconCls: 'x-fa fa-cloud',
             //glyph: 79,
             width: 500,
             plain: true,

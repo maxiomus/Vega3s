@@ -61,7 +61,7 @@ Ext.define("Vega.view.dashboard.Favorite",{
         return ['<tpl for=".">',
             //'<a href="#{Link}" style="text-decoration: none;">',
             '<div class="icon-wrap">',
-                '<i style="vertical-align: middle" class="fa fa-arrow-circle-o-right fa-2x"></i>',
+                '<i style="vertical-align: middle" class="x-fa fa-arrow-circle-o-right fa-2x"></i>',
                 '<span>{Module} - {Title}</span>',
             '</div>',
             //'</a>',
@@ -79,13 +79,13 @@ Ext.define("Vega.view.dashboard.Favorite",{
             items: [{
                 text: 'Refresh',
                 //glyph: 79,
-                iconCls: 'fa fa-refresh',
+                iconCls: 'x-fa fa-refresh',
                 handler: this.onCtxMnuRefreshClick,
                 scope: this
             },{
                 text: 'Remove Bookmark',
                 //glyph: 88,
-                iconCls: 'fa fa-remove',
+                iconCls: 'x-fa fa-remove',
                 disabled: false,
                 handler: this.onCtxMnuRemoveClick,
                 scope: this

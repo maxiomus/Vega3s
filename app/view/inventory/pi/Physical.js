@@ -19,7 +19,7 @@ Ext.define('Vega.view.inventory.pi.Physical',{
     cls: "physical shadow-panel",
 
     header: false,
-    margin: 8,
+    margin: '0 0 0 4',
 
     listeners: {
         actnew: 'onActionNew',
@@ -42,17 +42,23 @@ Ext.define('Vega.view.inventory.pi.Physical',{
                 xtype: "multiview",
                 reference: "multiview",
                 title: "Physical Inventory",
-                iconCls: "fa fa-calculator",
-                tbar: [{
+                iconCls: "x-fa fa-calculator",
+
+                tbar: {
                     xtype: "topbar",
                     reference: "topbar"
-                }],
+                },
 
                 mainItems: [{
                     xtype: "grid",
                     reference: "pi-grid",
                     scrollable: true,
                     flex: 2,
+                    style: {
+                        borderTop: '1px solid #cfcfcf',
+                        borderBottom: '1px solid #cfcfcf'
+                    },
+
                     bind: {
                         store: '{physicals}'
                     },
@@ -142,7 +148,7 @@ Ext.define('Vega.view.inventory.pi.Physical',{
         var mnuItems = [f.actEdit, f.actDelete, f.actRefresh,
             {
                 text: "Print",
-                iconCls: "fa fa-print",
+                iconCls: "x-fa fa-print",
                 action: "printlabel",
                 //handler: 'onOpenLabeltagClick',
                 scope: this.controller
@@ -175,7 +181,7 @@ Ext.define('Vega.view.inventory.pi.Physical',{
             dataIndex: "pino",
             locked: false,
             filter: {
-                type: "int"
+                type: "number"
             },
             renderer: function(f, e, a){
                 return f;
@@ -301,13 +307,13 @@ Ext.define('Vega.view.inventory.pi.Physical',{
             renderer: function(f, e, a){
                 return f;
             }
-        }]
+        }];
     },
 
     buildBottomBar: function(){
         var b = Ext.create("widget.combo", {
             name: "perpage",
-            reference: 'pageSizer',
+            //reference: 'pageSizer',
             width: 76,
             store: new Ext.data.ArrayStore({
                 fields: ["id"],
@@ -323,9 +329,9 @@ Ext.define('Vega.view.inventory.pi.Physical',{
             //triggerAction: "all",
         });
 
-        b.on('render', function(c, e){
+        b.on('afterrender', function(c, e){
             var store = this.getViewModel().getStore("physicals");
-            c.setValue(store.getPageSize())
+            c.setValue(store.getPageSize());
         }, this);
 
         b.on("select", function(e, a){
@@ -335,16 +341,15 @@ Ext.define('Vega.view.inventory.pi.Physical',{
             //console.log("combo select", f)
         }, this);
 
-        return [{
+        return {
             xtype: "pagingtoolbar",
-            dock: "bottom",
             //itemId: "pagingtb",
-            displayInfo: true,
             bind: {
                 store: "{physicals}"
             },
-            style: {borderWidth: "0px"},
+            //dock: "bottom",
+            //displayInfo: true,
             items: ["-", b, "Per Page"]
-        }];
+        };
     }
 });

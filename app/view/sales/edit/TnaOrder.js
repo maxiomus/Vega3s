@@ -55,6 +55,25 @@ Ext.define("Vega.view.sales.edit.TnaOrder",{
     initComponent: function(){
         var me = this;
 
+        var activities = Ext.create('Ext.data.Store', {
+            fields: ['id', 'text'],
+            //pageSize: 50,
+            autoLoad: true,
+            proxy: {
+                type: 'ajax',
+                url: '/api/Combos/activities',
+
+                pageParam: '',
+                startParam: '',
+                limitParam: '',
+
+                reader: {
+                    type: 'json',
+                    rootProperty: 'data'
+                }
+            }
+        });
+
         Ext.applyIf(me, {
             columns: [{
                 text: 'ID',
@@ -78,30 +97,71 @@ Ext.define("Vega.view.sales.edit.TnaOrder",{
                 text: 'No.',
                 dataIndex: 'lineseq',
                 width: 50,
+                align: 'center',
                 menuDisabled: true,
                 hidden: false
             },{
+                text: 'Priority',
+                dataIndex: 'priority',
+                width: 70,
+                align: 'center',
+                menuDisabled: true,
+                sortable: false,
+                hidden: true,
+                editor: {
+                    xtype: 'numberfield',
+                    step: 5,
+                    minValue: 0,
+                    listeners: {
+                        change: function(field, value){
+                            value = parseInt(value, 10);
+                            field.setValue(value + value % 5);
+                        }
+                    }
+                }
+            },{
                 text: 'Activity',
-                dataIndex: 'descript',
+                dataIndex: 'activity',
                 menuDisabled: true,
                 sortable: false,
                 width: 160,
                 editor: {
                     xtype: 'combo',
-                    name: 'descript',
+                    name: 'activity',
                     hideLabel: true,
-                    displayField: 'id',
+                    displayField: 'text',
                     valueField: 'id',
                     selectOnFocus: true,
+                    forceSelection: true,
                     editable: true,
                     //allowBlank: false,
-                    forceSelection: true,
                     minChars: 1,
                     queryMode: 'local',
+                    store: activities,
+                    /*
                     bind: {
                         store: '{activities}'
                     }
+                    */
+                    listeners: {
+                        select: {
+                            fn: 'onActivitySelect'
+                        }
+                    }
+                },
+                renderer: function(val, metaData, rec, rowIndex, colIndex, store){
+                    var idx = activities.findExact('id', val);
+                    if(idx != -1){
+                        var rs = activities.getAt(idx).data;
+                        return rs.text;
+                    }
                 }
+            },{
+                text: 'Description',
+                dataIndex: 'descript',
+                menuDisabled: true,
+                sortable: false,
+                hidden: true
             },{
                 xtype: 'datecolumn',
                 text: 'Due Date',
@@ -112,7 +172,8 @@ Ext.define("Vega.view.sales.edit.TnaOrder",{
                 width: 160,
                 format: 'm-d-Y',
                 editor: {
-                    xtype: 'datefield'
+                    xtype: 'datefield',
+                    format: 'Y-m-d'
                 }
             },{
                 xtype: 'datecolumn',
@@ -124,7 +185,8 @@ Ext.define("Vega.view.sales.edit.TnaOrder",{
                 width: 160,
                 format: 'm-d-Y',
                 editor: {
-                    xtype: 'datefield'
+                    xtype: 'datefield',
+                    format: 'Y-m-d'
                 }
             },{
                 xtype: 'datecolumn',
@@ -136,7 +198,8 @@ Ext.define("Vega.view.sales.edit.TnaOrder",{
                 width: 160,
                 format: 'm-d-Y',
                 editor: {
-                    xtype: 'datefield'
+                    xtype: 'datefield',
+                    format: 'Y-m-d'
                 }
             },{
                 xtype: 'datecolumn',
@@ -148,7 +211,8 @@ Ext.define("Vega.view.sales.edit.TnaOrder",{
                 width: 160,
                 format: 'm-d-Y',
                 editor: {
-                    xtype: 'datefield'
+                    xtype: 'datefield',
+                    format: 'Y-m-d'
                 }
             },{
                 text: 'Coordinator',
@@ -181,26 +245,7 @@ Ext.define("Vega.view.sales.edit.TnaOrder",{
                 hidden: true,
                 editor: {
                     xtype: 'numberfield',
-                    maxValue: 99,
                     minValue: 0
-                }
-            },{
-                text: 'Priority',
-                dataIndex: 'priority',
-                menuDisabled: true,
-                sortable: false,
-                hidden: true,
-                editor: {
-                    xtype: 'numberfield',
-                    step: 5,
-                    maxValue: 99,
-                    minValue: 0,
-                    listeners: {
-                        change: function(field, value){
-                            value = parseInt(value, 10);
-                            field.setValue(value + value % 5);
-                        }
-                    }
                 }
             },{
                 text: 'Remarks',

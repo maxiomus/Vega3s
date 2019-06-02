@@ -3,18 +3,19 @@ Ext.define('Vega.view.development.request.edit.Fabric',{
     extend: 'Ext.window.Window',
 
     requires: [
-        'Vega.view.development.request.edit.FabricController',
-        'Vega.view.development.request.edit.FabricModel',
-        'Ext.data.proxy.Memory',
-        'Ext.ux.form.field.MemoryCombo'
+        //'Vega.view.development.request.edit.FabricController',
+        //'Vega.view.development.request.edit.FabricModel',
+        'Ext.data.proxy.Memory'
     ],
 
     alias: 'widget.request-edit-fabric',
 
+    /*
     controller: 'request-edit-fabric',
     viewModel: {
         type: 'request-edit-fabric'
     },
+    */
 
     bind: '{title}',
 
@@ -41,6 +42,7 @@ Ext.define('Vega.view.development.request.edit.Fabric',{
     initComponent: function(c){
         var me = this;
 
+        /*
         var memComponents = Ext.create('Ext.data.Store', {
             pageSize: 50,
             remoteFilter: true,
@@ -104,13 +106,17 @@ Ext.define('Vega.view.development.request.edit.Fabric',{
             }
         });
 
-        Ext.apply(remoteComponents.getProxy().extraParams, {
+        Ext.apply(Ext.getStore('Components').getProxy().extraParams, {
             type: 'FABRICS'
         });
 
-        Ext.apply(remoteColors.getProxy().extraParams, {
+        Ext.apply(Ext.getStore('remoteRawColors').getProxy().extraParams, {
             type: 'FABRICS'
         });
+        */
+
+        Ext.getStore('memComponents').clearFilter();
+        Ext.getStore('memComponents').filter('text', 'FABRICS');
 
         Ext.applyIf(me, {
             fieldDefaults: {
@@ -199,7 +205,7 @@ Ext.define('Vega.view.development.request.edit.Fabric',{
                     },
                     //flex: 1,
                     items: [{
-                        xtype: "memorycombo",
+                        xtype: "combo",
                         name: 'Fabric',
                         //itemId: "Prints",
                         fieldLabel: "Fabric",
@@ -214,7 +220,7 @@ Ext.define('Vega.view.development.request.edit.Fabric',{
                             //store: '{components}',
                             value: '{theFabric.Fabric}'
                         },
-                        store: memComponents,
+                        store: 'memComponents',
                         autoLoadOnValue: true,
                         //forceSelection: false,
                         //selectOnFocus: true,
@@ -299,7 +305,7 @@ Ext.define('Vega.view.development.request.edit.Fabric',{
                             }
                         }
                     },{
-                        xtype: "memorycombo",
+                        xtype: "combo",
                         name: 'Color',
                         //itemId: "cboColor",
                         fieldLabel: "Color",
@@ -308,7 +314,7 @@ Ext.define('Vega.view.development.request.edit.Fabric',{
                         //width: 160,
                         //autoSelect: false,
                         hideTrigger: true,
-                        store: memColors,
+                        store: 'memRawColors',
                         bind: {
                             //store: '{colors}',
                             value: '{theFabric.Color}'
@@ -319,10 +325,10 @@ Ext.define('Vega.view.development.request.edit.Fabric',{
                         //selectOnFocus: true,
                         //autoLoadOnValue: true,
                         pageSize: 50,
-                        //minChars: 0,
+                        minChars: 0,
                         queryMode: 'local',
+                        triggerAction: 'query',
                         //queryParam: "filter",
-                        //triggerAction: 'all',
                         //lastQuery: '',
                         matchFieldWidth: false,
                         listConfig: {
@@ -343,7 +349,7 @@ Ext.define('Vega.view.development.request.edit.Fabric',{
                         '</tpl>' +
                         '<tr class="x-boundlist-item">' +
                         '<td>{label}</td>' +
-                        '<td>{descript}</td>' +
+                        '<td>{text}</td>' +
                         '</tr>' +
                         '<tpl if="[xcount-xindex]==0">' +
                         '</table>' +
@@ -365,7 +371,7 @@ Ext.define('Vega.view.development.request.edit.Fabric',{
                                         store.clearFilter();
 
                                         store.filter([{
-                                            property: 'descript',
+                                            property: 'text',
                                             value: cboStyle.getValue().toUpperCase(),
                                             operator: '='
                                         }]);
@@ -564,15 +570,13 @@ Ext.define('Vega.view.development.request.edit.Fabric',{
                     items: [{
                         name: 'CDate',
                         fieldLabel: 'Date Created',
-                        bind: '{theFabric.CDate}',
-                        allowBlank: false
+                        bind: '{theFabric.CDate}'
                     },{
                         xtype: 'textfield',
                         name: 'CUser',
                         fieldLabel: 'Created By',
                         bind: '{theFabric.CUser}',
-                        margin: '0 0 0 20',
-                        allowBlank: false
+                        margin: '0 0 0 20'
                     }]
                 },{
                     xtype: 'fieldcontainer',
@@ -590,15 +594,13 @@ Ext.define('Vega.view.development.request.edit.Fabric',{
                     items: [{
                         name: 'UDate',
                         fieldLabel: 'Date Modified',
-                        bind: '{theFabric.UDate}',
-                        allowBlank: true
+                        bind: '{theFabric.UDate}'
                     },{
                         xtype: 'textfield',
                         name: 'MUser',
                         fieldLabel: 'Updated By',
                         bind: '{theFabric.MUser}',
-                        margin: '0 0 0 20',
-                        allowBlank: true
+                        margin: '0 0 0 20'
                     }]
                 }]
             }]

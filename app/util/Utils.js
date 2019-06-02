@@ -3,6 +3,7 @@
  */
 Ext.define('Vega.util.Utils', {
     statics : {
+
         getOrdinal: function (n) {
             var s=["th","st","nd","rd"],
             v=n%100;
@@ -30,7 +31,7 @@ Ext.define('Vega.util.Utils', {
                 position: 'br',
                 useXAxis: true,
                 cls: 'ux-notification-light',
-                iconCls: 'fa fa-warning',
+                iconCls: 'x-fa fa-warning',
                 closable: false,
                 title: 'Warning!',
                 padding: '8',
@@ -43,9 +44,7 @@ Ext.define('Vega.util.Utils', {
             }).show();
         },
         generateGUID : function() {
-            return ((typeof(window.crypto) != 'undefined'
-                && typeof(window.crypto.getRandomValues) != 'undefined')
-                    ? function() { // If we have a cryptographically secure PRNG
+            return ((typeof(window.crypto) != 'undefined' && typeof(window.crypto.getRandomValues) != 'undefined') ? function() { // If we have a cryptographically secure PRNG
                     var buf = new Uint16Array(8);
                     window.crypto.getRandomValues(buf);
                     var S4 = function(num) {
@@ -53,9 +52,7 @@ Ext.define('Vega.util.Utils', {
                         while(ret.length < 4){ ret = "0"+ret; }
                         return ret;
                     };
-                    return (S4(buf[0])+S4(buf[1])+"-"
-                    +S4(buf[2])+"-"+S4(buf[3])+"-"
-                    +S4(buf[4])+"-"+S4(buf[5])+S4(buf[6])+S4(buf[7]));
+                    return (S4(buf[0])+S4(buf[1])+"-" +S4(buf[2])+"-"+S4(buf[3])+"-"+S4(buf[4])+"-"+S4(buf[5])+S4(buf[6])+S4(buf[7]));
                 }
                     : function() { // Otherwise, just use Math.random
                     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'

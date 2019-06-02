@@ -11,8 +11,8 @@ Ext.define('Vega.view.sales.edit.TnaOrderController', {
             tnaStore = me.getViewModel().getStore('tnaOrders');
 
         tnaStore.filter([{
-            property: 'planId',
-            type: 'string',
+            property: 'roleId',
+            type: 'int',
             value: combo.getValue()
         }])
     },
@@ -23,16 +23,15 @@ Ext.define('Vega.view.sales.edit.TnaOrderController', {
         store.filter({
             operator: "eq",
             value: aItem.type,
-            property: "planId",
-            type: "string"
+            property: "roleId"
         });
     },
 
     onAddClick: function(btn){
         //console.log(this.getReferences())
         var store = this.lookupReference('orders').getStore(),
-            rec = new Ext.create('Vega.model.sales.TnaOrder', {
-                planId: store.getAt(0).data.planId,
+            rec = new Ext.create('Vega.model.TnaOrder', {
+                roleId: store.getAt(0).data.roleId,
                 priority: (store.getCount() + 1) * 10
             });
 

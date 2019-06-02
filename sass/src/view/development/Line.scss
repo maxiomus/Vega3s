@@ -1,0 +1,15 @@
+.line-grid .x-grid-cell-inner {
+
+}
+
+.line-grid .line-icon:before {
+  content: "\f016";
+  font-family: FontAwesome;
+  font-style: normal;
+  font-weight: normal;
+  text-decoration: inherit;
+  font-size: 1.2em;
+  //color: lightblue;
+  position: absolute;
+  margin: 5px 0 0 -10px;
+}

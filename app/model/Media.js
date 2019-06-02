@@ -17,6 +17,7 @@ Ext.define('Vega.model.Media', {
         { name: 'F_APPLICATION', type: 'string', allowNull: true },
         { name: 'F_LINK', type: 'string', allowNull: true },
         { name: 'F_EXT', type: 'string', allowNull: true },
+        { name: 'F_STATUS', type: 'boolean'},
         { name: 'F_BFLAG', type: 'boolean'},
         { name: 'F_MFLAG', type: 'string', allowNull: true },
         { name: 'F_OWNER', type: 'string', allowNull: true },
@@ -34,8 +35,10 @@ Ext.define('Vega.model.Media', {
         { name: 'F_DESC8', type: 'string', allowNull: true },
         { name: 'F_DESC9', type: 'string', allowNull: true, allowBlank: true },
         { name: 'F_DESC10', type: 'string', allowNull: true, allowBlank: true },
-        { name: 'RORDER', type: 'int'},
+        { name: 'RORDER', type: 'int', persist: false},
         { name: 'CUSTOMER', type: 'string', persist: false},
+        { name: 'userId', type: 'string', mapping: 'F_USERID', persist: false},
+
         { name: 'F_PATH', type: 'string', persist: false,
             calculate: function(d){
                 var b;
@@ -57,14 +60,10 @@ Ext.define('Vega.model.Media', {
                         break;
                     case "photos":
                         c = (data.F_OWNER ? data.F_OWNER + " " : "") + data.F_STYLE;
-
-                        if(data.F_TYPE != null && data.F_SIZE != null){
-                            c = data.F_OWNER;
-                        }
                         break;
                     default:
                         c = data.F_DESC6;
-                        break
+                        break;
                 }
 
                 return c;

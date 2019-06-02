@@ -8,8 +8,10 @@ Ext.define('Vega.store.Colors', {
     fields: ['id', 'text'],
     // allow the grid to interact with the paging scroller by buffering
     //buffered: true,
+    storeId: 'Colors',
+
     pageSize: 0,
-    autoLoad: false,
+    autoLoad: true,
 
     remoteFilter: true,
     //remoteSort: true
@@ -17,6 +19,27 @@ Ext.define('Vega.store.Colors', {
     proxy: {
         type: 'ajax',
         url: '/api/Combos/colors',
+        reader: {
+            type: 'json',
+            rootProperty: 'data'
+        }
+    },
+
+    listeners: {
+        load: function(s){
+            memColors.getProxy().setData(s.getRange());
+            //memColors.load();
+        }
+    }
+});
+
+var memColors = Ext.create('Ext.data.Store', {
+    storeId: 'memColors',
+    pageSize: 50,
+    remoteFilter: true,
+    proxy: {
+        type: 'memory',
+        enablePaging: true,
         reader: {
             type: 'json',
             rootProperty: 'data'

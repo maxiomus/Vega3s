@@ -8,9 +8,8 @@ Ext.define('Vega.view.sales.edit.FormController', {
         'Vega.model.Powlog',
         'Vega.model.Powdtag',
         'Vega.model.Tnap',
-        'Vega.model.sales.TnaOrder',
-        'Vega.view.sales.edit.Window',
-        'Vega.view.sales.edit.TnaOrderWindow'
+        'Vega.model.TnaOrder',
+        'Vega.model.sales.File'
     ],
 
     alias: 'controller.sales-edit-form',
@@ -29,20 +28,59 @@ Ext.define('Vega.view.sales.edit.FormController', {
         store: {
             '#tnaOrders': {
                 beforeload: {
-                    fn: 'onStoreLoad'
+                    fn: 'onStoreBeforeLoad'
+                }
+            },
+            '#powlogs': {
+                datachanged: {
+                    fn: 'onStoreDataChanged'
                 }
             }
+
         }
     },
 
     init: function(){
-        //console.log('Form - init')
-        console.log('init', this.getReferences().details);
+        //console.log('init', this);
+        var me = this;
+
+        Ext.Ajax.request({
+            url: 'resources/data/sales/stores.json',
+            scope: me,
+            success: function(response){
+                var o = {};
+
+                try {
+                    o = Ext.decode(response.responseText);
+                }
+                catch(e){
+                    alert(e.message);
+                    return;
+                }
+
+                if(!o.success){
+                    // @todo error handling
+                    alert("Unknow error occurs!");
+                    return;
+                }
+
+                Ext.Object.each(o.stores, function(key, value, itself){
+                    var store = me.getViewModel().getStore(key);
+                    //console.log(store, key, value)
+                    if(store && value){
+                        store.loadData(value);
+                    }
+                });
+            },
+            failure: function(response){
+
+            }
+        });
+
     },
 
     initViewModel: function(vm){
-        //this.fireEvent("viewmodelready", this, vm);
-
+        //this.fireEvent("viewmodelready", thModel');
     },
 
     onAfterRender: function(p){
@@ -65,26 +103,123 @@ Ext.define('Vega.view.sales.edit.FormController', {
                 btnTna.setDisabled(s.getCount() == 0 || total != 0);
             })
         }
+
+        var me = this,
+            vm = this.getViewModel(),
+            rec = vm.get('header');
         */
+    },
+
+    onStoreBeforeLoad: function(store, op){
+        var me = this,
+            vm = this.getViewModel(),
+            rec = vm.get('header');
+        //combo = me.tna.query('combo')[0],
+
+        //console.log('beforestoreload', rec);
+        //store.getProxy().setExtraParam('tnaId', 0);
+        //store.filter('roleId', cycle.getActiveItem().type);
+    },
+
+    onStoreDataChanged: function(store, e){
+        var me = this,
+            vm = me.getViewModel(),
+            powh = vm.get('header');
+
+        //console.log('onStoreDataChanged', powh);
+        //powh.set('updatedby', Vega.user.data.Userid);
+        powh.set('updatedon', new Date());
+    },
+
+    /*
+    onActivate: function(p){
 
     },
 
     onAdded: function(c, p){
         //console.log(c, p)
     },
+    */
 
-    onStoreLoad: function(store, op){
-        var me = this;
-            //combo = me.tna.query('combo')[0],
-            //cycle = me.tna.query('cycle')[0];
+    onAttchmentRender: function(){
+        var refs = this.getReferences(),
+            view = refs.attachments.down('viewupload'),
+            toolbar = refs.attachments.down('toolbar');
 
-        //store.getProxy().setExtraParam('planId', 0);
-        //store.filter('planId', cycle.getActiveItem().type);
-
+        toolbar.add(view.fileUpload);
     },
 
-    onStoreDataChanged: function(store, e){
+    /*
+    onBtnReject: function(btn){
+        var me = this,
+            refs = this.getReferences(),
+            view = refs.attachments.down('viewupload'),
+            vm = me.getViewModel(),
+            changes = me.getSession().getChanges();
 
+        view.getStore().rejectChanges();
+
+        console.log(me.getSession())
+
+        changes=Ext.JSON.encodeValue(changes, '<br>');
+        Ext.Msg.alert('proxy', '<pre>' + changes + '</pre>');
+    },
+    */
+
+    onBtnRemoveAll: function(btn){
+        var refs = this.getReferences(),
+            view = refs.attachments.down('viewupload');
+
+        view.getStore().removeAll();
+        view.fileUpload.filesQueue.length = 0;
+    },
+
+    /**
+     *
+     * @param btn
+     * @param value
+     */
+    onToggleSlideChange: function(btn, pressed){
+        var refs = this.getReferences(),
+            attach = refs.attachments;
+
+        btn.setIconCls(pressed ? 'x-fa fa-toggle-on' : 'x-fa fa-toggle-off');
+
+        if(pressed){
+            attach.add({
+                xtype: 'container',
+                itemId: 'attach_detail',
+                region: 'east',
+                split: {
+                    size: 1
+                },
+                style: {
+                    'background-color' : '#f5f5f5'
+                },
+                width: '30%',
+                minWidth: 200
+            })
+        }
+        else {
+            attach.remove(attach.getComponent('attach_detail'))
+        }
+    },
+
+    onPositionChange: function(btn, active){
+        var tabpanel = this.lookupReference('panels');
+
+        tabpanel.setBind({
+            tabPosition: active.itemId
+        });
+
+        //console.log(tabpanel.getTabBar())
+    },
+
+    onTabChange: function(t, n, o, e){
+        var refs = this.getView().getReferences();
+
+        refs.groupCrud.setHidden(n.reference != 'merchandise');
+        refs.toggledetail.setHidden(n.reference != 'attachments');
     },
 
     showWindow: function(comp, record){
@@ -98,7 +233,7 @@ Ext.define('Vega.view.sales.edit.FormController', {
             reference: 'editWindow',
 
             //alignTarget: '',
-            width: window.innerWidth < 1360 ? (view.getWidth() * 0.98) : 1260,
+            width: window.innerWidth < 1360 ? (view.getWidth() * 0.98) : 1280,
             //maxWidth: 1366,
             height: window.innerHeight < 760 ? (view.getHeight() * 0.94) : 580,
 
@@ -148,7 +283,7 @@ Ext.define('Vega.view.sales.edit.FormController', {
                         get: function(value) {
                             var src = '';
                             if(value.data.bodyimgsrc != null){
-                                src = '../' + value.data.bodyimgsrc + '?w=128&h=140';
+                                src = '../' + encodeURIComponent(value.data.bodyimgsrc) + '?w=128&h=140';
                             }
                             return value.data.bodyimg.indexOf('blob:') !== -1 ? value.data.bodyimg : src
                         }
@@ -162,7 +297,7 @@ Ext.define('Vega.view.sales.edit.FormController', {
                             //var src = 'resources/images/default.png';
                             var src = '';
                             if(value.data.printimgsrc != null){
-                                src = '../' + value.data.printimgsrc + '?w=128&h=140';
+                                src = '../' + encodeURIComponent(value.data.printimgsrc) + '?w=128&h=140';
                             }
                             return value.data.printimg.indexOf('blob:') !== -1 ? value.data.printimg : src
                         }
@@ -235,9 +370,8 @@ Ext.define('Vega.view.sales.edit.FormController', {
             body.setSrc(!Ext.isEmpty(record.data._bodyimgsrc) ? record.get('_bodyimgsrc') : '../DLIB/BLU-ILLUSTRATIONS/' + record.get('bodyimgsrc') + '?w=128&h=140');
             print.setSrc(!Ext.isEmpty(record.data._printimgsrc) ? record.get('_printimgsrc') : '../DLIB/BLU-PRINTCAD/' + record.get('printimgsrc') + '?w=128&h=140');
             */
-            rec.set('updatedby', Vega.user.data.Userid);
+            //rec.set('updatedby', Vega.user.data.Userid);
         }
-
 
         this.win.on('close', function(p){
             view.up('viewer').up('maincontainerwrap').unmask();
@@ -307,7 +441,7 @@ Ext.define('Vega.view.sales.edit.FormController', {
         this.showWindow(btn, rec);
         //console.log('onEditStyleClick', me.lookupReference('details').getSelection()[0], me.getViewModel().getSession().peekRecord('Powd', rec.id))
         //this.showWindow(btn, rec);
-        console.log('editstyle', rec)
+        //console.log('editstyle', rec)
     },
 
     onDeleteStyleClick: function(btn){
@@ -322,12 +456,25 @@ Ext.define('Vega.view.sales.edit.FormController', {
 
     },
 
+    onExportStyleClick: function(btn){
+        var me = this,
+            grid = me.lookupReference('details'),
+            selection = grid.getSelectionModel().getSelection()[0],
+            store = grid.getStore(),
+            index = store.indexOf(selection),
+            rec = store.getAt(index);
+
+        //console.log(rec.modified.powhId)
+        this.redirectTo('product/import/' + rec.modified.powhId + index)
+    },
+
     onSaveStyleClick: function(){
         // Save the changes pending in the win's child session back to the
         // parent session.
         var me = this,
             session = me.getSession(),
             win = me.win,
+            vm = win.getViewModel(),
             view = me.getView(),
             form = me.lookupReference('form-edit'),
             grid = me.lookupReference('details'),
@@ -339,7 +486,8 @@ Ext.define('Vega.view.sales.edit.FormController', {
                 // Since we're not editing, we have a newly inserted record. Grab the id of
                 // that record that exists in the child session
             }
-            id = win.getViewModel().get('theStyle').id;
+
+            id = vm.get('theStyle').id;
             win.getSession().save();
 
             if (!isEdit) {
@@ -354,16 +502,17 @@ Ext.define('Vega.view.sales.edit.FormController', {
             }
 
             var data = [];
-            win.getViewModel().get('theStyle').powms(function(powms){
+            vm.get('theStyle').powms(function(powms){
                 powms.each(function(item){
                     data.push(item.data);
                 })
             });
-            rec.set('mats', data);
 
+            rec.set('mats', data);
+            //console.log(view.imagesQueue);
             if(view.imagesQueue && view.imagesQueue.length > 0){
                 Ext.each(view.imagesQueue, function(item, idx, self){
-                    console.log('FormController', item);
+                    //console.log('FormController', item);
                     view.getViewModel().getStore('fileStore').add({
                         FID: item.imageKey == ('bodyimg' + '-' + rec.id) ? 1 : 2,
                         F_NAME: item.imageFile.name,
@@ -403,7 +552,7 @@ Ext.define('Vega.view.sales.edit.FormController', {
                                     me.onCancelStyleClick();
                                     //Ext.Msg.alert('Success', resp);
                                 },
-                                failure: function(response) {
+                                failure: function(resp) {
                                     Ext.Msg.alert('Failure', resp);
                                 }
                             }, {
@@ -413,7 +562,7 @@ Ext.define('Vega.view.sales.edit.FormController', {
 
                     },
                     failure: function(batch, opt){
-
+                        Ext.Msg.alert(response.statusText, response.status + ' - ' + response.responseText );
                     },
                     callback: function(batch, opt){
 
@@ -433,23 +582,26 @@ Ext.define('Vega.view.sales.edit.FormController', {
     },
 
     showTNAWindow: function(comp, rec){
-        var me = this;
+        var me = this,
+            view = me.getView();
 
-        console.log('TNA', rec);
-        me.tna = me.getView().add({
+        //console.log('TNA', rec);
+        me.tna = view.add({
             xtype: 'window',
             reference: 'tnaWindow',
-            width: me.getView().getWidth() - 160,
-            minHeight: 560,
-
+            //alignTarget: '',
+            width: window.innerWidth < 1360 ? (view.getWidth() * 0.98) : 1280,
+            //maxWidth: 1366,
+            height: window.innerHeight < 760 ? (view.getHeight() * 0.94) : 580,
             //modal: true,
+            layout: 'fit',
             monitorResize: true,
             maximizable: true,
             //alwaysOnTop: true,
             constrain: true,
             //maximized: true,
+            scrollable: 'y',
             closable: true,
-            scrollable: true,
             padding: 4,
 
             bind: {
@@ -468,20 +620,13 @@ Ext.define('Vega.view.sales.edit.FormController', {
                 },
 
                 stores: {
-                    tnaOrders: {
-                        model: 'sales.TnaOrder',
-                        storeId: 'tnaOrders',
-                        autoLoad: true
-                        //remoteFilter: true
-                    },
-
                     planTypes: {
-                        fields: ['planId', 'name'],
+                        fields: ['roleId', 'name'],
                         data: [{
-                            planId: '1',
+                            roleId: 1,
                             name: 'Type A'
                         },{
-                            planId: '2',
+                            roleId: 2,
                             name: 'Type B'
                         }]
                     }
@@ -492,31 +637,29 @@ Ext.define('Vega.view.sales.edit.FormController', {
                 xtype: 'tna-grid',
                 reference: 'tnapsgrid',
                 bind: '{otherStyle.tnaps}',
-                layout: {
-                    type: 'fit'
-                },
+                //padding: '0 0 10 0',
+
                 tbar: [{
                     xtype: 'button',
                     text: 'Add',
                     width: 70,
-                    iconCls: 'fa fa-plus',
+                    iconCls: 'x-fa fa-plus',
                     handler: 'onAddActivityClick'
                 },{
                     xtype: "button",
-                    //ui: "default",
                     text: 'Add All',
-                    iconCls: "fa fa-gear",
+                    iconCls: "x-fa fa-gear",
                     //scope: this.controller,
                     menu: {
                         items: [{
                             text: "T&A - A",
-                            iconCls: "fa fa-gear",
-                            type: '1',
+                            iconCls: "x-fa fa-gear",
+                            type: 1,
                             itemId: "a"
                         },{
                             text: "T&A - B",
-                            iconCls: "fa fa-gear",
-                            type: '2',
+                            iconCls: "x-fa fa-gear",
+                            type: 2,
                             itemId: "b"
                         }],
                         listeners: {
@@ -528,7 +671,7 @@ Ext.define('Vega.view.sales.edit.FormController', {
                 },{
                     xtype: 'button',
                     text: 'Remove',
-                    iconCls: 'fa fa-remove',
+                    iconCls: 'x-fa fa-remove',
                     bind: {
                         disabled: '{!tnapsgrid.selection}'
                     },
@@ -536,7 +679,7 @@ Ext.define('Vega.view.sales.edit.FormController', {
                 },{
                     xtype: 'button',
                     text: 'Remove All',
-                    iconCls: 'fa fa-remove',
+                    iconCls: 'x-fa fa-remove',
                     handler: 'onRemoveAllActivityClick'
                 }]
 
@@ -557,41 +700,40 @@ Ext.define('Vega.view.sales.edit.FormController', {
             me.getView().up('viewer').up('maincontainerwrap').unmask();
         });
 
-        this.tna.show('', function(){
+        me.tna.show('', function(){
             me.getView().up('viewer').up('maincontainerwrap').mask();
         });
     },
 
     onAddAllMenuClick: function(menu, item, e){
+
         var me = this,
-            win = me.win,
-            style = win.getViewModel().get('theStyle'),
+            win = menu.up('window'),
+            style = win.getViewModel().get(win.reference == 'editWindow' ? 'theStyle' : 'otherStyle'),
+            store = me.getViewModel().getStore('tnaOrders');
 
-            store = Ext.create('Ext.data.Store', {
-                model: 'sales.TnaOrder',
-                autoLoad: true
-            });
-
-        store.load({
-            callback: function(){
-                store.filter({
-                    operator: "eq",
-                    value: item.type,
-                    property: "planId",
-                    type: "string"
-                });
-
-                //console.log(store, style);
-                if(style.tnaps().getCount() > 0){
-                    style.tnaps().removeAll();
-                }
-
-                store.each(function(r){
-                    var rec = r.copy();
-                    style.tnaps().add(rec.data);
-                });
+        //console.log(me.win, me.tna)
+        store.on('load', function(s){
+            //console.log(store, style);
+            if(style.tnaps().getCount() > 0){
+                style.tnaps().removeAll();
             }
-        })
+
+            store.sort('priority', 'ASC');
+
+            store.each(function(r){
+                style.tnaps().add(r.data);
+            });
+        }, this, {
+            single: true
+        });
+
+        store.filter({
+            operator: "eq",
+            value: item.type,
+            property: "roleId"
+        });
+
     },
 
     onGridWidgetClick: function(comp, rec){
@@ -633,32 +775,53 @@ Ext.define('Vega.view.sales.edit.FormController', {
 
     onAddActivityClick: function(btn){
         //var store = this.lookupReference('planactivities').getStore();
-        var store = btn.up('tna-grid').getStore();
+        var win = btn.up('window'),
+            style = win.getViewModel().get(win.reference == 'editWindow' ? 'theStyle' : 'otherStyle');
 
-        store.add({
-            priority: (store.getCount() + 1) * 10
+        style.tnaps().add({
+
         });
+
+        style.tnaps().each(function(rec,idx){
+            rec.set('priority', (idx+1) * 10);
+        })
     },
 
     onRemoveActivityClick: function(btn){
         var grid = btn.up('tna-grid'),
             //grid = this.lookupReference('planactivities'),
+            store = grid.getStore(),
             sm = grid.getSelectionModel(),
             selected = sm.getSelection();
 
         Ext.Array.each(selected, function(rec, index, self){
             rec.drop();
         })
+
+        store.each(function(rec,idx){
+            rec.set('priority', (idx+1) * 10);
+        })
     },
 
     onRemoveAllActivityClick: function(btn){
-        var grid = btn.up('tna-grid'),
-            //grid = this.lookupReference('planactivities'),
+        var grid = btn.up('tna-grid');
+
+        grid.getStore().removeAll();
+
+    },
+
+    onActivitySelect: function(combo, rec) {
+        //console.log('onActivitySelect')
+        var grid = combo.up('tna-grid'),
             sm = grid.getSelectionModel(),
             selected = sm.getSelection();
 
-        grid.getStore().removeAll();
+        Ext.Array.each(selected, function(record, index, self){
+            //console.log(record, rec)
+            record.set('descript', rec.data.text);
+        })
     },
+
 
     // Materials...
     onAddMaterialClick: function(btn){
@@ -670,6 +833,10 @@ Ext.define('Vega.view.sales.edit.FormController', {
         var rec = store.add({
             lineseq: store.getCount() + 1
         });
+
+        store.each(function(rec,idx){
+            rec.set('lineseq', idx + 1);
+        })
 
         var data = [];
         if(powd.get('mats') != undefined){
@@ -699,33 +866,23 @@ Ext.define('Vega.view.sales.edit.FormController', {
 
         selection.drop();
         //store.remove(selection);
-    },
-
-    onPositionChange: function(btn, active){
-        var tabpanel = this.lookupReference('panels');
-
-        tabpanel.setBind({
-            tabPosition: active.itemId
-        });
-    },
-
-    onTabChange: function(t, n, o, e){
-        var refs = this.getView().getReferences(),
-            btn = refs.groupCrud;
-
-        btn.setHidden(n.reference != 'merchandise')
+        store.each(function(rec, idx){
+            rec.set('lineseq', idx + 1);
+        })
     },
 
     onAddLogClick: function(btn){
         var me = this,
-            view = me.getView(),
-            vm = view.getViewModel(),
-            logview = this.lookupReference('logview'),
+            vm = me.getViewModel(),
+            powh = vm.get('header'),
+            logview = me.lookupReference('logview'),
             input = logview.down('textarea'),
             store = logview.down('dataview').getStore(),
             rec = new Ext.create('Vega.model.Powlog', {
-                powdId: 0,
                 powno: vm.get('header').data.powno,
+                powhId: vm.get('header').data.powhId,
+                powdId: 0,
+                //status: 'Open',
                 content: input.getValue(),
                 userId: Vega.user.data.Userid
             });
@@ -742,16 +899,29 @@ Ext.define('Vega.view.sales.edit.FormController', {
     },
 
     onRemoveLogClick: function(btn){
-        var dataview = this.lookupReference('logview').down('dataview'),
-            store = dataview.getStore();
+        var me = this,
+            vm = me.getViewModel(),
+            powh = vm.get('header'),
+            dataview = me.lookupReference('logview').down('dataview'),
+            store = dataview.getStore(),
+            rec = dataview.selection;
+        console.log(powh);
 
-        if(Vega.user.data.Userid === dataview.selection.data.userId){
-            store.remove(dataview.selection);
+        if(Vega.user.userOwn(rec.data.userId && rec.phantom)){
+            store.remove(rec);
         }
         else{
             Vega.util.Utils.showNotification("You can't delete this post.");
         }
 
+    },
+
+    onViewItemAdd: function(recs, idx, node, view){
+        //console.log('onViewItemAdd')
+    },
+
+    onViewItemRemove: function(recs, idx, item, view){
+        //console.log('onViewItemRemove')
     },
 
     onToogleAttach: function(btn, pressed){
@@ -769,7 +939,7 @@ Ext.define('Vega.view.sales.edit.FormController', {
                 //button.getEl().setCls('delete-focus-bg');
                 button.setHidden(!pressed);
             }
-            btn.setIconCls(pressed ? 'fa fa-toggle-on' : 'fa fa-toggle-off');
+            btn.setIconCls(pressed ? 'x-fa fa-toggle-on' : 'x-fa fa-toggle-off');
 
             var header = panel.getDockedItems('header[dock="left"]')[0];
             header.fireEvent('click', header);
@@ -838,7 +1008,7 @@ Ext.define('Vega.view.sales.edit.FormController', {
                                     powno: vm.get('header').data.powno,
                                     powhId: vm.get('header').data.powhId,
                                     powdId: 0,
-                                    status: 'open',
+                                    //status: 'Open',
                                     content: input.getValue(),
                                     userId: Vega.user.data.Userid
                                 });
@@ -918,7 +1088,7 @@ Ext.define('Vega.view.sales.edit.FormController', {
             session = vm.getSession(),
             changes = session.getChanges();
 
-        //console.log('onSave', action, changes);
+        //console.log('onSave', action, session, changes);
 
         /*
          if(refs.merchandise){
@@ -995,12 +1165,16 @@ Ext.define('Vega.view.sales.edit.FormController', {
                 rec.set('updatedby', Vega.user.data.Userid);
             }
 
-            if(Vega.user.inRole('sales')){
-
-            }
+            rec.powds().each(function(powd){
+                var sv = null;
+                if(typeof powd.data.status == 'boolean' && powd.data.status == true){
+                    sv = 'true';
+                }
+                powd.set('status', sv);
+            });
 
             var batch = session.getSaveBatch(),
-                field = view.lookupReference('attachments').down('multiupload').getDockedItems('toolbar[dock="top"] > uploadfiles')[0];
+                field = view.lookupReference('attachments').down('viewupload').fileUpload;
 
             //changes = session.getChanges();
             //console.log(changes, batch);
@@ -1008,7 +1182,6 @@ Ext.define('Vega.view.sales.edit.FormController', {
             me.processBatch(batch, field, {
                 url: '/api/Files/Powh/upload',
                 success: function(response){
-                    //console.log(response);
                     Ext.Msg.alert('Success', response);
                 },
                 failure: function(response) {
@@ -1103,76 +1276,117 @@ Ext.define('Vega.view.sales.edit.FormController', {
 
     processBatch: function(batch, field, options){
         var me = this,
+            vm = this.getViewModel(),
             view = me.getView(),
             viewer = view.up('viewer'),
             changes = view.getSession().getChanges();
 
-        var processMask = new Ext.LoadMask({
-            msg: 'Saving... Please wait',
-            target: viewer
-        });
-
         if(batch !== undefined){
+            var processMask = new Ext.LoadMask({
+                msg: 'Saving... Please wait',
+                target: viewer
+            });
+
             batch.on({
                 operationcomplete: function(batch, op){
-                    //console.log(op.getResultSet());
-                    var response = JSON.parse(op.getResponse().responseText);
-                    if(!Ext.isEmpty(response) && response.data.hasOwnProperty('powhId') && !response.data.hasOwnProperty('powdId')){
-                        if(field && field.getFilesQueue().length > 0){
-                            field.send(options, {
-                                Pow: JSON.stringify(response.data)
+                    //console.log(op, op.getResultSet(), field);
+                    var objResp = op.getResponse();
+
+                    if(!Ext.isEmpty(objResp)){
+                        var response = JSON.parse(objResp.responseText);
+                        //console.log(response, response.data.hasOwnProperty('powhId'), response.data.hasOwnProperty('powdId'))
+                        if(!Ext.isEmpty(response) && response.data.hasOwnProperty('powhId') && !response.data.hasOwnProperty('powdId')){
+                            var s = view.getViewModel().getStore('powlogs');
+
+                            s.each(function(r){
+                                r.set('powhId', response.data.powhId);
+                                r.set('powno', response.data.powno);
                             });
+
+                            s.sync({
+                                success: function (batch, options) {
+                                    // messageProperty accessing code
+                                },
+                                failure: function (batch, options) {
+
+                                },
+                                callback: function (records, operation, success) {
+                                    // messageProperty accessing code
+                                }
+                            });
+
+                            if(field && field.getFilesQueue().length > 0){
+                                field.send(options, {
+                                    Pow: JSON.stringify(response.data)
+                                });
+                            }
                         }
                     }
                 },
-                complete: function(batch, op){
-                    var response = JSON.parse(op.getResponse().responseText);
-                    //console.log(op.getResponse());
 
-                    var powhId = me.getViewModel().get('srcPowhId');
-                    if(Ext.isEmpty(id)){
-                        powhId =  me.getViewModel().get('header').id;
+                complete: function(batch, op){
+                    //console.log(op, op.getResponse());
+                    //refresh In-Review
+                    viewer.getViewModel().getStore(viewer.getXType() + 's').reload();
+
+                    var objResp = op.getResponse();
+                    if(!Ext.isEmpty(objResp)){
+                        var response = JSON.parse(objResp.responseText);
+                        /*
+                        if(!Ext.isEmpty(response) && response.data.hasOwnProperty('powhId') && !response.data.hasOwnProperty('powdId')){
+
+                        }
+                        */
+                    }
+
+                    var powhId = vm.get('srcPowhId');
+                    if(Ext.isEmpty(powhId)){
+                        powhId =  vm.get('header').id;
                     }
 
                     var tab = viewer.lookupReference(viewer.getXType() + '-' + powhId);
-
                     // refresh review tab...
                     if(tab){
                         /*
-                        var iframe = tab.getComponent('contentIframe');
-                        if(iframe){
-                            iframe.getEl().dom.contentWindow.location.reload();
-                        }
-                        */
+                         var iframe = tab.getComponent('contentIframe');
+                         if(iframe){
+                         iframe.getEl().dom.contentWindow.location.reload();
+                         }
+                         */
                         viewer.remove(tab);
                     }
-                    me.onClose();
 
-                    //refresh In-Review
-                    viewer.getViewModel().getStore(viewer.getXType() + 's').reload();
+                    me.onClose();
 
                     processMask.hide('', function() {
                         Ext.Msg.alert('Status', 'Changes saved successfully.');
                     });
-
                     /*
-                    new Ext.window.Window({
-                        autoShow: true,
-                        title: 'Session Changes',
-                        modal: true,
-                        width: 600,
-                        height: 400,
-                        layout: 'fit',
-                        items: {
-                            xtype: 'textarea',
-                            value: JSON.stringify(changes, null, 4)
-                        }
-                    });
-                    */
+                     new Ext.window.Window({
+                     autoShow: true,
+                     title: 'Session Changes',
+                     modal: true,
+                     width: 600,
+                     height: 400,
+                     layout: 'fit',
+                     items: {
+                     xtype: 'textarea',
+                     value: JSON.stringify(changes, null, 4)
+                     }
+                     });
+                     */
                 },
+
                 exception: function(batch, op){
                     processMask.hide('', function(){
-                        Ext.Msg.alert('Error', 'Error occurred');
+                        //Ext.Msg.alert('Error', 'Error occurred');
+                        var objResp = op.error.response;
+                        console.log(objResp)
+                        if(!Ext.isEmpty(objResp)){
+                            var response = JSON.parse(objResp.responseText);
+                            Ext.Msg.alert(objResp.statusText, objResp.responseText);
+                        }
+
                     });
                 }
             });
@@ -1202,6 +1416,7 @@ Ext.define('Vega.view.sales.edit.FormController', {
             Ext.Msg.alert('No Changes', 'There are no changes to the session.');
         }
         */
+
     },
 
     onClose: function(btn, e){

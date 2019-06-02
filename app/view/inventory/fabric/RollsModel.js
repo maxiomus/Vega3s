@@ -30,12 +30,11 @@ Ext.define('Vega.view.inventory.fabric.RollsModel', {
 
             remoteFilter: true
         },
+
         'rolls': {
             model: 'fabric.RollInfo',
 
             //storeId: 'Rolls',
-            //buffered: true,
-            //leadingBufferZone: 300,
             autoLoad: false,
 
             pageSize: 999999,
@@ -44,7 +43,7 @@ Ext.define('Vega.view.inventory.fabric.RollsModel', {
             autoSync: true,
             //
             remoteFilter: true,
-            remoteSort: true,
+            //remoteSort: true,
             //remoteGroup: true,
             // destroy the store if the grid is destroyed
             //sorters: {property: 'logdate', direction: 'DESC'},

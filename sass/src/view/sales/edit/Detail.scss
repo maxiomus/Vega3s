@@ -2,18 +2,22 @@
   visibility: hidden;
 }
 
-.tbcontainer {
+.detail-grid .tbcontainer {
   float: left;
-  margin: 0 25px 5px 25px;
+  margin: 0px 25px 5px 0px;
 }
 
-.tbrow  {
+.detail-grid .tbrow  {
   display: table-row;
 }
 
-.tbleft, .tbright, .tbmiddle {
+.detail-grid .tbleft {
   display: table-cell;
   height: 140px;
+}
+
+.detail-grid .tbright, .tbmiddle {
+
 }
 
 /*

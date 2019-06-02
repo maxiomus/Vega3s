@@ -234,7 +234,8 @@ Ext.define('Vega.model.Style', {
         { name: 'do_not_invoice' },
         { name: 'cost_cur_cs', type: 'number' },
         { name: 'price_ddp', type: 'number' },
-        { name: 'nafta' }
+        { name: 'nafta' },
+        { name: 'userId', type: 'string', mapping: 'userName', persist: false}
     ]
 
     //idProperty: 'PID'

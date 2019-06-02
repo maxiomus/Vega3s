@@ -33,7 +33,7 @@ Ext.define("Vega.view.inventory.fabric.panel.Requirements", {
         align: "center",
         filter: { type: "string" },
         summaryRenderer: function (f, e, d) {
-            return "Total:"
+            return "Total:";
         }
     },
     {
@@ -65,9 +65,9 @@ Ext.define("Vega.view.inventory.fabric.panel.Requirements", {
         renderer: Ext.util.Format.numberRenderer("0,0.00"),
         summaryType: "sum",
         summaryRenderer: function (f, e, d) {
-            return Ext.util.Format.number(f, "0,0.00")
+            return Ext.util.Format.number(f, "0,0.00");
         },
-        filter: { type: "float"}
+        filter: { type: "number"}
     },
     {
         text: "Req. Qty",
@@ -77,9 +77,9 @@ Ext.define("Vega.view.inventory.fabric.panel.Requirements", {
         renderer: Ext.util.Format.numberRenderer("0,0.00"),
         summaryType: "sum",
         summaryRenderer: function (f, e, d) {
-            return Ext.util.Format.number(f, "0,0.00")
+            return Ext.util.Format.number(f, "0,0.00");
         },
-        filter: { type: "float"}
+        filter: { type: "number"}
     },
     {
         text: "Alloc. Qty",
@@ -89,9 +89,9 @@ Ext.define("Vega.view.inventory.fabric.panel.Requirements", {
         renderer: Ext.util.Format.numberRenderer("0,0.00"),
         summaryType: "sum",
         summaryRenderer: function (f, e, d) {
-            return Ext.util.Format.number(f, "0,0.00")
+            return Ext.util.Format.number(f, "0,0.00");
         },
-        filter: { type: "float"}
+        filter: { type: "number"}
     },
     {
         text: "Alloc. Bal",
@@ -101,9 +101,9 @@ Ext.define("Vega.view.inventory.fabric.panel.Requirements", {
         renderer: Ext.util.Format.numberRenderer("0,0.00"),
         summaryType: "sum",
         summaryRenderer: function (f, e, d) {
-            return Ext.util.Format.number(f, "0,0.00")
+            return Ext.util.Format.number(f, "0,0.00");
         },
-        filter: { type: "float"}
+        filter: { type: "number"}
     },
     {
         text: "Used Qty",
@@ -111,7 +111,7 @@ Ext.define("Vega.view.inventory.fabric.panel.Requirements", {
         width: 100,
         align: "center",
         renderer: Ext.util.Format.numberRenderer("0,0.00"),
-        filter: { type: "float"}
+        filter: { type: "number"}
     },
     {
         text: "Used Bal",
@@ -121,9 +121,9 @@ Ext.define("Vega.view.inventory.fabric.panel.Requirements", {
         renderer: Ext.util.Format.numberRenderer("0,0.00"),
         summaryType: "sum",
         summaryRenderer: function (f, e, d) {
-            return Ext.util.Format.number(f, "0,0.00")
+            return Ext.util.Format.number(f, "0,0.00");
         },
-        filter: { type: "float"}
+        filter: { type: "number"}
     },
     {
         text: "On-Hand",
@@ -133,9 +133,9 @@ Ext.define("Vega.view.inventory.fabric.panel.Requirements", {
         renderer: Ext.util.Format.numberRenderer("0,0.00"),
         summaryType: "sum",
         summaryRenderer: function (f, e, d) {
-            return Ext.util.Format.number(f, "0,0.00")
+            return Ext.util.Format.number(f, "0,0.00");
         },
-        filter: { type: "float"}
+        filter: { type: "number"}
     },
     {
         text: "UOM",
@@ -180,7 +180,7 @@ Ext.define("Vega.view.inventory.fabric.panel.Requirements", {
         dataIndex: "pono",
         width: 80,
         align: "center",
-        filter: { type: "int"}
+        filter: { type: "number"}
     },
     {
         text: "podId",
@@ -188,7 +188,7 @@ Ext.define("Vega.view.inventory.fabric.panel.Requirements", {
         width: 100,
         align: "center",
         hidden: true,
-        filter: { type: "int"}
+        filter: { type: "number"}
     },
     {
         text: "price",
@@ -196,7 +196,7 @@ Ext.define("Vega.view.inventory.fabric.panel.Requirements", {
         width: 100,
         align: "center",
         renderer: Ext.util.Format.usMoney,
-        filter: { type: "float"}
+        filter: { type: "number"}
     },
     {
         text: "poclId",
@@ -204,7 +204,7 @@ Ext.define("Vega.view.inventory.fabric.panel.Requirements", {
         width: 100,
         align: "center",
         hidden: true,
-        filter: { type: "int"}
+        filter: { type: "number"}
     },
     {
         text: "userName",
@@ -236,4 +236,3 @@ Ext.define("Vega.view.inventory.fabric.panel.Requirements", {
         this.callParent(arguments);
     }
 });
-

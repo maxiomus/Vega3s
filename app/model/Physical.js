@@ -22,6 +22,10 @@ Ext.define('Vega.model.Physical', {
         { name: 'user1', type: 'string' },
         { name: 'user2', type: 'string' },
         { name: 'user3', type: 'string' },
-        { name: 'user4', type: 'string' }
-    ]
+        { name: 'user4', type: 'string' },
+        { name: 'userId', type: 'string', mapping: 'createUser', persist: false}
+    ],
+
+    idProperty: 'pino',
+    identifier: 'negative'
 });

@@ -1,14 +1,19 @@
 Ext.define('Vega.view.sales.edit.Window', {
     extend: 'Ext.window.Window',
 
+    /**
+     * c is not a constructor... error after compiles
+     * Proper classes needs @ requires
+     */
     requires: [
         //'Vega.model.Powm',
         'Vega.model.sales.File',
         'Ext.grid.plugin.RowEditing',
-        //'Ext.data.validator.Presence',
-        //'Ext.data.validator.Range',
-        'Ext.data.proxy.Memory',
-        'Ext.ux.form.field.MemoryCombo'
+        'Ext.data.validator.Validator',
+        'Ext.data.validator.Presence',
+        'Ext.data.validator.Range',
+        'Ext.data.validator.Length',
+        'Ext.data.proxy.Memory'
     ],
 
     alias: 'widget.edit-window',
@@ -27,7 +32,6 @@ Ext.define('Vega.view.sales.edit.Window', {
     //minWidth: 480,
     //minHeight: 320,
 
-    layout: 'fit',
     //modal: true,
     monitorResize: true,
     maximizable: true,
@@ -184,6 +188,7 @@ Ext.define('Vega.view.sales.edit.Window', {
         //vendorStore = Ext.create('Vega.store.Vendors'),
         //var compStore = me.up('form').getViewModel().getStore('components'),
 
+        /*
         var memStyles = Ext.create('Ext.data.Store', {
             pageSize: 50,
             remoteFilter: true,
@@ -335,11 +340,13 @@ Ext.define('Vega.view.sales.edit.Window', {
                 }
             }
         });
+        */
 
         //var compStore = Ext.create('Vega.store.Components'),
         //    compProxyUrl = compStore.getProxy().getUrl();
 
-        console.log('padding')
+        //Ext.getStore('memComponents').clearFilter();
+
         Ext.applyIf(me, {
             items: [{
                 xtype: 'form',
@@ -416,7 +423,7 @@ Ext.define('Vega.view.sales.edit.Window', {
                                     padding: '0 0 1 0'
                                 },
                                 items: [{
-                                    xtype: "memorycombo",
+                                    xtype: "combo",
                                     name: 'style',
                                     reference: 'style',
                                     //itemId: "cboPrint",
@@ -428,7 +435,8 @@ Ext.define('Vega.view.sales.edit.Window', {
                                     bind: {
                                         value: '{theStyle.style}'
                                     },
-                                    store: memStyles,
+                                    store: 'memStyles',
+                                    remoteStore: 'Styles',
                                     valueField: 'id',
                                     displayField: 'id',
                                     //forceSelection: false,
@@ -441,8 +449,8 @@ Ext.define('Vega.view.sales.edit.Window', {
                                     queryMode: "local",
                                     //queryParam: "filter",
                                     //queryDelay: 800,
-                                    //triggerAction: 'last',
-                                    lastQuery: '',
+                                    //triggerAction: 'all',
+                                    //lastQuery: '',
                                     listConfig: {
                                         loadindText: 'Searching...',
                                         emptyText: 'No matching items found.',
@@ -458,26 +466,28 @@ Ext.define('Vega.view.sales.edit.Window', {
                                             }
                                         },
                                         select: function(combo, record, e){
-                                            var colorCombo = combo.ownerCt.lookupReference('stylecolor'),
-                                                colorStore = colorCombo.getStore();
+                                            var cboColor = combo.ownerCt.down('combo[name="stylecolor"]'),
+                                                store = cboColor.getStore();
 
-                                            Ext.apply(colorStore.getProxy().extraParams, {
-                                                style: combo.getValue().trim()
-                                            });
+                                            store.clearFilter();
 
-                                            colorStore.reload({
-                                                callback: function(){
-                                                    colorCombo.select(colorStore.first());
-                                                    //colorCombo.fireEvent('select', combo, [store.first()]);
-                                                }
-                                            });
+                                            if(!Ext.isEmpty(combo.getValue())){
+
+                                                store.filter([{
+                                                    property: 'text',
+                                                    value: combo.getValue().toUpperCase(),
+                                                    operator: '='
+                                                }]);
+
+                                                cboColor.select(store.first());
+                                            }
                                         }
                                     }
                                 },{
                                     xtype: 'box',
                                     width: 10
                                 },{
-                                    xtype: "memorycombo",
+                                    xtype: "combo",
                                     name: 'stylecolor',
                                     reference: 'stylecolor',
                                     //itemId: "cboPrint",
@@ -488,9 +498,10 @@ Ext.define('Vega.view.sales.edit.Window', {
                                     bind: {
                                         value: '{theStyle.color}'
                                     },
-                                    store: memStColors,
-                                    valueField: "id",
-                                    displayField: "id",
+                                    store: 'memStColors',
+                                    remoteStore: 'stColors',
+                                    valueField: "label",
+                                    displayField: "label",
                                     //forceSelection: false,
                                     //selectOnFocus: true,
                                     pageSize: 50,
@@ -576,7 +587,7 @@ Ext.define('Vega.view.sales.edit.Window', {
                                         padding: '0 0 1 0'
                                     },
                                     items: [{
-                                        xtype: "memorycombo",
+                                        xtype: "combo",
                                         name: 'body',
                                         //itemId: "Body",
                                         fieldLabel: 'Pattern #',
@@ -586,7 +597,8 @@ Ext.define('Vega.view.sales.edit.Window', {
                                         bind: {
                                             value: '{theStyle.bodyref}'
                                         },
-                                        store: memBodies,
+                                        store: 'memBodies',
+                                        remoteStore: 'Bodies',
                                         valueField: "id",
                                         displayField: "id",
                                         //forceSelection: false,
@@ -608,6 +620,16 @@ Ext.define('Vega.view.sales.edit.Window', {
                                             ptype: "cleartrigger"
                                         }],
                                         listeners: {
+                                            triggerClear: function(combo){
+                                                var record = me.getViewModel().get('theStyle');
+
+                                                if(!Ext.isEmpty(record.data.bodyimgsrc)){
+                                                    record.set('bodyimgsrc', '')
+                                                }
+                                                if(!Ext.isEmpty(record.data.bodyimg)){
+                                                    record.set('bodyimg', '')
+                                                }
+                                            },
                                             select: {
                                                 fn: function (combo, rec, eOpts) {
                                                     me.getImageSrc(combo, 'body');
@@ -652,23 +674,32 @@ Ext.define('Vega.view.sales.edit.Window', {
                                         labelAlign: 'top'
                                     },
                                     items: [{
+                                        xtype: 'numberfield',
                                         fieldLabel: 'Cost',
-                                        hideLabel: false,
+                                        minValue: 0, //prevents negative numbers
+                                        // Remove spinner buttons, and arrow key and mouse wheel listeners
+                                        hideTrigger: true,
                                         name: 'cost',
                                         bind: '{theStyle.cost}'
                                     },{
+                                        xtype: 'numberfield',
                                         fieldLabel: 'Selling Price',
-                                        hideLabel: false,
+                                        minValue: 0,
+                                        hideTrigger: true,
                                         name: 'price',
                                         bind: '{theStyle.price}'
                                     },{
+                                        xtype: 'numberfield',
                                         fieldLabel: 'MSRP',
-                                        hideLabel: false,
+                                        minValue: 0,
+                                        hideTrigger: true,
                                         name: 'msrp',
                                         bind: '{theStyle.msrp}'
                                     },{
+                                        xtype: 'numberfield',
                                         fieldLabel: 'Units',
-                                        hideLabel: false,
+                                        minValue: 0,
+                                        hideTrigger: true,
                                         name: 'units',
                                         bind: '{theStyle.units}'
                                     },{
@@ -681,10 +712,15 @@ Ext.define('Vega.view.sales.edit.Window', {
                                         valueField: 'text',
                                         editable: false,
                                         //triggerAction: 'all',
+                                        autoLoadOnValue: true,
+                                        queryMode: 'local',
                                         bind: {
                                             store: '{factories}',
                                             value: '{theStyle.factory}'
-                                        }
+                                        },
+                                        plugins: [{
+                                            ptype: "cleartrigger"
+                                        }]
                                     },{
                                         xtype: 'checkbox',
                                         name: 'status',
@@ -747,7 +783,7 @@ Ext.define('Vega.view.sales.edit.Window', {
                                             xtype: 'button',
                                             text: 'Add',
                                             width: 70,
-                                            iconCls: 'fa fa-plus',
+                                            iconCls: 'x-fa fa-plus',
                                             handler: 'onAddMaterialClick'
                                         }, {
                                             xtype: 'tbspacer',
@@ -755,7 +791,7 @@ Ext.define('Vega.view.sales.edit.Window', {
                                         }, {
                                             xtype: 'button',
                                             text: 'Remove',
-                                            iconCls: 'fa fa-remove',
+                                            iconCls: 'x-fa fa-remove',
                                             bind: {
                                                 disabled: '{!materials.selection}'
                                             },
@@ -838,7 +874,7 @@ Ext.define('Vega.view.sales.edit.Window', {
                                         plugins: [{
                                             ddGroup: 'mat-group',
                                             ptype: 'gridviewdragdrop',
-                                            enableDrop: true,
+                                            //enableDrop: true,
                                             dragText: 'Drag and drop to reorganize'
                                         }],
                                         listeners: {
@@ -891,15 +927,15 @@ Ext.define('Vega.view.sales.edit.Window', {
                                                 }
 
                                                 //editForm.setVisible(true);
-                                                vendorCombo.setVisible(isStone);
-                                                costCombo.setVisible(isStone);
                                                 codeCombo.setVisible(!isStone);
                                                 colorCombo.setVisible(!isStone);
+                                                vendorCombo.setVisible(isStone);
+                                                costCombo.setVisible(isStone);
                                             }
                                         }
                                     }
                                 },{
-                                    iconCls: 'fa fa-edit fa-lg',
+                                    iconCls: 'x-fa fa-edit fa-lg',
                                     header: {
                                         title: 'Edit:',
                                         height: 44
@@ -923,31 +959,32 @@ Ext.define('Vega.view.sales.edit.Window', {
                                         name: 'matcategory',
                                         reference: 'material_category',
                                         //itemId: "cboPrint",
-                                        fieldLabel: "",
+                                        //fieldLabel: "",
                                         hideEmptyLabel: false,
                                         //labelWidth: 50,
                                         //width: 160,
-                                        hideTrigger: true,
+                                        //hideTrigger: true,
+                                        allowBlank: false,
+                                        editable: false,
                                         bind: {
-                                            store: '{categories}',
+                                            store: '{subcategories}',
                                             value: '{materials.selection.matcategory}',
                                             disabled: '{!materials.selection}'
                                         },
-                                        //store: categoryStore,
                                         publishes: 'value',
-                                        valueField: 'name',
-                                        displayField: 'name',
+                                        valueField: 'text',
+                                        displayField: 'text',
                                         //forceSelection: true,
                                         //selectOnFocus: true,
-                                        editable: false,
-                                        //queryMode: "remote",
+                                        autoLoadOnValue: true,
+                                        queryMode: 'local',
                                         //queryParam: "filter",
                                         //triggerAction: 'last',
                                         //minChars: 1,
                                         listConfig: {
                                             loadindText: 'Searching...',
                                             emptyText: 'No matching items found.',
-                                            width: 340
+                                            width: 320
                                         },
                                         plugins: [{
                                             ptype: "cleartrigger"
@@ -980,7 +1017,7 @@ Ext.define('Vega.view.sales.edit.Window', {
                                             value: '{materials.selection.mattype}'
                                         }
                                     },{
-                                        xtype: "memorycombo",
+                                        xtype: "combo",
                                         name: 'matcode',
                                         reference: 'material_code',
                                         //itemId: "Prints",
@@ -988,7 +1025,7 @@ Ext.define('Vega.view.sales.edit.Window', {
                                         //labelWidth: 50,
                                         //width: 160,
                                         //autoSelect: false,
-                                        hideTrigger: true,
+                                        //hideTrigger: true,
                                         //publishes: 'value',
                                         valueField: 'label',
                                         displayField: 'label',
@@ -997,7 +1034,9 @@ Ext.define('Vega.view.sales.edit.Window', {
                                             value: '{materials.selection.matcode}',
                                             disabled: '{!materials.selection}'
                                         },
-                                        store: memMaterials,
+                                        store: 'memComponents',
+                                        remoteStore: 'Components',
+                                        matchFieldWidth: false,
                                         autoLoadOnValue: true,
                                         //forceSelection: false,
                                         //selectOnFocus: true,
@@ -1020,20 +1059,41 @@ Ext.define('Vega.view.sales.edit.Window', {
                                                 if(combo.isExpanded){
                                                     combo.collapse();
                                                 }
-                                                var cboColor = this.ownerCt.ownerCt.query('combo[name="matcolor"]')[0],
+                                                var cboCategory = this.ownerCt.ownerCt.query('combo[name="matcategory"]')[0],
+                                                    cboColor = this.ownerCt.ownerCt.query('combo[name="matcolor"]')[0],
                                                     txtDesc = this.ownerCt.ownerCt.query('textfield[name="matdesc"]')[0];
 
                                                 cboColor.getStore().clearFilter();
                                                 cboColor.setValue('');
                                                 txtDesc.setValue('');
-                                            },
-                                            /*
-                                            beforequery: {
-                                                fn: function(qe){
-                                                    delete qe.combo.lastQuery;
+
+                                                if(cboCategory.getValue() === 'PRINTS'){
+                                                    var record = me.getViewModel().get('theStyle');
+
+                                                    if(!Ext.isEmpty(record.data.printimgsrc)){
+                                                        record.set('printimgsrc', '')
+                                                    }
+                                                    if(!Ext.isEmpty(record.data.printimg)){
+                                                        record.set('printimg', '')
+                                                    }
                                                 }
                                             },
-                                            */
+                                            beforequery: {
+                                                fn: function(qe){
+                                                    //delete qe.combo.lastQuery;
+                                                    var txtType = qe.combo.ownerCt.query('textfield[name="mattype"]')[0],
+                                                        store = qe.combo.getStore();
+
+                                                    store.clearFilter();
+                                                    if(!Ext.isEmpty(txtType.getValue())){
+                                                        store.filter([{
+                                                            property: 'text',
+                                                            value: txtType.getValue().trim(),
+                                                            operator: '='
+                                                        }]);
+                                                    }
+                                                }
+                                            },
                                             select: {
                                                 fn: function(combo, rec, e){
 
@@ -1044,11 +1104,12 @@ Ext.define('Vega.view.sales.edit.Window', {
                                                     if(!Ext.isEmpty(combo.getValue())){
 
                                                         store.filter([{
-                                                            property: 'descript',
-                                                            value: combo.getValue().toUpperCase(),
+                                                            property: 'text',
+                                                            value: combo.getValue().trim(),
                                                             operator: '='
                                                         }]);
 
+                                                        console.log(store)
                                                         cboColor.select(store.first());
                                                         cboColor.fireEvent('select', combo, [store.first()]);
                                                     }
@@ -1066,7 +1127,7 @@ Ext.define('Vega.view.sales.edit.Window', {
                                                         }
                                                     });
                                                     */
-                                                    if(rec.data.text === 'PRINTS'){
+                                                    if(rec.data.text === 'PRINTS' || rec.data.text === 'SUBLIMATION PAPER' || rec.data.text === 'EMBROIDERY'){
                                                         me.getImageSrc(combo, 'prints');
                                                     }
 
@@ -1074,25 +1135,27 @@ Ext.define('Vega.view.sales.edit.Window', {
                                             }
                                         }
                                     },{
-                                        xtype: "memorycombo",
+                                        xtype: "combo",
                                         name: 'matcolor',
                                         //itemId: "cboColor",
                                         fieldLabel: "Color",
                                         //labelWidth: 50,
                                         //width: 160,
                                         //autoSelect: false,
-                                        hideTrigger: true,
+                                        //hideTrigger: true,
                                         bind: {
                                             value: '{materials.selection.matcolor}',
                                             disabled: '{!materials.selection}'
                                         },
-                                        store: memColors,
                                         valueField: 'label',
                                         displayField: 'label',
+                                        matchFieldWidth: false,
                                         //forceSelection: false,
                                         //selectOnFocus: true,
                                         pageSize: 50,
-                                        minChars: 0,
+                                        //minChars: 0,
+                                        store: 'memRawColors',
+                                        remoteStore: 'rawColors',
                                         queryMode: "local",
                                         //queryParam: "filter",
                                         //triggerAction: 'last',
@@ -1121,8 +1184,8 @@ Ext.define('Vega.view.sales.edit.Window', {
                                                         store.clearFilter();
 
                                                         store.filter([{
-                                                            property: 'descript',
-                                                            value: cboCode.getValue().toUpperCase(),
+                                                            property: 'text',
+                                                            value: cboCode.getValue().trim(),
                                                             operator: '='
                                                         }]);
                                                     }
@@ -1132,10 +1195,10 @@ Ext.define('Vega.view.sales.edit.Window', {
                                             select: {
                                                 fn: function(combo, record, e){
                                                     // Error
-                                                    //console.log('color select', this.getSelection());
+                                                    //console.log('color select', this, record);
                                                     var me = this,
                                                         txtDesc = me.ownerCt.ownerCt.query('textfield[name="matdesc"]')[0];
-                                                    txtDesc.setValue(me.getSelection().data.text);
+                                                    txtDesc.setValue(me.getSelection().data.descript.split('(#)')[0]);
                                                 },
                                                 buffer: 10
                                             },
@@ -1159,22 +1222,25 @@ Ext.define('Vega.view.sales.edit.Window', {
                                         //labelWidth: 50,
                                         //width: 160,
                                         hidden: true,
-                                        hideTrigger: true,
+                                        //hideTrigger: true,
                                         bind: {
-                                            store: '{vendors}',
+                                            //store: '{vendors}',
                                             value: '{materials.selection.matvendor}',
                                             disabled: '{!materials.selection}'
                                         },
-                                        //store: vendorStore,
+                                        store: 'Vendors',
+                                        pageSize: 50,
                                         valueField: "id",
                                         displayField: "id",
-                                        //forceSelection: false,
+                                        matchFieldWidth: false,
+                                        //forceSelection: true,
                                         //selectOnFocus: true,
+                                        autoLoadOnValue: true,
                                         queryMode: 'local',
                                         //queryParam: "filter",
                                         //triggerAction: 'all',
                                         //lastQuery: '',
-                                        minChars: 0,
+                                        //minChars: 0,
                                         listConfig: {
                                             loadindText: 'Searching...',
                                             emptyText: 'No matching items found.',
@@ -1184,9 +1250,11 @@ Ext.define('Vega.view.sales.edit.Window', {
                                             ptype: "cleartrigger"
                                         }]
                                     },{
-                                        xtype: 'textfield',
+                                        xtype: 'numberfield',
                                         name: 'matcost',
                                         fieldLabel: 'Cost',
+                                        minValue: 0,
+                                        hideTrigger: true,
                                         hidden: true,
                                         bind: {
                                             value: '{materials.selection.matcost}',
@@ -1268,31 +1336,29 @@ Ext.define('Vega.view.sales.edit.Window', {
                         reference: 'planactivities',
                         title: 'T & A',
                         bind: '{theStyle.tnaps}',
-                        layout: {
-                            type: 'fit'
-                        },
+
                         tbar: [{
                             xtype: 'button',
                             text: 'Add',
                             width: 70,
-                            iconCls: 'fa fa-plus',
+                            iconCls: 'x-fa fa-plus',
                             handler: 'onAddActivityClick'
                         },{
                             xtype: "button",
                             //ui: "default",
                             text: 'Add All',
-                            iconCls: "fa fa-gear",
+                            iconCls: "x-fa fa-gear",
                             //scope: this.controller,
                             menu: {
                                 items: [{
                                     text: "T&A - A",
-                                    iconCls: "fa fa-gear",
-                                    type: '1',
+                                    iconCls: "x-fa fa-gear",
+                                    type: 1,
                                     itemId: "a"
                                 },{
                                     text: "T&A - B",
-                                    iconCls: "fa fa-gear",
-                                    type: '2',
+                                    iconCls: "x-fa fa-gear",
+                                    type: 2,
                                     itemId: "b"
                                 }],
                                 listeners: {
@@ -1304,7 +1370,7 @@ Ext.define('Vega.view.sales.edit.Window', {
                         },{
                             xtype: 'button',
                             text: 'Remove',
-                            iconCls: 'fa fa-remove',
+                            iconCls: 'x-fa fa-remove',
                             bind: {
                                 disabled: '{!planactivities.selection}'
                             },
@@ -1312,7 +1378,7 @@ Ext.define('Vega.view.sales.edit.Window', {
                         },{
                             xtype: 'button',
                             text: 'Remove All',
-                            iconCls: 'fa fa-remove',
+                            iconCls: 'x-fa fa-remove',
                             handler: 'onRemoveAllActivityClick'
                         }]
 
@@ -1328,7 +1394,7 @@ Ext.define('Vega.view.sales.edit.Window', {
     },
 
     renderDesc: function(value, metaData, record){
-        var stRight = record.get('matcode') + '-' + record.get('matcolor'),
+        var stRight = record.get('matcode') + ' ' + record.get('matcolor'),
             stLeft = record.get('matdesc');
 
         if (record.get('mattype') === 'STONE'){
@@ -1382,7 +1448,7 @@ Ext.define('Vega.view.sales.edit.Window', {
                 }
             },
             failure: function(response, opts){
-                Ext.Msg.alert(response.status.toString(), response.statusText + ', an error occurred during your request. Please try again.' );
+                Ext.Msg.alert(response.statusText, response.status + ' - ' + response.responseText );
             },
             callback: function(response, opts){
 

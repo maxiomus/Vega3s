@@ -3,7 +3,8 @@
  */
 
 Ext.define("Ext.ux.form.plugin.ClearTrigger", {
-    extend: 'Ext.AbstractPlugin',
+    //extend: 'Ext.AbstractPlugin',
+    extend: 'Ext.plugin.Abstract',
 
     alias: "plugin.cleartrigger",
 

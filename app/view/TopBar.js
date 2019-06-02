@@ -16,15 +16,27 @@ Ext.define('Vega.view.TopBar', {
     width: "100%",
     enableOverflow: true,
 
-    initComponent: function(){
+    initComponent: function(c){
         var me = this;
 
+        me.actClear = Ext.create('Ext.Action', {
+            tooltip: 'Clear All Filters',
+            ui: 'bootstrap-btn-default',
+            reference: 'clear',
+            cls: 'delete-focus-bg',
+            iconCls: 'fa fa-filter-clear',
+            hidden: true,
+            handler: function(a){
+                this.fireEvent('clearall',this,a);
+            },
+            scope: this
+        }),
         me.actNew = Ext.create('Ext.Action', {
             text: "New",
             tooltip: "New",
             ui: "default",
             //reference: 'new',
-            iconCls: "fa fa-plus-circle",
+            iconCls: "x-fa fa-plus-circle",
             hidden: true,
             handler: function(item, e){
                 this.fireEvent("actnew", this, item);
@@ -36,7 +48,7 @@ Ext.define('Vega.view.TopBar', {
             tooltip: 'Edit',
             ui: 'default',
             //reference: 'edit',
-            iconCls: 'fa fa-edit',
+            iconCls: 'x-fa fa-edit',
             hidden: true,
             handler: function(item, e){
                 this.fireEvent("actedit", this, item);
@@ -48,7 +60,7 @@ Ext.define('Vega.view.TopBar', {
             tooltip: "Delete",
             ui: "default",
             //reference: 'delete',
-            iconCls: "fa fa-minus-circle",
+            iconCls: "x-fa fa-minus-circle",
             hidden: true,
             //disabled: true,
             handler: function(item, e){
@@ -61,19 +73,10 @@ Ext.define('Vega.view.TopBar', {
             tooltip: "Save",
             ui: "default",
             //reference: 'save',
-            iconCls: "fa fa-save",
+            iconCls: "x-fa fa-save",
             hidden: true,
             handler: function(item, e){
                 this.fireEvent("actsave", this, item);
-            },
-            scope: this
-        }),
-        me.actView = Ext.create('Ext.Action', {
-            text: 'View',
-            tooltop: 'View',
-            iconCls: 'fa fa-file-o',
-            handler: function(item, e){
-                this.fireEvent("actview", this, item);
             },
             scope: this
         }),
@@ -82,10 +85,19 @@ Ext.define('Vega.view.TopBar', {
             tooltip: "Refresh",
             ui: "default",
             //reference: 'refresh',
-            iconCls: "fa fa-refresh",
+            iconCls: "x-fa fa-refresh",
             hidden: false,
             handler: function(item, e){
                 this.fireEvent("actrefresh", this, item);
+            },
+            scope: this
+        }),
+        me.actView = Ext.create('Ext.Action', {
+            text: 'View',
+            tooltop: 'View',
+            iconCls: 'x-fa fa-file-o',
+            handler: function(item, e){
+                this.fireEvent("actview", this, item);
             },
             scope: this
         }),
@@ -95,7 +107,7 @@ Ext.define('Vega.view.TopBar', {
             ui: 'default',
             //reference: 'edit',
             hidden: true,
-            iconCls: 'fa fa-copy',
+            iconCls: 'x-fa fa-copy',
             handler: function(item, e){
                 this.fireEvent("actcopy", this, item);
             },
@@ -106,7 +118,7 @@ Ext.define('Vega.view.TopBar', {
             tooltip: "Mark Complete",
             ui: "default",
             //reference: 'refresh',
-            iconCls: "fa fa-check-square-o",
+            iconCls: "x-fa fa-check-square-o",
             hidden: true,
             handler: function(item, e){
                 this.fireEvent("actcomplete", this, item);
@@ -118,7 +130,7 @@ Ext.define('Vega.view.TopBar', {
             tooltip: "Mark Active",
             ui: "default",
             //reference: 'refresh',
-            iconCls: "fa fa-pencil-square-o",
+            iconCls: "x-fa fa-pencil-square-o",
             hidden: true,
             handler: function(item, e){
                 this.fireEvent("actactive", this, item);
@@ -126,20 +138,16 @@ Ext.define('Vega.view.TopBar', {
             scope: this
         });
 
-        Ext.applyIf(me,{
-            items:[{
-                tooltip: 'Clear All Filters',
-                ui: 'bootstrap-btn-default',
-                reference: 'clear',
-                cls: 'delete-focus-bg',
-                iconCls: 'fa fa-filter-clear',
-                hidden: true,
-                scope: this,
-                handler: function(a){
-                    this.fireEvent('clearall',this,a)
-                }
-            },
-            me.actNew, me.actEdit, me.actSave ,me.actDelete, me.actRefresh, "-",
+        me.items = this.buildItems();
+
+        me.callParent(arguments);
+    },
+
+    buildItems: function(){
+        var me = this;
+
+        return [
+            me.actClear, me.actNew, me.actEdit, me.actSave ,me.actDelete, me.actRefresh, "-",
             {
                 xtype: "cycle",
                 text: "Reading Pane",
@@ -153,22 +161,22 @@ Ext.define('Vega.view.TopBar', {
                 scope: this,
                 menu: {
                     items:[{
-                        text: "Bottom",
-                        iconCls: "fa fa-columns"
-                    },{
                         text: "Right",
-                        iconCls: "fa fa-columns"
+                        iconCls: "x-fa fa-columns"
+                    },{
+                        text: "Bottom",
+                        iconCls: "x-fa fa-columns"
                     },{
                         text: "Hide",
                         checked:true,
-                        iconCls: "fa fa-columns"
+                        iconCls: "x-fa fa-columns"
                     }]
                 }
             },{
                 text: "Summary",
                 tooltip: "Summary",
                 ui: "default",
-                iconCls: "fa fa-compress",
+                iconCls: "x-fa fa-compress",
                 enableToggle: true,
                 pressed: true,
                 hidden: true,
@@ -200,12 +208,19 @@ Ext.define('Vega.view.TopBar', {
                 }],
 
                 listeners:{
-                    toggle: "onBtnToggle"
+                    toggle: "onBtnToggle",
+                    scope: this
                 }
-            }]
-        });
+            }];
+    },
 
-        me.callParent(arguments);
+    onBtnToggle: function(f, j, i){
+        var h = Ext.util.History.getToken(),
+            g = h ? h.split("/") : [];
+
+        g[1] = j.viewMode;
+
+        this.getController().redirectTo(g.join("/"));
     },
 
     onSummaryToggle:function(j,h){
@@ -213,7 +228,7 @@ Ext.define('Vega.view.TopBar', {
             g=i.up("multiview"),
             f=g.lookupReference("grid");
 
-        f.getView().getPlugin("preview").toggleExpanded(h)
+        f.getView().getPlugin("preview").toggleExpanded(h);
     },
 
     readingPaneChange:function(g,i){
@@ -221,7 +236,7 @@ Ext.define('Vega.view.TopBar', {
             h=l.up("multiview"),
             j=h.lookupReference("preview");
 
-        var k=(i.text!="Bottom")?"east" : "south";
+        var k=(i.text!="Bottom") ? "east" : "south";
         switch(i.text){
             case"Bottom":j.setRegion(k);
                 j.show();
@@ -231,9 +246,8 @@ Ext.define('Vega.view.TopBar', {
                 break;
             default:
                 j.hide();
-                j.down('display').removeAll();
-                break
+                //j.down('display').removeAll();
+                break;
         }
     }
 });
-

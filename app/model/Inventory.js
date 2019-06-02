@@ -137,7 +137,8 @@ Ext.define('Vega.model.Inventory', {
         { name: 'Bomid', type: 'int' },
         { name: 'Out_allocno', type: 'int' },
         { name: 'yard_base', type: 'auto' },
-        { name: 'receiving_loc', type: 'auto' }
+        { name: 'receiving_loc', type: 'auto' },
+        { name: 'userId', type: 'string', mapping: 'userName', persist: false}
     ],
 
     idProperty: 'inventoryId',

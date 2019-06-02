@@ -236,6 +236,8 @@ Ext.define('Ext.ux.form.ImageUpload', {
         me.attachImage(files);
 
         this.removeCls('drag-over');
+
+        this.fireEvent('dropped', me, field);
     },
 
     attachImage: function (files) {
@@ -263,7 +265,7 @@ Ext.define('Ext.ux.form.ImageUpload', {
                 width: me.imageWidth,
                 height: me.imageHeight,
 
-                animate: 2000,
+                animate: 1000,
                 flex: 1,
                 listeners: {
                     render: function (c) {

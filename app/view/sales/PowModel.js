@@ -25,9 +25,9 @@ Ext.define("Vega.view.sales.PowModel", {
         pows: {
             model: "Pow",
             storeId: "pows",
-            autoLoad: false,
-            remoteFilter: true,
+            //remoteFilter: true,
             remoteSort: true,
+            autoLoad: false,
             pageSize: 99,
             proxy: {
                 type: "rest",
@@ -35,14 +35,14 @@ Ext.define("Vega.view.sales.PowModel", {
                 reader: {
                     type: "json",
                     rootProperty: "data"
-                },
-                listeners: {
-
-                }},
+                }
+            },
 
             listeners: {
-                beforeload: "onBeforeLoad",
-                load: "onLoad"
+                beforeload: function(s){
+                    s.setRemoteFilter(true);
+                }
+                //load: "onLoad"
             },
 
             isDirty:function(){
@@ -51,18 +51,9 @@ Ext.define("Vega.view.sales.PowModel", {
                 b = b || this.getRemovedRecords().length;
                 return !!b;
             }
-        },
+        }
 
-        factories: {
-            fields: ['id', 'label'],
-            //storeId: 'factories',
-            proxy: {
-                type: 'ajax',
-                url: 'data/factories.json'
-            },
-            autoLoad: false
-        },
-
+        /*
         sales: {
             fields: ['id', 'label'],
             storeId: 'sales',
@@ -86,5 +77,6 @@ Ext.define("Vega.view.sales.PowModel", {
         powsChained: {
             source: "{pows}"
         }
+        */
     }
 });

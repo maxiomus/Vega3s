@@ -1,7 +1,7 @@
 
 Ext.define("Vega.view.dal.View", {
     extend: 'Ext.view.View',
-    
+
     requires: [
         'Vega.view.dal.ViewController',
         'Vega.view.dal.ViewModel',
@@ -24,8 +24,15 @@ Ext.define("Vega.view.dal.View", {
     },
     */
 
+    padding: '3 0 0 4',
+
     config: {
 
+    },
+
+    style: {
+        borderTop: '1px solid #cfcfcf',
+        borderBottom: '1px solid #cfcfcf'
     },
 
     scrollable: "y",
@@ -64,7 +71,7 @@ Ext.define("Vega.view.dal.View", {
 
     listeners: {
         select: {fn: "onSelect"},
-        beforecontainerclick: function(){return false}
+        beforecontainerclick: function(){return false;}
     },
 
     initComponent: function(){
@@ -77,7 +84,7 @@ Ext.define("Vega.view.dal.View", {
     },
 
     onDestroy: function(){
-        this.callParent(arguments)
+        this.callParent(arguments);
     },
 
     onSelect: function(g, h, f, e){}

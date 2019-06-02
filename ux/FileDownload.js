@@ -14,6 +14,7 @@ Ext.define('Ext.ux.FileDownload', {
         cls: 'x-hidden',
         src: Ext.SSL_SECURE_URL
     },
+
     load: function(config){
         var e = this.getEl();
         e.dom.src = config.url +

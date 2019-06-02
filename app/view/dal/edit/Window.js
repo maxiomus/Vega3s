@@ -35,7 +35,7 @@ Ext.define("Vega.view.dal.edit.Window", {
             text: 'Save',
             formBind: true,
             //glyph: 86,
-            iconCls: 'fa fa-save',
+            iconCls: 'x-fa fa-save',
             handler: function(btn){
                 me.fireEvent('saveclick', btn, me);
             }
@@ -43,7 +43,7 @@ Ext.define("Vega.view.dal.edit.Window", {
             action: 'close',
             text: 'Close',
             //glyph: 88,
-            iconCls: 'fa fa-close',
+            iconCls: 'x-fa fa-close',
             handler: function(btn){
                 btn.up('window').close();
             }

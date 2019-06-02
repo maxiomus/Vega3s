@@ -3,50 +3,56 @@
  */
 Ext.define('Ext.overrides.form.field.ComboBox', {
     override: 'Ext.form.field.ComboBox',
-    createPicker: function() {
 
-        var me = this,
-            picker,
-            pickerCfg = Ext.apply({
-                xtype: 'boundlist',
-                //id: me.pickerId,
-                pickerField: me,
-                selectionModel: me.pickerSelectionModel,
-                floating: true,
-                hidden: true,
-                store: me.getPickerStore(),
-                displayField: me.displayField,
-                preserveScrollOnRefresh: true,
-                pageSize: me.pageSize,
-                tpl: me.tpl
-            }, me.listConfig, me.defaultListConfig);
+    beforeRender: function(){
+        var me = this;
+        me.callParent(arguments);
 
+        if(!Ext.isEmpty(me.remoteStore)){
 
-        picker = me.picker = Ext.widget(pickerCfg);
-        if (me.pageSize) {
-            picker.pagingToolbar.on('beforechange', me.onPageChange, me);
+            if(Ext.isString(me.remoteStore)){
+                var rs = Ext.getStore(me.remoteStore);
+
+                if(rs){
+                    me.remoteStore = rs;
+                }
+            }
+
+            if(me.pageSize){
+                var picker = me.getPicker(),
+                    refresh = picker.pagingToolbar.queryById('refresh');
+
+                refresh.on('click', function(b){
+                    if(me.remoteStore){
+                        picker.setLoading(true);
+
+                        me.remoteStore.load({
+                            callback: function(r,o,s){
+
+                                picker.setLoading(false);
+                                var task = new Ext.util.DelayedTask(function(){
+                                    me.collapse();
+                                });
+                                task.delay(10);
+                            }
+                        });
+                    }
+
+                }, me)
+            }
         }
+    },
 
+    afterQuery: function(qe){
+        var me = this;
 
-        // We limit the height of the picker to fit in the space above
-        // or below this field unless the picker has its own ideas about that.
-        if (!picker.initialConfig.maxHeight) {
-            picker.on({
-                beforeshow: me.onBeforePickerShow,
-                scope: me
+        me.callParent(arguments);
+
+        if(!Ext.isEmpty(me.remoteStore)){
+
+            me.loadPage(1, {
+                rawQuery: qe.rawQuery
             });
         }
-        picker.getSelectionModel().on({
-            beforeselect: me.onBeforeSelect,
-            beforedeselect: me.onBeforeDeselect,
-            focuschange: me.onFocusChange,
-            scope: me
-        });
-
-
-        picker.getNavigationModel().navigateOnSpace = false;
-
-
-        return picker;
     }
 });

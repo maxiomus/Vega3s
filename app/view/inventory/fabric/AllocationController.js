@@ -25,7 +25,7 @@ Ext.define('Vega.view.inventory.fabric.AllocationController', {
                 },
                 'fabricrolldetail': {
                     select: function(grid, record, index){
-                        console.log('select', record);
+                        //console.log('select', record);
                     }
                 },
                 'fabricrolldetail combo#cboLotno': {
@@ -50,7 +50,7 @@ Ext.define('Vega.view.inventory.fabric.AllocationController', {
                     beforesync: 'onBeforeSync'
                 }
             }
-        })
+        });
     },
 
     onBeforeSync: function(options){
@@ -128,7 +128,7 @@ Ext.define('Vega.view.inventory.fabric.AllocationController', {
     onSaveClicked: function(btn) {
 
         var me = this,
-            store = me.getViewModel().getStore('rolldetails')//,
+            store = me.getViewModel().getStore('rolldetails');//,
         //grid = this.getRequirements(),
         //record = grid.getSelectionModel().selected;
         //console.log(record, record[0]);
@@ -188,13 +188,6 @@ Ext.define('Vega.view.inventory.fabric.AllocationController', {
          lotno: record[0].get('lotno'),
          poclid: record[0].get('poclId')
          });*/
-
-        /*store.reload({
-         callback: function(records, options, success) {
-         //console.log(records)
-
-         }
-         });*/
     },
 
     onPrintClicked: function(btn) {
@@ -236,7 +229,6 @@ Ext.define('Vega.view.inventory.fabric.AllocationController', {
         store.load({
             callback: function(records, options, success) {
                 //console.log(records)
-
             }
         });
 
@@ -286,7 +278,7 @@ Ext.define('Vega.view.inventory.fabric.AllocationController', {
             selected = requirements.getSelectionModel().getSelection()[0];
 
         me.getViewModel().getStore('rolldetails').each(function(rec) {
-            if (rec.data.checkStatus != 1 && rec.data.unit1 != 0) {
+            if (rec.data.checkStatus != 1 && rec.data.unit1 != 0 && rec.data.alloc_qty_total == 0) {
                 rec.set('checkStatus', 1);
                 rec.set('poclid', selected.data.poclId);
                 rec.set('pono', selected.data.pono);
@@ -302,6 +294,10 @@ Ext.define('Vega.view.inventory.fabric.AllocationController', {
             record = me.getViewModel().getStore('rolldetails').getAt(rowIndex);
 
         if(record.data.unit1 == 0) {
+            return false;
+        }
+
+        if(record.data.alloc_qty_total > 0 && record.data.alloc_qty == 0){
             return false;
         }
     },
@@ -378,5 +374,5 @@ Ext.define('Vega.view.inventory.fabric.AllocationController', {
         details.getStore().removeAll();
         //console.log('Fabric Controller onDestroy calls.', store)
     }
-    
+
 });

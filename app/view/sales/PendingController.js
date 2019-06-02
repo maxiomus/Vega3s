@@ -32,7 +32,7 @@ Ext.define('Vega.view.sales.PendingController', {
     },
 
     initViewModel: function(b){
-        this.fireEvent("viewmodelready", this, b)
+        this.fireEvent("viewmodelready", this, b);
     },
 
     onStoreLoad: function(store, op){
@@ -59,10 +59,10 @@ Ext.define('Vega.view.sales.PendingController', {
                 if(Vega.user.inRole('exec') || Vega.user.inRole('administrators')){
                     topbar.add({
                         text: 'Revise',
-                        iconCls: 'fa fa-edit',
+                        iconCls: 'x-fa fa-edit',
                         hidden: false,
                         handler: function(btn){
-                            this.redirectTo('pending/edit/' + rec.data.powhId)
+                            this.redirectTo('pending/edit/' + rec.data.powhId);
                         },
                         scope: this
                     });
@@ -71,13 +71,13 @@ Ext.define('Vega.view.sales.PendingController', {
                 if(Vega.user.inRole('exec') || Vega.user.inRole('administrators')){
                     topbar.add({
                         text: 'Confirm',
-                        iconCls: 'fa fa-check-circle-o',
+                        iconCls: 'x-fa fa-check-circle-o',
                         hidden: false,
                         handler: 'onConfirm',
                         scope: this
                     },{
                         text: 'To Audit',
-                        iconCls: 'fa fa-arrow-circle-o-left',
+                        iconCls: 'x-fa fa-arrow-circle-o-left',
                         hidden: false,
                         handler: 'onAudit',
                         scope: this
@@ -193,7 +193,7 @@ Ext.define('Vega.view.sales.PendingController', {
                             }
                         },
                         failure: function(response, options) {
-                            Ext.Msg.alert(response.status.toString(), response.statusText + ', an error occurred during your request. Please try again.' );
+                            Ext.Msg.alert(response.statusText, response.status + ' - ' + response.responseText );
                         },
                         callback: function(response, opotions) {
 
@@ -317,7 +317,7 @@ Ext.define('Vega.view.sales.PendingController', {
 
                                 if(search.store.isStore){
                                     Ext.each(p.initData, function(obj, idx, self){
-                                        search.store.add({powdId: item.data.powdId, name: obj.name})
+                                        search.store.add({powdId: item.data.powdId, name: obj.name});
                                     });
 
                                     /*
@@ -354,6 +354,7 @@ Ext.define('Vega.view.sales.PendingController', {
         var win = btn.up('window'),
             tabs = win.down('tabpanel').items,
             view = win.up('display'),
+            viewer = view.up('viewer'),
             vm = view.getViewModel(),
             rec = vm.get('thePow');
 
@@ -370,13 +371,16 @@ Ext.define('Vega.view.sales.PendingController', {
             batch = session.getSaveBatch();
 
         if(batch !== undefined){
+            var processMask = new Ext.LoadMask({
+                msg: 'Saving... Please wait',
+                target: viewer
+            });
+
             batch.on({
                 complete: function(batch, op){
 
                     //var response = JSON.parse(op.getResponse().responseText);
                     //console.log(response);
-                    var viewer = view.up('viewer');
-
                     /*
                     // refresh review tab...
                     if(tab){
@@ -404,6 +408,10 @@ Ext.define('Vega.view.sales.PendingController', {
                             success: function(rec, op){
                                 win.close();
                                 view.close();
+
+                                processMask.hide('', function() {
+                                    Ext.Msg.alert('Status', 'Changes saved successfully.');
+                                });
                             },
                             failure: function(rec, op){
 
@@ -418,7 +426,10 @@ Ext.define('Vega.view.sales.PendingController', {
                         view.close();
                     }
 
-                    Ext.Msg.alert('Status', 'Changes saved successfully.');
+                    processMask.hide('', function() {
+                        Ext.Msg.alert('Status', 'Changes saved successfully.');
+                    });
+
                     /*
                     new Ext.window.Window({
                         autoShow: true,
@@ -434,11 +445,21 @@ Ext.define('Vega.view.sales.PendingController', {
                     });
                     */
                 },
-                exception: function(){
-                    Ext.Msg.alert('Error', 'Error occurred');
+                exception: function(batch, op){
+                    processMask.hide('', function(){
+                        //Ext.Msg.alert('Error', 'Error occurred');
+                        var objResp = op.error.response;
+                        //console.log(objResp)
+                        if(!Ext.isEmpty(objResp)){
+                            var response = JSON.parse(objResp.responseText);
+                            Ext.Msg.alert(objResp.statusText, objResp.responseText);
+                        }
+
+                    });
                 }
             });
             //console.log(batch, changes);
+            processMask.show();
             batch.start();
         }
         else {
@@ -514,8 +535,11 @@ Ext.define('Vega.view.sales.PendingController', {
 
         refs.display.setActive(rec);
 
-        if(!refs.preview.hidden){
-            this.loadIframe(refs.display ,rec);
+        if(refs.preview.hidden){
+            refs.display.removeAll();
+        }
+        else {
+            refs.display.loadIframe();
         }
 
         var l = [],
@@ -533,9 +557,11 @@ Ext.define('Vega.view.sales.PendingController', {
 
         var i = h.getSelectionModel();
         if(!i.isSelected(g)){
-            i.select(g)
+            i.select(g);
         }
-        this.view.contextmenu.showAt(l.getXY())
+
+        this.view.contextmenu.items.items[2].setHidden(!(Vega.user.userOwn(j.data.userId) || Vega.user.inRole('administrators')));
+        this.view.contextmenu.showAt(l.getXY());
     },
 
     onActionNew: function(){
@@ -548,10 +574,52 @@ Ext.define('Vega.view.sales.PendingController', {
 
     onActionView: function(){
         var m = this.lookupReference("multiview"),
-            g = m.lookupReference("grid"),
-            s = g.getSelection()[0];
+            g = m.lookupReference('grid'),
+            v = m.lookupReference('tiles'),
+            s = g.getSelection().length != 0 ? g.getSelection() : v.getSelection();
 
-        this.onTabOpen(null, s);
+        this.onTabOpen(null, s[0]);
+    },
+
+    onActionDelete: function(topbar){
+        var me = this,
+            m = me.lookupReference("multiview"),
+            g = m.lookupReference("grid"),
+            d = g.getSelection()[0];
+
+        Ext.Msg.show({
+            title:'Warning!',
+            message: 'Are you sure you want to delete this?',
+            buttons: Ext.Msg.OKCANCEL,
+            icon: Ext.Msg.QUESTION,
+            fn: function(btn) {
+                if (btn === 'ok') {
+                    var processMask = new Ext.LoadMask({
+                        msg: 'Saving... Please wait',
+                        target: me.getView()
+                    });
+                    //grid.getStore().remove(rec);
+                    d.drop();
+
+                    processMask.show();
+                    g.getStore().sync({
+                        success: function(batch, opt) {
+                            processMask.hide('', function() {
+                                Ext.Msg.alert('Status', 'Changes saved successfully.');
+                            });
+                        },
+                        failure: function(batch, opt) {
+
+                        },
+                        callback: function(batch, opt) {
+
+                        }
+                    });
+                    //var batch = me.getView().getSession().getSaveBatch();
+                    //me.processBatch(batch);
+                }
+            }
+        });
     },
 
     onTabOpen: function(i, h){
@@ -621,21 +689,5 @@ Ext.define('Vega.view.sales.PendingController', {
             //y.setValue(aItem.type);
             //y.setActive(true);
         }
-    },
-
-    loadIframe: function(display, rec){
-        var xf = Ext.util.Format;
-        display.removeAll();
-        display.add({
-            xtype: "component",
-            itemId: "contentIframe",
-            autoEl: {
-                tag: "iframe",
-                style: {height: "100%"},
-                width: "100%",
-                border: "none",
-                src: xf.format('../services/PowPreviewPrint.ashx?ID={0}', rec.data.powhId)
-            }
-        })
     }
 });

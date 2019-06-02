@@ -22,7 +22,7 @@ Ext.define('Vega.view.reports.inventory.LotActivityController', {
             store: {
 
             }
-        })
+        });
     },
 
     onFabricStoreBeforeLoad: function(store){
@@ -111,5 +111,5 @@ Ext.define('Vega.view.reports.inventory.LotActivityController', {
 
         return filters;
     }
-    
+
 });

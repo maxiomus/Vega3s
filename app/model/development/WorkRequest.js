@@ -1,15 +1,15 @@
 
 Ext.define('Vega.model.development.WorkRequest', {
     extend: 'Vega.model.Base',
-    
+
     fields: [
         { name: 'ID' },
         { name: 'RowNo', type: 'int', allowNull: true },
         { name: 'DSID', type: 'int', allowNull: true },
-        { name: 'Due', type: 'date', dateFormat: 'c' },
-        { name: 'ETA', type: 'date', dateFormat: 'c' },
-        { name: 'Issued', type: 'date', dateFormat: 'c' },
-        { name: 'Received', type: 'date', dateFormat: 'c' },
+        { name: 'Due', type: 'date', dateFormat: 'c', dateWriteFormat: 'Y-m-d' },
+        { name: 'ETA', type: 'date', dateFormat: 'c', dateWriteFormat: 'Y-m-d' },
+        { name: 'Issued', type: 'date', dateFormat: 'c', dateWriteFormat: 'Y-m-d' },
+        { name: 'Received', type: 'date', dateFormat: 'c', dateWriteFormat: 'Y-m-d' },
         { name: 'Pow', allowNull: true },
         { name: 'Customer' },
         { name: 'Style', type: 'string', allowNull: true },
@@ -31,7 +31,8 @@ Ext.define('Vega.model.development.WorkRequest', {
         { name: 'UserID', type: 'string', allowNull: true },
         { name: 'CreatedOn', type: 'date', dateFormat: 'c' },
         { name: 'UpdateUser', type: 'string', allowNull: true },
-        { name: 'UpdatedOn', type: 'date', dateFormat: 'c' }
+        { name: 'UpdatedOn', type: 'date', dateFormat: 'c' },
+        { name: 'userId', type: 'string', mapping: 'UserID', persist: false}
     ],
 
     idProperty: 'ID',
@@ -77,4 +78,4 @@ Ext.define('Vega.model.development.WorkRequest', {
             }
         }
     }
-})
+});

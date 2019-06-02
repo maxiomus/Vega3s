@@ -15,17 +15,17 @@ Ext.define('Vega.view.inventory.fabric.RollsController', {
                 'combo': {
                     change: 'onComboChanged'
                 },
-                'rolls-grid button[action=save]': {
+                'button[action=save]': {
                     click: 'onSaveClicked'
                 },
-                'rolls-grid button[action=refresh]': {
+                'button[action=refresh]': {
                     click: 'onRefreshClicked'
                 },
-                'rolls-grid button[action=showsummary]': {
+                'button[action=showsummary]': {
                     click: 'onShowSummaryClicked'
                 }
             }
-        })
+        });
     },
 
     onComboChanged: function (combo, newValue, oldValue, eOpts) {
@@ -68,7 +68,7 @@ Ext.define('Vega.view.inventory.fabric.RollsController', {
                 else
                     Ext.Msg.alert('Status', 'Changes failed.');
             }
-        })
+        });
     },
 
     onPrintBarcodeClicked: function(btn, eOpts) {
@@ -88,7 +88,7 @@ Ext.define('Vega.view.inventory.fabric.RollsController', {
 
             if (color.getValue() != null) {
                 //url += 'color=' + color.getValue() + '&';
-                query.color = color.getValue()
+                query.color = color.getValue();
             }
 
             query.lotno = lotno.getValue();
@@ -125,7 +125,7 @@ Ext.define('Vega.view.inventory.fabric.RollsController', {
             if (record.data.lotno.trim() != lotno){
                 record.set('barcode', record.data.style.trim()+'*'+record.data.color.trim()+'*'+record.data.lotno.trim()+'*'+record.data.rollno);
                 record.commit();
-                record.setDirty()
+                record.setDirty();
                 console.log(record.data.barcode);
             }
         });
@@ -216,5 +216,5 @@ Ext.define('Vega.view.inventory.fabric.RollsController', {
 
         return filters;
     }
-    
+
 });

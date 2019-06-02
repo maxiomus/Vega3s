@@ -2,55 +2,46 @@ Ext.define('Vega.view.sales.edit.FormModel', {
     extend: 'Ext.app.ViewModel',
 
     requires: [
-        //'Vega.model.Powh',
-        //'Vega.model.Powd',
-        //'Vega.model.Powm',
+        'Vega.model.Powh',
+        'Vega.model.Powd',
+        'Vega.model.Powm',
+        'Vega.model.Powlog',
+        'Vega.model.Media',
         'Vega.model.sales.File'
     ],
 
     alias: 'viewmodel.sales-edit-form',
 
     stores: {
+        powlogs: {
+            model: 'Powlog',
+            storeId: "powlogs",
+            autoLoad: false
+            //autoSync: true,
+            //remoteFilter: true,
+            //remoteSort: true,
+            //pageSize: 50,
+        },
+
+        tnaOrders: {
+            model: 'TnaOrder',
+            storeId: 'tnaOrders',
+            autoLoad: false,
+            remoteFilter: true
+        },
+
         fileStore: {
-            model: 'Vega.model.Media'
-        },
-
-        categories: {
-            fields: ['id', 'name'],
-            proxy: {
-                type: 'ajax',
-                url: 'data/categories.json'
-            }
-        },
-
-        factories: {
-            fields: ["id", "text"],
-            //storeId: 'factories',
-            proxy: {
-                type: 'ajax',
-                url: 'data/factories.json'
-            }
-        },
-
-        status: {
-            fields: ["id", "text"],
-            //storeId: 'powStatus',
-            autoLoad: true,
-            proxy: {
-                type: 'ajax',
-                url: 'data/powStatus.json'
-            }
+            model: 'Media'
         },
 
         users: {
             fields: ['id', 'text'],
-            autoLoad: true,
+            autoLoad: false,
+            pageSize: 0,
             proxy: {
                 type: 'ajax',
-                url: '/api/Options/users',
-                pageParam: '',
-                startParam: '',
-                limitParam: '',
+                url: '/api/Combos/users',
+
                 reader: {
                     type: 'json',
                     rootProperty: 'data'
@@ -58,33 +49,83 @@ Ext.define('Vega.view.sales.edit.FormModel', {
             }
         },
 
+        sales: {
+            fields: ['id', 'label'],
+            autoLoad: false
+        },
+
+        submissions: {
+            fields: ['id', 'label'],
+            autoLoad: false
+        },
+        /*
         activities: {
             fields: ['id', 'text'],
             autoLoad: true,
             proxy: {
                 type: 'ajax',
-                url: '/api/Options/activities',
+                url: '/api/Combos/activities',
+
                 pageParam: '',
                 startParam: '',
                 limitParam: '',
+
                 reader: {
                     type: 'json',
                     rootProperty: 'data'
                 }
             }
         },
+        */
+
+        progress: {
+            fields: ["id", "text"],
+            autoLoad: false
+        },
+
+        subcategories: {
+            fields: ['id', 'text', 'type'],
+            autoLoad: false
+            /*
+            pageSize: 0,
+            proxy: {
+                type: "ajax",
+                url: "resources/data/sales/subcategories.json",
+
+                reader: {
+                    type: "json",
+                    rootProperty: "data"
+                }
+            }
+            */
+        },
+
+        factories: {
+            fields: ["id", "text"],
+            //storeId: 'factories',
+            autoLoad: false
+        },
+
+        mills: {
+            fields: ["id", "text"],
+            autoLoad: false
+        },
+
+        powStatus: {
+            fields: ["id", "text"],
+            //storeId: 'powStatus',
+            autoLoad: false
+        },
 
         customers: {
             fields: ["id", "text"],
             //storeId: 'customer',
-            autoLoad: true,
-            remoteFilter: false,
+            autoLoad: false,
+            pageSize: 0,
             proxy: {
                 type: "ajax",
-                url: "/api/Options/customers",
-                pageParam: '',
-                startParam: '',
-                limitParam: '',
+                url: "/api/Combos/customers",
+
                 reader: {
                     type: "json",
                     rootProperty: "data"
@@ -92,16 +133,30 @@ Ext.define('Vega.view.sales.edit.FormModel', {
             }
         },
 
+        customerDept: {
+            fields: ["id", "label", "descript"],
+            autoLoad: false,
+            pageSize: 0,
+            proxy: {
+                type: 'ajax',
+                url: '/api/Combos/customerdept',
+
+                reader: {
+                    type: 'json',
+                    rootProperty: 'data'
+                }
+            }
+        },
+
         types: {
             fields: ["id", "text"],
             //storeId: 'type',
-            autoLoad: true,
+            autoLoad: false,
+            pageSize: 0,
             proxy: {
                 type: "ajax",
-                url: "/api/Options/ordertypes",
-                pageParam: '',
-                startParam: '',
-                limitParam: '',
+                url: "/api/Combos/ordertypes",
+
                 reader: {
                     type: "json",
                     rootProperty: "data"
@@ -112,13 +167,12 @@ Ext.define('Vega.view.sales.edit.FormModel', {
         divisions: {
             fields: ["id", "text"],
             //storeId: 'division',
-            autoLoad: true,
+            autoLoad: false,
+            pageSize: 0,
             proxy: {
                 type: "ajax",
-                url: "/api/Options/divisions",
-                pageParam: '',
-                startParam: '',
-                limitParam: '',
+                url: "/api/Combos/divisions",
+
                 reader: {
                     type: "json",
                     rootProperty: "data"
@@ -129,14 +183,12 @@ Ext.define('Vega.view.sales.edit.FormModel', {
         labels: {
             fields: ["id", "text"],
             //storeId: 'division',
-            autoLoad: true,
+            autoLoad: false,
             pageSize: 0,
             proxy: {
                 type: "ajax",
-                url: "/api/Options/labels",
-                pageParam: '',
-                startParam: '',
-                limitParam: '',
+                url: "/api/Combos/labels",
+
                 reader: {
                     type: "json",
                     rootProperty: "data"
@@ -147,14 +199,12 @@ Ext.define('Vega.view.sales.edit.FormModel', {
         terms: {
             fields: ["id", "text"],
             //storeId: 'division',
-            autoLoad: true,
+            autoLoad: false,
             pageSize: 0,
             proxy: {
                 type: "ajax",
-                url: "/api/Options/terms",
-                pageParam: '',
-                startParam: '',
-                limitParam: '',
+                url: "/api/Combos/terms",
+
                 reader: {
                     type: "json",
                     rootProperty: "data"
@@ -165,31 +215,29 @@ Ext.define('Vega.view.sales.edit.FormModel', {
         sizeCats: {
             fields: ["id", "text"],
             //storeId: 'sizeCat',
-            autoLoad: true,
+            autoLoad: false,
+            pageSize: 0,
             proxy: {
                 type: 'ajax',
-                url: '/api/Options/sizes',
-                pageParam: '',
-                startParam: '',
-                limitParam: '',
+                url: '/api/Combos/sizes',
+
                 reader: {
                     type: 'json',
                     rootProperty: 'data'
                 }
             }
-        },
+        }
 
+        /*
         vendors: {
             fields: ['id', 'text'],
 
-            autoLoad: true,
-
+            autoLoad: false,
+            pageSize: 0,
             proxy: {
                 type: 'ajax',
                 url: '/api/Combos/vendors',
-                pageParam: null,
-                startParam: null,
-                limitParam: null,
+
                 reader: {
                     type: 'json',
                     rootProperty: 'data'
@@ -226,11 +274,11 @@ Ext.define('Vega.view.sales.edit.FormModel', {
             proxy: {
                 type: 'ajax',
                 url: '/api/Combos/styles',
-                /*
-                pageParam: '',
-                startParam: '',
-                limitParam: '',
-                */
+
+                //pageParam: '',
+                //startParam: '',
+                //limitParam: '',
+
                 reader: {
                     type: 'json',
                     rootProperty: 'data'
@@ -247,11 +295,11 @@ Ext.define('Vega.view.sales.edit.FormModel', {
             proxy: {
                 type: 'ajax',
                 url: '/api/Combos/stycolors',
-                /*
-                pageParam: '',
-                startParam: '',
-                limitParam: '',
-                */
+
+                //pageParam: '',
+                //startParam: '',
+                //limitParam: '',
+
                 reader: {
                     type: 'json',
                     rootProperty: 'data'
@@ -274,11 +322,10 @@ Ext.define('Vega.view.sales.edit.FormModel', {
                 type: 'ajax',
                 url: '/api/Combos/components',
 
-                /*
-                pageParam: '',
-                startParam: '',
-                limitParam: '',
-                */
+                //pageParam: '',
+                //startParam: '',
+                //limitParam: '',
+
                 extraParams: {
                     type: '{material_category.value}'
                 },
@@ -297,21 +344,22 @@ Ext.define('Vega.view.sales.edit.FormModel', {
             proxy: {
                 type: 'ajax',
                 url: '/api/Combos/rawcolors',
-                /*
-                pageParam: '',
-                startParam: '',
-                limitParam: '',
-                */
+
+                //pageParam: '',
+                //startParam: '',
+                //limitParam: '',
+
                 reader: {
                     type: 'json',
                     rootProperty: 'data'
                 }
             }
         }
+        */
     },
 
     formulas: {
-        // used to enable/disalbe form buttons
+        // used to enable/disable form buttons
         dirty: {
             bind: {
                 bindTo: '{header}',
@@ -407,7 +455,7 @@ Ext.define('Vega.view.sales.edit.FormModel', {
                 }
             },
             set: function(value){
-                this.set('header.salescontact', value.salescontact.toString());
+                this.set('header.salescontact', value.salescontact);
             }
         },
 
@@ -423,7 +471,7 @@ Ext.define('Vega.view.sales.edit.FormModel', {
                 }
             },
             set: function(value){
-                this.set('header.submissions', value.submissions.toString());
+                this.set('header.submissions', value.submissions);
             }
         }
     }

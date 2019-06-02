@@ -15,4 +15,4 @@ Ext.define('Vega.model.Bookmark', {
     ],
 
     idProperty: 'BID'
-})
+});

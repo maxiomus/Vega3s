@@ -5,7 +5,6 @@ Ext.define('Vega.store.Styles', {
     //buffered: true,
     alias: 'store.Styles',
 
-    storeId: 'Styles',
     fields: [{
         name: 'id',
         sortType: 'asUCString'
@@ -14,24 +13,38 @@ Ext.define('Vega.store.Styles', {
         sortType: 'asUCString'
     }],
 
+    storeId: 'Styles',
+
     pageSize: 0,
-    remoteFilter: true,
+    autoLoad: true,
+
+    //remoteFilter: true,
     //remoteSort: true,
-    //numFromEdge: 5,
-    //trailingBufferZone: 100,
-    //leadingBufferZone: 100,
-    autoLoad: false,
 
     proxy: {
         type: 'ajax',
         url: '/api/Combos/styles',
+        reader: {
+            type: 'json',
+            rootProperty: 'data'
+        }
+    },
 
-        /*
-         pageParam: '',
-         startParam: '',
-         limitParam: '',
-         */
+    listeners: {
+        load: function(s){
+            memStyles.getProxy().setData(s.getRange());
+            //memStyles.load();
+        }
+    }
+});
 
+var memStyles = Ext.create('Ext.data.Store', {
+    storeId: 'memStyles',
+    pageSize: 50,
+    remoteFilter: true,
+    proxy: {
+        type: 'memory',
+        enablePaging: true,
         reader: {
             type: 'json',
             rootProperty: 'data'

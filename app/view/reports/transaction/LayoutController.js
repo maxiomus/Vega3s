@@ -6,6 +6,28 @@ Ext.define('Vega.view.reports.transaction.LayoutController', {
 
     },
 
+    onBox: function(p){
+        var keyMap = Ext.create('Ext.util.KeyMap', {
+            target: Ext.getBody(),
+            binding: [{
+                key: 'c',
+                ctrl: true,
+                fn: this.onEnterKey,
+                scope: p.ownerCt
+            }]
+        });
+    },
+
+    onEnterKey: function(){
+        var me = this;
+
+        console.log(this.body);
+        Ext.Msg.alert('KeyMap', 'You pressed Enter Key.');
+        //e.stopEvent();
+        //this.remove(this.getActiveTab())
+
+    },
+
     onRender: function(p){
         //console.log('onRender', p, this);
         var leftDockedItem,
@@ -29,7 +51,7 @@ Ext.define('Vega.view.reports.transaction.LayoutController', {
 
                         me.expand();
                     }
-                })
+                });
             });
             task.delay(10);
         }
@@ -52,5 +74,5 @@ Ext.define('Vega.view.reports.transaction.LayoutController', {
 
         me.expand();
     }
-    
+
 });

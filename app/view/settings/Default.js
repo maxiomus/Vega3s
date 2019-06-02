@@ -5,9 +5,12 @@ Ext.define("Vega.view.settings.Default",{
     requires: [
         "Vega.view.settings.DefaultController",
         "Vega.view.settings.DefaultModel",
-        'Vega.view.settings.sales.Default',
-        'Vega.view.settings.sales.Activity',
-        'Vega.view.settings.development.Default'
+        'Vega.view.settings.notification.Default',
+        'Vega.view.settings.company.Default',
+        'Vega.view.settings.view.Default',
+        'Vega.view.settings.product.Default',
+        'Vega.view.settings.task.Default',
+        'Vega.view.settings.vendors.Default'
     ],
 
     alias: 'widget.settings-default',
@@ -24,7 +27,7 @@ Ext.define("Vega.view.settings.Default",{
 
     cls: "shadow-panel",
     header: false,
-    margin: 8,
+    margin: '0 0 0 4',
 
     //bodyPadding: 10,
 
@@ -87,9 +90,8 @@ Ext.define("Vega.view.settings.Default",{
                 }],
 
                 items: [{
-                    xtype: 'panel',
-                    reference: 'settings-base',
-                    title: 'System Settings'
+                    xtype: 'container',
+                    reference: 'settings-base'
                 }]
             }]
         });

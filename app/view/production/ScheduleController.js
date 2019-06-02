@@ -21,7 +21,7 @@ Ext.define('Vega.view.production.ScheduleController', {
             case "CUSTOMER":
                 n.paramName = j;
                 n.show();
-                m.hide()
+                m.hide();
                 break;
             default:
                 m.paramName = j;
@@ -33,7 +33,7 @@ Ext.define('Vega.view.production.ScheduleController', {
 
         if(k != null){
             k.load();
-            n.bindStore(k)
+            n.bindStore(k);
         }
     },
 
@@ -66,7 +66,7 @@ Ext.define('Vega.view.production.ScheduleController', {
             Ext.each(h, function(a){
                 e = a.filter;
                 if(a.dataIndex===g.paramName){
-                    return false
+                    return false;
                 }
             });
             g.setValue("");
@@ -74,7 +74,7 @@ Ext.define('Vega.view.production.ScheduleController', {
             e.setActive(false);
             g.hasSearch = false;
             g.getTrigger("clear").hide();
-            g.updateLayout()
+            g.updateLayout();
         }
     },
 
@@ -88,7 +88,7 @@ Ext.define('Vega.view.production.ScheduleController', {
             Ext.each(i, function(a){
                 if(a.dataIndex === h.paramName){
                     f = a.filter;
-                    return false
+                    return false;
                 }
             });
             //console.log("onSearchClick", f, h.paramName);
@@ -96,8 +96,8 @@ Ext.define('Vega.view.production.ScheduleController', {
             f.setActive(true);
             h.hasSearch = true;
             h.getTrigger("clear").show();
-            h.updateLayout()
+            h.updateLayout();
         }
     }
-    
+
 });

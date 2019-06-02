@@ -6,7 +6,8 @@ Ext.define('Vega.view.reports.inventory.InventoryByLot', {
 
     requires: [
         'Vega.view.reports.inventory.InventoryByLotController',
-        'Vega.view.reports.inventory.InventoryByLotModel'
+        'Vega.view.reports.inventory.InventoryByLotModel',
+        'Ext.data.proxy.Memory'
     ],
 
     alias: "widget.inventoryByLot",
@@ -18,7 +19,7 @@ Ext.define('Vega.view.reports.inventory.InventoryByLot', {
 
     cls: "shadow-panel",
     border: false,
-    margin: 8,
+    margin: '0 0 0 4',
 
     layout: {
         type: "fit"
@@ -122,7 +123,7 @@ Ext.define('Vega.view.reports.inventory.InventoryByLot', {
 
                             Ext.each(records, function(item){
                                 total += item.total;
-                            })
+                            });
 
                             return xf.number(total, '0,0.00');
                         },
@@ -136,9 +137,9 @@ Ext.define('Vega.view.reports.inventory.InventoryByLot', {
                                 var alloc = item.allocqty == null ? 0 : item.allocqty;
 
                                 total += (item.totalunit - alloc);
-                            })
+                            });
 
-                            return xf.number(total, '0,0.00')
+                            return xf.number(total, '0,0.00');
                         },
 
                         MemoRenderer: function(value) {
@@ -154,13 +155,10 @@ Ext.define('Vega.view.reports.inventory.InventoryByLot', {
                         DateRenderer: function(value) {
 
                             if (value != null) {
-                                var d = new Date(value);
+                                var d = new Date(value),
+                                pad = function(n){return n<10 ? '0'+n : n;};
 
-                                function pad(n){return n<10 ? '0'+n : n}
-
-                                return pad(d.getUTCMonth()+1)+'-'
-                                    + pad(d.getUTCDate())+'-'
-                                    + d.getUTCFullYear()
+                                return pad(d.getUTCMonth()+1)+'-'+ pad(d.getUTCDate())+'-'+ d.getUTCFullYear();
                             }
                         },
 
@@ -222,6 +220,118 @@ Ext.define('Vega.view.reports.inventory.InventoryByLot', {
     buildDockedItems: function(){
         var me = this;
 
+        var memComponents = Ext.create('Ext.data.Store', {
+            //storeId: 'memComponents',
+            pageSize: 50,
+            remoteFilter: true,
+            proxy: {
+                type: 'memory',
+                enablePaging: true,
+                reader: {
+                    type: 'json',
+                    rootProperty: 'data'
+                }
+            }
+        });
+
+        var Components = Ext.create('Ext.data.Store', {
+            //storeId: 'remoteComponents',
+            pageSize: 0,
+            //remoteFilter: true,
+            autoLoad: true,
+
+            proxy: {
+                type: 'ajax',
+                url: '/api/Combos/components',
+                reader: {
+                    type: 'json',
+                    rootProperty: 'data'
+                }
+            },
+
+            listeners: {
+                load: function(s){
+                    memComponents.getProxy().setData(s.getRange());
+                    memComponents.load();
+                }
+            }
+        });
+
+        var memRawColors = Ext.create('Ext.data.Store', {
+            //storeId: 'memRawColors',
+            pageSize: 50,
+            remoteFilter: true,
+            proxy: {
+                type: 'memory',
+                enablePaging: true,
+                reader: {
+                    type: 'json',
+                    rootProperty: 'data'
+                }
+            }
+        });
+
+        var RawColors = Ext.create('Ext.data.Store', {
+            //storeId: 'remoteRawColors',
+            autoLoad: true,
+            //remoteFilter: true,
+            pageSize: 0,
+            proxy: {
+                type: 'ajax',
+                url: '/api/Combos/rawcolors',
+
+                reader: {
+                    type: 'json',
+                    rootProperty: 'data'
+                }
+            },
+            listeners: {
+                load: function(s){
+                    memRawColors.getProxy().setData(s.getRange());
+                    memRawColors.load();
+                }
+            }
+        });
+
+        var memLotnos = Ext.create('Ext.data.Store', {
+            //storeId: 'memLotnos',
+            pageSize: 50,
+            remoteFilter: true,
+            proxy: {
+                type: 'memory',
+                enablePaging: true,
+                reader: {
+                    type: 'json',
+                    rootProperty: 'data'
+                }
+            }
+        });
+
+        var Lotnos = Ext.create('Ext.data.Store', {
+            //storeId: 'remoteLotnos',
+            autoLoad: true,
+            pageSize: 0,
+            proxy: {
+                type: 'ajax',
+                url: '/api/Combos/lotnos',
+
+                reader: {
+                    type: 'json',
+                    rootProperty: 'data'
+                }
+            },
+
+            listeners: {
+                load: function(s){
+                    memLotnos.getProxy().setData(s.getRange());
+                    memLotnos.load();
+                }
+            }
+        });
+
+        //remoteComponents.clearFilter();
+        //remoteComponents.filter('text', 'FABRICS');
+
         return [{
             xtype: 'toolbar',
             dock: "top",
@@ -230,7 +340,7 @@ Ext.define('Vega.view.reports.inventory.InventoryByLot', {
                 align: 'bottom'
             },
             items: [{
-                xtype: "memorycombo",
+                xtype: "combo",
                 itemId: "cboComp",
                 labelAlign: "top",
                 fieldLabel: "FABRICS",
@@ -239,7 +349,8 @@ Ext.define('Vega.view.reports.inventory.InventoryByLot', {
                 },
                 //labelWidth: 50,
                 width: 160,
-                store: 'memComponents',
+                store: memComponents,
+                remoteStore: Components,
                 valueField: "label",
                 displayField: "label",
                 forceSelection: false,
@@ -247,6 +358,7 @@ Ext.define('Vega.view.reports.inventory.InventoryByLot', {
                 pageSize: 50,
                 matchFieldWidth: false,
                 queryMode: "local",
+                //caseSensitive: true,
                 //queryParam: "filter",
                 minChars: 1,
                 listConfig: {
@@ -257,19 +369,17 @@ Ext.define('Vega.view.reports.inventory.InventoryByLot', {
                 plugins: [{
                     ptype: "cleartrigger"
                 }],
-                listners: {
+                listeners: {
                     triggerClear: function (combo) {
-
                         var cboColor = combo.ownerCt.query('combo[itemId="cboColor"]')[0];
                         cboColor.getStore().clearFilter();
                         cboColor.setValue('');
                     },
                     beforequery: {
                         fn: function(qe){
-                            var cboRawMat = combo.ownerCt.query('combo[itemId="cboRawMat"]')[0],
+                            var cboRawMat = qe.combo.ownerCt.query('combo[itemId="cboRawMat"]')[0],
                                 store = qe.combo.getStore();
 
-                            console.log(qe.combo, qe.combo.getValue())
                             store.clearFilter();
                             store.filter([{
                                 property: 'text',
@@ -280,13 +390,14 @@ Ext.define('Vega.view.reports.inventory.InventoryByLot', {
                     }
                 }
             },{
-                xtype: "memorycombo",
+                xtype: "combo",
                 itemId: "cboColor",
                 labelAlign: "top",
                 fieldLabel: "Color",
                 //labelWidth: 50,
                 width: 160,
-                store: 'memColors',
+                store: memRawColors,
+                remoteStore: RawColors,
                 valueField: "label",
                 displayField: "label",
                 forceSelection: false,
@@ -305,21 +416,17 @@ Ext.define('Vega.view.reports.inventory.InventoryByLot', {
                     ptype: "cleartrigger"
                 }],
                 listeners: {
-                    triggerClear: function(combo){
-
-                    },
                     beforequery: {
                         fn: function(qe){
                             var cboStyle = qe.combo.ownerCt.query('combo[itemId="cboComp"]')[0],
                                 store = qe.combo.getStore();
 
-                            console.log(cboStyle, cboStyle.getValue())
                             store.clearFilter();
 
                             if(!Ext.isEmpty(cboStyle.getValue())){
 
                                 store.filter([{
-                                    property: 'descript',
+                                    property: 'text',
                                     value: cboStyle.getValue().toUpperCase(),
                                     operator: '='
                                 }]);
@@ -329,13 +436,14 @@ Ext.define('Vega.view.reports.inventory.InventoryByLot', {
                     }
                 }
             },{
-                xtype: "memorycombo",
+                xtype: "combo",
                 itemId: "cboLotno",
                 labelAlign: "top",
                 fieldLabel: "Lot #",
                 //labelWidth: 50,
                 width: 160,
-                store: 'memLotnos',
+                store: memLotnos,
+                remoteStore: Lotnos,
                 valueField: "label",
                 displayField: "label",
                 forceSelection: false,
@@ -353,9 +461,11 @@ Ext.define('Vega.view.reports.inventory.InventoryByLot', {
                 plugins: [{
                     ptype: "cleartrigger"
                 }],
-                listners: {
-                    triggerClear: function (combo) {
-
+                listeners: {
+                    beforequery: {
+                        fn: function(qe){
+                            console.log('Lotno', qe);
+                        }
                     }
                 }
             },{
@@ -404,7 +514,7 @@ Ext.define('Vega.view.reports.inventory.InventoryByLot', {
                                 operator: '='
                             }]);
 
-                            me.getViewModel().set('RawMatType', c.getValue().toUpperCase())
+                            me.getViewModel().set('RawMatType', c.getValue().toUpperCase());
                         }
                     }
                 }
@@ -422,7 +532,7 @@ Ext.define('Vega.view.reports.inventory.InventoryByLot', {
                 scale: "small",
                 iconAlign: "left",
                 action: "search",
-                iconCls: "fa fa-search"
+                iconCls: "x-fa fa-search"
             },
             "->",
             {
@@ -433,7 +543,7 @@ Ext.define('Vega.view.reports.inventory.InventoryByLot', {
                 scale: "small",
                 iconAlign: "left",
                 action: "print",
-                iconCls: "fa fa-print"
+                iconCls: "x-fa fa-print"
             },
             {
                 xtype: "button",
@@ -467,6 +577,6 @@ Ext.define('Vega.view.reports.inventory.InventoryByLot', {
                 '</div>' +
                 '</div>'
             }]
-        }]
+        }];
     }
-})
+});

@@ -5,18 +5,16 @@ Ext.define("Vega.view.sales.Pow", {
     requires: [
         'Vega.view.sales.PowController',
         'Vega.view.sales.PowModel',
-        //'Vega.view.sales.Grid',
-        //'Vega.view.sales.View',
+        'Vega.view.sales.TopBar',
         'Vega.view.sales.edit.Form',
-        'Vega.view.Display',
-        'Ext.ux.form.SearchComboBox'
+        'Vega.view.Display'
     ],
 
     alias: "widget.pow",
 
     config: {
-        activeState: null,
-        defaultActiveState: null
+        //activeState: null,
+        //defaultActiveState: null
     },
 
     controller: "pow",
@@ -26,17 +24,18 @@ Ext.define("Vega.view.sales.Pow", {
 
     cls: "shadow-panel",
     header: false,
-    margin: 8,
+    margin: '0 0 0 4',
 
     session: true,
 
     listeners: {
-        add: 'onBeforeAdd',
+        beforeadd: 'onBeforeAdd',
         tabopen: "onTabOpen",
-        clearall: 'onClearFilters',
+        //clearall: 'onClearFilters',
         rowdblclick: "onRowDblClick",
         itemdblclick: "onItemDblClick",
         itemcontextmenu: "onItemContextMenu",
+        actcopy: 'onActionCopy',
         actview: "onActionView",
         actrefresh: "onActionRefresh",
         ctxmnueditclick: "onContextMenuEditClick",
@@ -51,33 +50,32 @@ Ext.define("Vega.view.sales.Pow", {
                 xtype: "multiview",
                 reference: "multiview",
                 title: "P.O.W List",
-                iconCls: "fa fa-file-text-o",
+                iconCls: "x-fa fa-file-text-o",
                 tbar:{
-                    xtype:"topbar",
-                    reference:"topbar"
+                    xtype: "sales-topbar",
+                    reference: "topbar"
                 },
                 mainItems:[{
                     xtype: "sales-grid",
                     reference: "grid",
                     cls: 'pow-grid',
                     scrollable: true,
-                    stateful:true,
-                    stateId: "pow-grid",
-                    stateEvents: ["columnmove", "columnresize", "groupchange", "bodyresize"],
+                    //stateful:true,
+                    //stateId: "pow-grid",
+                    //stateEvents: ["columnmove", "columnresize", "groupchange", "bodyresize"],
                     publishes: ["selectedPows"],
                     bind: {
                         store: "{pows}",
                         selection: "{selectedPows}"
                     },
                     viewConfig: {
-                        loadMask:true,
                         stripeRows:true,
                         trackOver:true,
                         preserveScrollOnRefresh:true,
                         deferInitialRefresh:true,
                         emptyText:'<h1 style="margin:20px">No matching results</h1>',
                         getRowClass: function(rec, idx, rowParams, store){
-                            return "custom-row-style"
+                            return "custom-row-style";
                         }
                     },
                     listeners: {
@@ -88,10 +86,7 @@ Ext.define("Vega.view.sales.Pow", {
                     }
                 },
                 {
-                    /*
-                    xtype: "sales-view",
-                    reference: "icons"
-                    */
+
                 },
                 {
                     xtype: "sales-view",
@@ -102,23 +97,27 @@ Ext.define("Vega.view.sales.Pow", {
                         selection: "{selectedPows}"
                     },
                     tpl: new Ext.XTemplate('<tpl for=".">',
-                    '<div class="thumb-wrap {viewStatus}" id="mView-{powhId}">',
-                    '<div class="thumb">',
-                    //'<img src="{linkImage}" title="{title}" />',
-                    '</div>',
-                    '<div class="post-data">',
-                    '<div class="post-title">POW # {powno} <i class="fa fa-check-square-o fa-lg viewIcon {viewStatus}"></i></div>',
-                    '<div class="post-date">{createdon:date("M j,Y,g:i a")}</div>',
-                    '<div class="post-author">Registered by {userId:capitalize}</div>',
-                    '</div>',
-                    '<div>',
-                    '<span>{customer:uppercase}</span>',
-                    '<span>{status}</span>',
-                    '<span>{ordertype}</span>',
-                    '<span>{division}</span>',
-                    '<div style="font-size:11px;padding:4px;">{comments:this.formatComment}</div>',
-                    '</div>',
-                    '</div>',
+                        '<div class="thumb-wrap {viewStatus}" id="mView-{powhId}">',
+                            '<div class="thumb">',
+                            //'<img src="{linkImage}" title="{title}" />',
+                            //'<div class="{F_BFLAG}">Rejected</div>',
+                            '</div>',
+                            '<tpl if="attachs &gt; 0">',
+                                '<div class="post-attach"></div>',
+                            '</tpl>',
+                            '<div class="post-data">',
+                                '<div class="post-title">POW # {powno} <i class="x-fa fa-check-square-o fa-lg viewIcon {viewStatus}"></i></div>',
+                                '<div class="post-date">{createdon:date("M j,Y,g:i a")}</div>',
+                                '<div class="post-author">Registered by {userId:capitalize}</div>',
+                            '</div>',
+                            '<div>',
+                                '<span>{customer:uppercase}</span>',
+                                '<span>{status:uppercase}</span>',
+                                '<span>{ordertype:uppercase}</span>',
+                                '<span>{division:uppercase}</span>',
+                                '<div style="font-size:11px;padding:4px;">{comments:this.formatComment}</div>',
+                            '</div>',
+                        '</div>',
                     '</tpl>',
                     '<div class="x-clear"></div>',
                     {
@@ -134,15 +133,13 @@ Ext.define("Vega.view.sales.Pow", {
                     reference: "display"
                 }],
 
-                bbar:[{
+                bbar:{
                     xtype: "pagingtoolbar",
                     bind:{
                         store: "{pows}"
                     },
-                    style: {borderWidth:"0px"},
-                    dock: "bottom",
                     displayInfo: true
-                }]
+                }
             }]
         });
 
@@ -156,9 +153,17 @@ Ext.define("Vega.view.sales.Pow", {
             k = o.display,
             i = o.topbar;
 
+        if(Vega.user.inRole('sales') || Vega.user.inRole('cs') || Vega.user.inRole('administrators')){
+            i.actCopy.setText('Copy to ...');
+            //i.actCopy.setHidden(false);
+        }
+
+        //i.actCopy.setDisabled(true);
+
         me.contextmenu = Ext.create('Ext.menu.Menu', {
             items: [
                 i.actView,
+                i.actCopy,
                 i.actRefresh
             ]
         });
@@ -167,51 +172,10 @@ Ext.define("Vega.view.sales.Pow", {
         segmented.items.items[1].setHidden(true);
         segmented.setValue(2);
 
-        i.items.items[0].setHidden(false);
-        i.insert(0,
-            [{
-                xtype: "combo",
-                width: 112,
-                hideLabel: true,
-                displayField: "label",
-                valueField: "field",
-                value: "powno",
-                editable: false,
-                reference: "filterSelection",
-                bind: {
-                    store: "{salesCategories}"
-                },
-                listeners: {
-                    change: {
-                        fn: "onFilterItemChange",
-                        scope: this.controller
-                    }
-                }
-            },
-            {
-                xtype: "searchcombo",
-                reference: 'searchcombo',
-                width: 300,
-                hidden: true,
-                searchAt: 'sales-grid',
-                listeners: {
-                    //triggerclear: "onClearClick",
-                    //triggersearch: "onSearchClick"
-                }
-            },
-            {
-                xtype: "gridsearchfield",
-                reference: 'searchfield',
-                width: 300,
-                grid: "sales-grid",
-                paramName: "powno"
-            }]
-        );
-
-        this.relayEvents(i, ["actview", "actrefresh", "clearall"]);
+        this.relayEvents(i, ["actview", 'actcopy', "actrefresh"]);
         this.relayEvents(k, ["open"], 'tab');
         this.relayEvents(m, ["rowdblclick", "itemcontextmenu"]);
-        this.relayEvents(p, ["itemdblclick", "itemcontextmenu"])
+        this.relayEvents(p, ["itemdblclick", "itemcontextmenu"]);
     },
 
     onDestroy:function(){
@@ -219,4 +183,3 @@ Ext.define("Vega.view.sales.Pow", {
         this.callParent(arguments);
     }
 });
-

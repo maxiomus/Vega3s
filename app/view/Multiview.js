@@ -2,7 +2,7 @@
  * Created by tech on 3/8/2016.
  */
 Ext.define('Vega.view.Multiview', {
-    extend: 'Ext.form.Panel',
+    extend: 'Ext.panel.Panel',
 
     requires: [
         'Vega.view.MultiviewController',
@@ -30,6 +30,11 @@ Ext.define('Vega.view.Multiview', {
     mainItems: null,
     displayItems: null,
 
+    style: {
+        borderTop: '1px solid #cfcfcf'
+        //borderBottom: '1px solid #cfcfcf'
+    },
+
     initComponent: function(){
         var me = this;
 
@@ -42,8 +47,8 @@ Ext.define('Vega.view.Multiview', {
                 reference: "center",
                 defaultType: "container",
                 flex: 3,
-                minHeight: 300,
-                minWidth: 300,
+                //height: 300,
+                //width: 300,
                 items: me.mainItems
             },{
                 layout: "fit",
@@ -58,10 +63,13 @@ Ext.define('Vega.view.Multiview', {
                     }
                 },
                 border: false,
-                split: true,
+                split: {
+                    size: 1
+                },
                 flex: 2,
                 hidden: true,
-                minWidth: 150,
+                //width: 150,
+                //height: 300,
                 items: me.displayItems
             }]
         });
@@ -71,11 +79,11 @@ Ext.define('Vega.view.Multiview', {
 
     applyMainItems: function(c){
         var me = this;
-        me.lookupReference("center").add(c)
+        me.lookupReference("center").add(c);
     },
 
     applyDisplayItems: function(c){
         var me = this;
-        me.lookupReference("preview").add(c)
+        me.lookupReference("preview").add(c);
     }
 });

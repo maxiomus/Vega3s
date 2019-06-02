@@ -35,7 +35,7 @@ Ext.define('Vega.view.sales.edit.TnaOrderWindow', {
         //value: 1,
         hidden: true,
         displayField: 'name',
-        valueField: 'planId',
+        valueField: 'roleId',
         editable: false,
         bind: {
             store: '{planTypes}'
@@ -49,7 +49,7 @@ Ext.define('Vega.view.sales.edit.TnaOrderWindow', {
         xtype: "cycle",
         //ui: "default",
         prependText: "T&A: ",
-        iconCls: "fa fa-gear",
+        iconCls: "x-fa fa-gear",
         showText: true,
         //reference: "filterButton",
         changeHandler: "onTypeChange",
@@ -57,14 +57,14 @@ Ext.define('Vega.view.sales.edit.TnaOrderWindow', {
         menu: {
             items: [{
                 text: "A",
-                iconCls: "fa fa-gear",
-                type: '1',
+                iconCls: "x-fa fa-gear",
+                type: 1,
                 itemId: "a",
                 checked: true
             },{
                 text: "B",
-                iconCls: "fa fa-gear",
-                type: '2',
+                iconCls: "x-fa fa-gear",
+                type: 2,
                 itemId: "b",
                 checked: false
             }]
@@ -74,13 +74,13 @@ Ext.define('Vega.view.sales.edit.TnaOrderWindow', {
         text: 'Add',
         reference: 'add',
         width: 70,
-        iconCls: 'fa fa-plus',
+        iconCls: 'x-fa fa-plus',
         handler: 'onAddClick'
     },{
         xtype: 'button',
         text: 'Remove',
         reference: 'remove',
-        iconCls: 'fa fa-remove',
+        iconCls: 'x-fa fa-remove',
         bind: {
             disabled: '{!orders.selection}'
         },

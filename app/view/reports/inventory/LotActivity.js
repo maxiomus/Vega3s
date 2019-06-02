@@ -6,7 +6,8 @@ Ext.define("Vega.view.reports.inventory.LotActivity", {
 
     requires: [
         'Vega.view.reports.inventory.LotActivityController',
-        'Vega.view.reports.inventory.LotActivityModel'
+        'Vega.view.reports.inventory.LotActivityModel',
+        'Ext.data.proxy.Memory'
     ],
 
     alias: "widget.lotactivity",
@@ -16,11 +17,11 @@ Ext.define("Vega.view.reports.inventory.LotActivity", {
         type: "lotactivity"
     },
 
-    autoScroll: false,
-    layout: "fit",
     cls: "shadow-panel",
     border: false,
-    margin: 8,
+    margin: '0 0 0 4',
+
+    layout: "fit",
 
     bbar: [{
         xtype: "pagingtoolbar",
@@ -41,6 +42,9 @@ Ext.define("Vega.view.reports.inventory.LotActivity", {
 
     initComponent: function () {
         var me = this;
+
+        //Ext.getStore('memComponents').clearFilter();
+        //Ext.getStore('memComponents').filter('text', 'FABRICS');
 
         me.dockedItems = me.buildDockedItems();
 
@@ -99,25 +103,25 @@ Ext.define("Vega.view.reports.inventory.LotActivity", {
                         var f = Ext.util.Format;
                         var e = 0;
                         Ext.each(a, function (c) {
-                            e += c.lotTotal
+                            e += c.lotTotal;
                         });
                         return f.number(e, "0,0.00");
                     },
                     DateRenderer: function (a) {
                         if (a != null) {
-                            var d = new Date(a);
-                            function f(c) {
-                                return c < 10 ? "0" + c : c
-                            }
+                            var d = new Date(a),
+                            f = function(c) {
+                                return c < 10 ? "0" + c : c;
+                            };
                             return f(d.getUTCMonth() + 1) + "-" + f(d.getUTCDate()) + "-" + d.getUTCFullYear();
                         }
                     },
                     ExtPriceRenderer: function (d) {
                         var a = Ext.util.Format;
                         if (d < 0) {
-                            return '<span style="color:#ff0000;">' + a.usMoney(d) + '</span>'
+                            return '<span style="color:#ff0000;">' + a.usMoney(d) + '</span>';
                         } else {
-                            return a.usMoney(d)
+                            return a.usMoney(d);
                         }
                     },
                     UnitRenderer: function (g) {
@@ -125,16 +129,16 @@ Ext.define("Vega.view.reports.inventory.LotActivity", {
                         var a,
                             f = '<span style="color:{0}">{1}</span>';
                         if (g < 0) {
-                            a = "red"
+                            a = "red";
                         } else {
-                            a = "black"
+                            a = "black";
                         }
-                        return Ext.String.format(f, a, h.number(g, "0,0.00"))
+                        return Ext.String.format(f, a, h.number(g, "0,0.00"));
                     },
                     ActualRenderer: function (a) {
                         var d = '<input type="checkbox" name="actual_yn" {0} />';
                         if (a == "Y") {
-                            return Ext.String.format(d, "checked")
+                            return Ext.String.format(d, "checked");
                         } else {
                             return d;
                         }
@@ -161,11 +165,119 @@ Ext.define("Vega.view.reports.inventory.LotActivity", {
         var me = this;
 
         /*
-        var fabricStore = Ext.create('Vega.store.Components'),
-            proxy = fabricStore.getProxy();
+        var memComponents = Ext.create('Ext.data.Store', {
+            //storeId: 'memComponents',
+            pageSize: 50,
+            remoteFilter: true,
+            proxy: {
+                type: 'memory',
+                enablePaging: true,
+                reader: {
+                    type: 'json',
+                    rootProperty: 'data'
+                }
+            }
+        });
 
-        proxy.setUrl(proxy.url + '/fabrics');
+        var Components = Ext.create('Ext.data.Store', {
+            //storeId: 'remoteComponents',
+            pageSize: 0,
+            remoteFilter: true,
+            autoLoad: true,
+
+            proxy: {
+                type: 'ajax',
+                url: '/api/Combos/components',
+                reader: {
+                    type: 'json',
+                    rootProperty: 'data'
+                }
+            },
+
+            listeners: {
+                load: function(s){
+                    memComponents.getProxy().setData(s.getRange());
+                    memComponents.load();
+                }
+            }
+        });
+
+        Ext.apply(Components.getProxy().extraParams, {
+            type: 'FABRICS'
+        });
         */
+
+        var memRawColors = Ext.create('Ext.data.Store', {
+            //storeId: 'memRawColors',
+            pageSize: 50,
+            remoteFilter: true,
+            proxy: {
+                type: 'memory',
+                enablePaging: true,
+                reader: {
+                    type: 'json',
+                    rootProperty: 'data'
+                }
+            }
+        });
+
+        var RawColors = Ext.create('Ext.data.Store', {
+            //storeId: 'remoteRawColors',
+            autoLoad: true,
+            remoteFilter: true,
+            pageSize: 0,
+            proxy: {
+                type: 'ajax',
+                url: '/api/Combos/rawcolors',
+
+                reader: {
+                    type: 'json',
+                    rootProperty: 'data'
+                }
+            },
+            listeners: {
+                load: function(s){
+                    memRawColors.getProxy().setData(s.getRange());
+                    memRawColors.load();
+                }
+            }
+        });
+
+        var memLotnos = Ext.create('Ext.data.Store', {
+            //storeId: 'memLotnos',
+            pageSize: 50,
+            remoteFilter: true,
+            proxy: {
+                type: 'memory',
+                enablePaging: true,
+                reader: {
+                    type: 'json',
+                    rootProperty: 'data'
+                }
+            }
+        });
+
+        var Lotnos = Ext.create('Ext.data.Store', {
+            //storeId: 'remoteLotnos',
+            autoLoad: true,
+            pageSize: 0,
+            proxy: {
+                type: 'ajax',
+                url: '/api/Combos/lotnos',
+
+                reader: {
+                    type: 'json',
+                    rootProperty: 'data'
+                }
+            },
+
+            listeners: {
+                load: function(s){
+                    memLotnos.getProxy().setData(s.getRange());
+                    memLotnos.load();
+                }
+            }
+        });
 
         return [{
             xtype: "toolbar",
@@ -175,13 +287,14 @@ Ext.define("Vega.view.reports.inventory.LotActivity", {
                 align: "bottom"
             },
             items: [{
-                xtype: "memorycombo",
+                xtype: "combo",
                 itemId: "cboFabric",
                 labelAlign: "top",
                 fieldLabel: "Fabric",
                 labelWidth: 50,
                 width: 160,
                 store: 'memComponents',
+                remoteStore: 'Components',
                 valueField: "label",
                 displayField: "label",
                 forceSelection: false,
@@ -216,33 +329,35 @@ Ext.define("Vega.view.reports.inventory.LotActivity", {
                 */
                 listeners: {
                     triggerClear: function(combo){
-
                         var cboColor = combo.ownerCt.query('combo[itemId="cboColor"]')[0];
                         cboColor.getStore().clearFilter();
                         cboColor.setValue('');
                     },
                     beforequery: {
                         fn: function(qe){
+
                             var store = qe.combo.getStore();
-                            console.log(qe.combo, qe.combo.getValue())
+                            //console.log(qe.combo, qe.combo.getValue())
                             store.clearFilter();
                             store.filter([{
                                 property: 'text',
                                 value: 'FABRICS',
                                 operator: '='
                             }]);
+
                         }
                     }
                 }
             },
             {
-                xtype: "memorycombo",
+                xtype: "combo",
                 itemId: "cboColor",
                 labelAlign: "top",
                 fieldLabel: "Color",
                 labelWidth: 50,
                 width: 160,
-                store: 'memColors',
+                store: memRawColors,
+                remoteStore: RawColors,
                 valueField: "label",
                 displayField: "label",
                 forceSelection: false,
@@ -276,21 +391,18 @@ Ext.define("Vega.view.reports.inventory.LotActivity", {
                 },
                 */
                 listeners: {
-                    triggerClear: function(combo){
-
-                    },
                     beforequery: {
                         fn: function(qe){
                             var cboStyle = qe.combo.ownerCt.query('combo[itemId="cboFabric"]')[0],
                                 store = qe.combo.getStore();
 
-                            console.log(cboStyle, cboStyle.getValue())
+                            //console.log(cboStyle, cboStyle.getValue())
                             store.clearFilter();
 
                             if(!Ext.isEmpty(cboStyle.getValue())){
 
                                 store.filter([{
-                                    property: 'descript',
+                                    property: 'text',
                                     value: cboStyle.getValue().toUpperCase(),
                                     operator: '='
                                 }]);
@@ -301,13 +413,14 @@ Ext.define("Vega.view.reports.inventory.LotActivity", {
                 }
             },
             {
-                xtype: "memorycombo",
+                xtype: "combo",
                 itemId: "cboLotno",
                 labelAlign: "top",
                 fieldLabel: "Lot #",
                 //labelWidth: 50,
                 width: 160,
-                store: 'memLotnos',
+                store: memLotnos,
+                remoteStore: Lotnos,
                 valueField: "label",
                 displayField: "label",
                 forceSelection: false,
@@ -373,7 +486,7 @@ Ext.define("Vega.view.reports.inventory.LotActivity", {
                 scale: "small",
                 iconAlign: "left",
                 action: "search",
-                iconCls: "fa fa-search"
+                iconCls: "x-fa fa-search"
             },
             "->",
             {
@@ -384,7 +497,7 @@ Ext.define("Vega.view.reports.inventory.LotActivity", {
                 scale: "small",
                 iconAlign: "left",
                 action: "print",
-                iconCls: "fa fa-print"
+                iconCls: "x-fa fa-print"
             },
             {
                 xtype: "button",
@@ -431,14 +544,13 @@ Ext.define("Vega.view.reports.inventory.LotActivity", {
                 '</div>' +
                 '</div>'
             }]
-        }]
+        }];
     },
 
     renderTip: function (d, c) {
         if (d != undefined) {
-            c.tdAttr = 'data-qtip="' + d + '"'
+            c.tdAttr = 'data-qtip="' + d + '"';
         }
         return d;
     }
 });
-

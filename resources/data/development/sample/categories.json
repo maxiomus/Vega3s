@@ -1,0 +1,11 @@
+[
+  {"label": "Style #", "field": "style"},
+  {"label": "Body #", "field": "user2"},
+  {"label": "Fabric", "field": "fabrics"},
+  {"label": "Print", "field": "prints"},
+  {"label": "Market", "field": "user3"},
+  {"label": "Group", "field": "grp"},
+  {"label": "Sub. Cat", "field": "subcategory"},
+  {"label": "Stone Vendor", "field": "stone"},
+  {"label": "Memo", "field": "memo"}
+]

@@ -1,5 +1,6 @@
 Ext.define('Vega.view.dashboard.PowsController', {
     extend: 'Ext.app.ViewController',
+
     alias: 'controller.dashboard-pows',
 
     init: function(){

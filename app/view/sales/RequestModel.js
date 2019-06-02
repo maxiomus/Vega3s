@@ -15,24 +15,14 @@ Ext.define('Vega.view.sales.RequestModel', {
             //session: true,
             remoteFilter: true,
             remoteSort: true,
-            pageSize: 100,
+            pageSize: 99,
             filters: [{
                 property: 'progress',
                 value: 'request',
                 type: 'string'
             }]
-        },
-
-        factories: {
-            fields: ['id', 'label'],
-            //storeId: 'factories',
-            proxy: {
-                type: 'ajax',
-                url: 'data/factories.json'
-            },
-            autoLoad: false
-        },
-
+        }
+        /*
         sales: {
             fields: ['id', 'label'],
             storeId: 'sales',
@@ -41,20 +31,9 @@ Ext.define('Vega.view.sales.RequestModel', {
                 type: 'ajax',
                 url: 'data/sales.json'
             },
-
             listeners: {
                 refresh: "onSalesRefresh"
             }
-        },
-
-        salescontact: {
-            fields: ['id', 'label'],
-            storeId: 'salescontact',
-            proxy: {
-                type: 'ajax',
-                url: 'data/sales.json'
-            },
-            autoLoad: true
         },
 
         submissions: {
@@ -66,6 +45,7 @@ Ext.define('Vega.view.sales.RequestModel', {
             },
             autoLoad: true
         }
+        */
     },
 
     formulas: {

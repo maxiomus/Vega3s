@@ -1,0 +1,33 @@
+.wip-grid .x-grid-item
+{
+  height: 73px;
+  vertical-align: middle;
+  //cursor: pointer;
+}
+
+.wip-grid .x-grid-item.x-grid-item-selected {
+  border-bottom-color: #3892d4;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-top-color: #3892d4;
+  border-top-style: solid;
+  border-top-width: 2px;
+  background-color: #c2ddf2;
+}
+
+.overdue-row {
+  background-color: #ffe2e2;
+  //background-color: #fec8fe;
+  //color: #000;
+}
+
+.neardue-row {
+  //background-color: #fdfdaf;
+  background-color: #ffefbb;
+  //color: #900;
+}
+
+.x-change-col {
+  font-weight: 400;
+  color: $color-soft-red !important;
+}

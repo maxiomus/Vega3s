@@ -14,24 +14,15 @@ Ext.define('Vega.view.sales.ReviewModel', {
             autoLoad: false,
             remoteFilter: true,
             remoteSort: true,
-            pageSize: 100,
+            pageSize: 99,
             filters: [{
                 property: 'progress',
                 value: 'review',
                 type: 'string'
             }]
-        },
+        }
 
-        factories: {
-            fields: ['id', 'label'],
-            //storeId: 'factories',
-            proxy: {
-                type: 'ajax',
-                url: 'data/factories.json'
-            },
-            autoLoad: false
-        },
-
+        /*
         sales: {
             fields: ['id', 'label'],
             storeId: 'sales',
@@ -51,7 +42,7 @@ Ext.define('Vega.view.sales.ReviewModel', {
             },
             autoLoad: true
         }
-
+        */
 
     }
 

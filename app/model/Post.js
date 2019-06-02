@@ -13,6 +13,7 @@ Ext.define('Vega.model.Post', {
         { name: 'ParentID', type: 'int' },
         { name: 'Status', type: 'string' },
         { name: 'Sticky', type: 'int', allowNull: true },
+        { name: 'userId', type: 'string', mapping: 'Author', persist: false},
         { name: 'hasAttach', type: 'boolean', persist: false,
             calculate: function(data){
 

@@ -6,24 +6,25 @@ Ext.define('Vega.model.fabric.PoReceiving', {
         { name: 'color', type: 'string', convert: tr },
         { name: 'lotno', type: 'string', convert: tr },
         { name: 'rollno', type: 'string', convert: tr },
-        { name: 'unit1', type: 'float'},
-        { name: 'price', type: 'float'},
-        { name: 'logdate', convert: df },
+        { name: 'unit1', type: 'number'},
+        { name: 'price', type: 'number'},
+        { name: 'logdate', type: 'date', dateFormat: 'c'},
         { name: 'vendor', type: 'string', convert: tr },
         { name: 'warehouse', type: 'string', convert: tr },
         { name: 'warehouseType', type: 'string', convert: tr },
         { name: 'damage_location', type: 'string', convert: tr },
         { name: 'damageReason', type: 'string', convert: tr },
         { name: 'memo', type: 'string', convert: tr },
-        { name: 'totalUnit', type: 'float'},
-        { name: 'c_total_amt', type: 'float'},
+        { name: 'totalUnit', type: 'number'},
+        { name: 'c_total_amt', type: 'number'},
         { name: 'podId', type: 'int'},
         { name: 'inventoryId', type: 'int'},
         { name: 'userName', type: 'string', convert: tr },
-        { name: 'userTime', convert: df },
-        { name: 'updateDate', convert: df },
+        { name: 'userTime', type: 'date', dateFormat: 'c'},
+        { name: 'updateDate', type: 'date', dateFormat: 'c'},
         { name: 'location', type: 'string', convert: tr },
         { name: 'ref', type: 'string', convert: tr },
+        { name: 'userId', type: 'string', mapping: 'userName', persist: false},
         { name: 'pino', type: 'int'},
         {
             name: 'pono',
@@ -62,9 +63,8 @@ Ext.define('Vega.model.fabric.PoReceiving', {
 
 function df(value, record){
     return value != undefined ? new Date(value.replace(/-/g, '\/').replace(/T.+/,'')): '';
-};
+}
 
 function tr(value, record){
     return Ext.String.trim(value);
-};
-
+}

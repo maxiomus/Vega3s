@@ -7,10 +7,12 @@ Ext.define('Vega.model.Powlog', {
     fields: [
         // id field
         {
-            name: 'powlogId'
+            name: 'powlogId',
+            type: 'int'
         },
         {
-            name: 'powdId'
+            name: 'powdId',
+            type: 'int'
         },
         {
             name: 'powno',
@@ -56,16 +58,12 @@ Ext.define('Vega.model.Powlog', {
     ],
 
     idProperty: 'powlogId',
+    identifier: 'negative',
 
     proxy: {
         //$configStrict: false,
         type: 'rest',
         url: '/api/Powlog/',
-
-        pageParam: '',
-        startParam: '',
-        limitParam: '',
-
         reader: {
             type: 'json',
             rootProperty: 'data'

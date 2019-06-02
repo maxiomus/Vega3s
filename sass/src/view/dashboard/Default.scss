@@ -1,0 +1,34 @@
+.default-top {
+  border-bottom: 1px solid #dddddd !important;
+  font-family: Century Gothic,CenturyGothic,AppleGothic,sans-serif;
+  background-color: #ffffff;
+  //padding: 6px;
+}
+
+.user-info {
+  font-size: 24px;
+  font-style: normal;
+  //font-variant: normal;
+  font-weight: 400;
+  text-align: center;
+  line-height: 60px;
+}
+
+.time-info {
+  font-size: 12px;
+  font-style: normal;
+  //font-variant: normal;
+  text-align: center;
+  //line-height: 60px;
+}
+
+.blue-box {
+  //background-color: #ffffff;
+  border: 3px solid #157fcc;
+  border-radius: 5px;
+  //box-shadow: 2px 2px 2px #bbb;
+  padding: 10px;
+
+  color: #157fcc;
+  font-weight: bold;
+}

@@ -9,10 +9,6 @@ Ext.define('Vega.view.inventory.fabric.ReceivingModel', {
         'Ext.data.proxy.Ajax'
     ],
 
-    data: {
-
-    },
-
     stores: {
         'lotnos': {
             fields: ['id', 'text'],

@@ -7,14 +7,10 @@ Ext.define('Vega.view.reports.inventory.InventoryByLotModel', {
 
     alias: 'viewmodel.inventorybylot',
 
-    data: {
-
-    },
-
     stores: {
 
         'lotnos': {
-            fields: ['id', 'text'],
+            fields: ['label', 'text', 'descript'],
 
             // allow the grid to interact with the paging scroller by buffering
             //buffered: true,

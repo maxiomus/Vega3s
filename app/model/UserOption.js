@@ -24,6 +24,6 @@ Ext.define('Vega.model.UserOption', {
             type: 'json',
             //totalProperty: 'total',
             rootProperty: 'data'
+        }
     }
-}
 });

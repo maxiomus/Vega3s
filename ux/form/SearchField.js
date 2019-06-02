@@ -32,6 +32,7 @@ Ext.define('Ext.ux.form.SearchField', {
             proxy;
 
         me.callParent(arguments);
+
         me.on('specialkey', function(f, e){
             if (e.getKey() == e.ENTER) {
                 me.onSearchClick();
@@ -41,14 +42,13 @@ Ext.define('Ext.ux.form.SearchField', {
         /**
          * Adding
          */
-        me.bindStore(me.store || 'empty-ext-store', true);
+        me.bindStore(store || 'empty-ext-store', true);
         /**
          * Removing
          */
         /*if (!store || !store.isStore) {
             store = me.store = Ext.data.StoreManager.lookup(store);
         }*/
-
 
         // We're going to use filtering
         /**
@@ -78,6 +78,7 @@ Ext.define('Ext.ux.form.SearchField', {
             store.remoteFilter = true;
 
             // Set up the proxy to encode the filter in the simplest way as a name / value pair
+            /*
             proxy = me.store.getProxy();
 
             proxy.setFilterParam(me.paramName);
@@ -85,6 +86,7 @@ Ext.define('Ext.ux.form.SearchField', {
             proxy.encodeFilters = function(filters)  {
                 return filters[0].getValue();
             }
+            */
         }
     },
 
@@ -109,6 +111,7 @@ Ext.define('Ext.ux.form.SearchField', {
             // Param name is ignored here since we use custom encoding in the proxy.
             // id is used by the Store to replace any previous filter
             me.activeFilter = new Ext.util.Filter({
+                operator: 'st',
                 property: me.paramName,
                 value: value
             });

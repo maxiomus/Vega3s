@@ -9,12 +9,29 @@ Ext.define('Vega.view.main.MainModel', {
     },
 
     stores: {
-        status: {
-            fields: ["id", "text"],
-            //storeId: 'powStatus',
+        /*
+        categories: {
+            fields: ["label", "field"],
+            autoLoad: true,
             proxy: {
                 type: 'ajax',
-                url: 'data/powStatus.json'
+                url: 'data/sales/categories.json'
+            }
+        },
+
+        dept: {
+            fields: ["id", "text"],
+            //storeId: 'customer',
+            autoLoad: true,
+            pageSize: 999,
+            proxy: {
+                type: "ajax",
+                url: "/api/Combos/departments",
+
+                reader: {
+                    type: "json",
+                    rootProperty: "data"
+                }
             }
         },
 
@@ -24,31 +41,40 @@ Ext.define('Vega.view.main.MainModel', {
             autoLoad: false,
             proxy: {
                 type: "ajax",
-                url: "/api/Options/customers",
+                url: "/api/Combos/customers",
                 pageParam: '',
                 startParam: '',
                 limitParam: '',
                 reader: {
                     type: "json",
-                    rootProperty: "data",
-                    totalProperty: "total",
-                    successProperty: "success"
+                    rootProperty: "data"
                 }
             }
         },
 
-        ordertype: {
+        status: {
+            fields: ["id", "text"],
+            //storeId: 'powStatus',
+            autoLoad: true,
+            proxy: {
+                type: 'ajax',
+                url: 'data/powStatus.json'
+            }
+        },
+
+        type: {
             fields: ["id", "text"],
             //storeId: 'type',
-            autoLoad: false,
+            autoLoad: true,
             proxy: {
                 type: "ajax",
-                url: "/api/Options/ordertypes",
+                url: "/api/Combos/ordertypes",
+                pageParam: '',
+                startParam: '',
+                limitParam: '',
                 reader: {
                     type: "json",
-                    rootProperty: "data",
-                    totalProperty: "total",
-                    successProperty: "success"
+                    rootProperty: "data"
                 }
             }
         },
@@ -56,36 +82,19 @@ Ext.define('Vega.view.main.MainModel', {
         division: {
             fields: ["id", "text"],
             //storeId: 'division',
-            autoLoad: false,
-            proxy: {
-                type: "ajax",
-                url: "/api/Options/divisions",
-                reader: {
-                    type: "json",
-                    rootProperty: "data",
-                    totalProperty: "total",
-                    successProperty: "success"
-                }
-            }
-        },
-
-        progress: {
-            fields: ["id", "text"],
-            //storeId: 'powStatus',
-            proxy: {
-                type: 'ajax',
-                url: 'data/progress.json'
-            }
-        },
-
-        salesCategories: {
-            fields: ["label", "field"],
             autoLoad: true,
             proxy: {
-                type: 'ajax',
-                url: 'data/sales/category.json'
+                type: "ajax",
+                url: "/api/Combos/divisions",
+                pageParam: '',
+                startParam: '',
+                limitParam: '',
+                reader: {
+                    type: "json",
+                    rootProperty: "data"
+                }
             }
-        },
+        }
 
         setting: {
             model: 'Vega.model.settings.Options',
@@ -99,5 +108,6 @@ Ext.define('Vega.view.main.MainModel', {
                 }
             }
         }
+        */
     }
 });

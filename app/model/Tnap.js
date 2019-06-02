@@ -5,16 +5,17 @@ Ext.define('Vega.model.Tnap', {
         { name: 'dtId', type: 'int'},
         { name: 'tnaId', type: 'int'},
         { name: 'powdId', type: 'int'},
-        { name: 'planId', type: 'int', persist: false },
+        //{ name: 'roleId', type: 'int', persist: false },
+        { name: 'activity', type: 'string'},
         { name: 'descript', type: 'string'},
-        //{ name: 'activity', type: 'string', persist: false },
         //{ name: 'duration', type: 'int', persist: false },
-        { name: 'due', type: 'date', dateFormat: 'c'},
+        { name: 'due', type: 'date', dateFormat: 'c', dateWriteFormat: 'Y-m-d'},
         { name: 'responder', type: 'string'},
         { name: 'priority', type: 'int'},
-        { name: 'remind', type: 'date', dateFormat: 'c'},
-        { name: 'eta', type: 'date', dateFormat: 'c'},
-        { name: 'complete', type: 'date', dateFormat: 'c'},
+        { name: 'remind', type: 'date', dateFormat: 'c', dateWriteFormat: 'Y-m-d'},
+        { name: 'eta', type: 'date', dateFormat: 'c', dateWriteFormat: 'Y-m-d'},
+        { name: 'sent', type: 'date', dateFormat: 'c', dateWriteFormat: 'Y-m-d'},
+        { name: 'complete', type: 'date', dateFormat: 'c', dateWriteFormat: 'Y-m-d'},
         { name: 'remarks', type: 'string'},
         { name: 'lineseq', type: 'int', persist: false,
             calculate: function(data){
@@ -62,4 +63,4 @@ Ext.define('Vega.model.Tnap', {
             }
         }
     }
-})
+});

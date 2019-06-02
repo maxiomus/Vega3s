@@ -7,10 +7,10 @@ Ext.define('Vega.model.development.FabricRequest', {
     fields: [
         { name: 'ID', type: 'int'},
         { name: 'RowNo', type: 'int', allowNull: true },
-        { name: 'ETA', type: 'date', dateFormat: 'c'},
-        { name: 'Due', type: 'date', dateFormat: 'c'},
-        { name: 'Issued', type: 'date', dateFormat: 'c'},
-        { name: 'Received', type: 'date', dateFormat: 'c'},
+        { name: 'ETA', type: 'date', dateFormat: 'c', dateWriteFormat: 'Y-m-d'},
+        { name: 'Due', type: 'date', dateFormat: 'c', dateWriteFormat: 'Y-m-d'},
+        { name: 'Issued', type: 'date', dateFormat: 'c', dateWriteFormat: 'Y-m-d'},
+        { name: 'Received', type: 'date', dateFormat: 'c', dateWriteFormat: 'Y-m-d'},
         { name: 'Fabric', type: 'string', allowNull: true},
         { name: 'Color', type: 'string', allowNull: true},
         { name: 'Descript', type: 'string', allowNull: true},
@@ -28,7 +28,8 @@ Ext.define('Vega.model.development.FabricRequest', {
         { name: 'CDate', type: 'date', dateFormat: 'c'},
         { name: 'CUser', type: 'string', allowNull: true},
         { name: 'UDate', type: 'date', dateFormat: 'c'},
-        { name: 'MUser', type: 'string', allowNull: true}
+        { name: 'MUser', type: 'string', allowNull: true},
+        { name: 'userId', type: 'string', mapping: 'CUser', persist: false}
     ],
 
     idProperty: 'ID',
@@ -72,4 +73,4 @@ Ext.define('Vega.model.development.FabricRequest', {
             }
         }
     }
-})
+});

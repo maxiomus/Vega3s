@@ -18,15 +18,14 @@ Ext.define("Vega.view.sales.Grid", {
     },
     */
 
-    cls: "pow-grid",
-    stateful:true,
-    stateId: "pow-grid",
-    stateEvents: ["columnmove", "columnresize", "groupchange", "bodyresize"],
+    //cls: "pow-grid",
+    //stateful:true,
+    //stateId: "pow-grid",
+    //stateEvents: ["columnmove", "columnresize", "groupchange", "bodyresize"],
 
-    loadMask: true,
-
-    listeners: {
-
+    style: {
+        borderTop: '1px solid #cfcfcf',
+        borderBottom: '1px solid #cfcfcf'
     },
 
     initComponent: function(){
@@ -61,7 +60,7 @@ Ext.define("Vega.view.sales.Grid", {
             }]
         });
 
-        me.callParent(arguments)
+        me.callParent(arguments);
     },
 
     buildColumns: function(){
@@ -75,13 +74,14 @@ Ext.define("Vega.view.sales.Grid", {
             }
         },
         {
-            text: "Date",
-            width: 140,
+            xtype: 'datecolumn',
+            text: "Date & Time",
             dataIndex: "createdon",
+            width: 140,
+            format: 'Y-m-d h:i a',
             filter: {
                 type: "date"
-            },
-            renderer: this.formatDate
+            }
         },
         {
             text: "P.O.W #",
@@ -94,7 +94,7 @@ Ext.define("Vega.view.sales.Grid", {
                 var h = "";
                 if(localStorage.getItem("pow-seen-" + f.data.powhId)){
                     e.tdCls += "visited";
-                    h = ' <i class="fa fa-check-square-o fa-lg"></i>'
+                    h = ' <i class="x-fa fa-check-square-o fa-lg"></i>';
                 }
                 return g + h;
             }
@@ -116,7 +116,7 @@ Ext.define("Vega.view.sales.Grid", {
                 type: "string"
             },
             renderer: function(c, d){
-                return Ext.util.Format.uppercase(c)
+                return Ext.util.Format.uppercase(c);
             }
         },
         {
@@ -137,8 +137,10 @@ Ext.define("Vega.view.sales.Grid", {
             }
         },
         {
+            xtype: 'datecolumn',
             text: "CXL Date",
-            dataIndex: "cancelon",
+            dataIndex: "cxldate",
+            format: 'Y-m-d',
             filter: {
                 type: "date"
             }
@@ -168,10 +170,30 @@ Ext.define("Vega.view.sales.Grid", {
             filter: {
                 type: "string"
             }
-        }]
+        },
+        {
+            text: "Update User",
+            dataIndex: "updatedby",
+            width:140,
+            hidden:true,
+            filter: {
+                type: "string"
+            }
+        },
+        {
+            xtype: 'datecolumn',
+            text: "Update Date",
+            width: 140,
+            dataIndex: "updatedon",
+            format: 'Y-m-d H:i a',
+            hidden: true,
+            filter: {
+                type: "date"
+            }
+        }];
     },
 
     loadStore: function(){
-        this.getStore().load()
+        this.getStore().load();
     }
 });

@@ -26,7 +26,7 @@ Ext.define('Vega.view.dashboard.WeatherModel', {
             }
         },
         climates: {
-            model: 'weather.Climate',
+            //model: 'weather.Climate',
             storeId: 'climates',
             //autoLoad: true,
             proxy: {

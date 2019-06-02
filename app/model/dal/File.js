@@ -53,4 +53,4 @@ Ext.define('Vega.model.dal.File', {
             }
         }
     }
-})
+});

@@ -1,0 +1,38 @@
+[
+  {
+  "label": "P.O.W #",
+  "field": "powno"
+  },
+  {
+    "label": "Customer",
+    "field": "customer"
+  },
+  {
+    "label": "Cut #",
+    "field": "pono"
+  },
+  {
+    "label": "Body #",
+    "field": "bodyref"
+  },
+  {
+    "label": "Fabric",
+    "field": "fab_code"
+  },
+  {
+    "label": "Style #",
+    "field": "style"
+  },
+  {
+    "label": "Prints",
+    "field": "prints"
+  },
+  {
+    "label": "Status",
+    "field": "poh_status"
+  },
+  {
+    "label": "Process Type",
+    "field": "processType"
+  }
+]

@@ -22,6 +22,8 @@ Ext.define('Vega.model.Pow', {
         { name: 'reviseon', type: 'date'},
         { name: 'cancelon', type: 'date'},
         { name: 'submits', type: 'string'},
+        { name: 'progress', type: 'string'},
+        { name: 'attachs', type: 'int'},
         { name: 'visited', type: 'string', persist: false}
     ],
 

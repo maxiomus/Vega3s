@@ -18,6 +18,7 @@ Ext.define('Vega.view.development.request.FabricModel', {
             pageSize: 9999999,
 
             session: true,
+
             filters: [{
                 property: 'Status',
                 value: 'In Progress',
@@ -51,7 +52,7 @@ Ext.define('Vega.view.development.request.FabricModel', {
                 listeners: {
                     exception: function (proxy, response, operation) {
 
-                        Vega.util.Utils.showErrorMsg(response.status.toString() + ' - ' + response.statusText.toString())
+                        Vega.util.Utils.showErrorMsg(response.status.toString() + ' - ' + response.statusText.toString());
                     }
                 }
             }
@@ -60,9 +61,10 @@ Ext.define('Vega.view.development.request.FabricModel', {
         categories: {
             fields: ['label', 'field'],
             autoLoad: true,
+            pageSize: 0,
             proxy: {
                 type: 'ajax',
-                url: 'data/development/request/fabric/categories.json',
+                url: 'resource/data/development/request/fabric/categories.json',
                 reader: {
                     type: 'json',
                     rootProperty: 'data'
@@ -100,7 +102,7 @@ Ext.define('Vega.view.development.request.FabricModel', {
             autoLoad: false,
             proxy: {
                 type: "ajax",
-                url: "/api/Options/vendors",
+                url: "/api/Combos/vendors",
                 pageParam: '',
                 startParam: '',
                 limitParam: '',
@@ -119,7 +121,7 @@ Ext.define('Vega.view.development.request.FabricModel', {
             autoLoad: false,
             proxy: {
                 type: "ajax",
-                url: "/api/Options/customers",
+                url: "/api/Combos/customers",
                 pageParam: '',
                 startParam: '',
                 limitParam: '',
@@ -138,7 +140,7 @@ Ext.define('Vega.view.development.request.FabricModel', {
             autoLoad: false,
             proxy: {
                 type: "ajax",
-                url: "/api/Options/users",
+                url: "/api/Combos/users",
                 pageParam: '',
                 startParam: '',
                 limitParam: '',

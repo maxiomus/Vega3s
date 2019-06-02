@@ -1,3 +1,94 @@
+.pow-attach-view {
+  background: white;
+  font: 11px Arial, Helvetica, sans-serif;
+  //padding: 8px 0 8px 8px;
+  //margin: 10px 0 10px 10px;
+}
+
+.pow-attach-view .thumb-wrap {
+  float: left;
+  margin: 0 8px 8px 0;
+  //padding: 1px;
+  width: 128px;
+  height: 128px;
+  position: relative;
+
+  cursor: pointer;
+}
+
+.pow-attach-view .thumb {
+  background: #eeeeee;
+  border: 1px solid #d6d6d6;
+  //margin: 1px;
+  position: absolute;
+  width: 120px;
+  height: 120px;
+
+  top: 50%;
+  left: 50%;
+  text-align: center;
+  margin-right: -50%;
+  transform: translate(-50%, -50%)
+  //padding: 3px;
+}
+
+.pow-attach-view .thumb .title {
+  background: #fbfbfb;
+  border-top: 1px solid #d6d6d6;
+  //display: block;
+  overflow: hidden;
+  width: 118px;
+  position: absolute;
+  bottom: 0;
+  margin-right: -50%;
+  text-align: left;
+  max-height: 30%;
+  //margin: 1px 1px;
+  padding: 4px;
+  font-weight: bolder;
+  //opacity:0.4;
+  //-moz-opacity:0.4;
+  //-khtml-opacity:0.4;
+  //filter:alpha(opacity=40); /* For IE8 and earlier */
+}
+
+.pow-attach-view .thumb img
+{
+  //padding: 3px 5px 2px 3px;
+  //margin: 2px 0 0 2px;
+  //float:left;
+  //width: 64px;
+  //height: 64px;
+}
+
+.pow-attach-view .x-item-over {
+  border: 3px solid #6593cf;
+  //margin: 1px;
+  background: #E2EFF8;
+  //padding: 1px;
+}
+
+.pow-attach-view .x-item-selected {
+  //border: 1px solid #6593cf;
+  //background: #C1DDF2;
+  border: 3px solid #6593cf;
+  //padding: 1px;
+  //background: #FFEFBB;
+  //background: #DFEDFF;
+  //padding: 1px;
+}
+
+.pow-attach-view .x-item-selected:before {
+  content: '\f046';
+  font-family: FontAwesome;
+  font-size: 2.0em;
+  color: #6593cf;
+  position: absolute;
+  z-index: 99;
+  top: 2px;
+  right: 2px;
+}
+
 .thumbnail{
   vertical-align: middle;
 }

@@ -1,23 +1,19 @@
 Ext.define('Ext.ux.form.CheckboxStoreGroup', {
     extend: 'Ext.form.CheckboxGroup',
 
-    /*
     mixins: [
         'Ext.util.StoreHolder'
     ],
-    */
 
     alias: 'widget.checkboxstoregroup',
 
-    config: {
-        store: null,
-        labelField: 'label',
-        valueField: 'id',
-        checkedField: 'checked'
-        //columns: 3,
-        //boxFieldName: 'cb'
-    },
+    labelField: 'label',
+    valueField: 'id',
+    checkedField: 'checked',
+    //columns: 3,
+    //boxFieldName: 'cb'
 
+    /*
     applyStore: function(store) {
         if (Ext.isString(store)) {
             return Ext.getStore(store);
@@ -28,7 +24,7 @@ Ext.define('Ext.ux.form.CheckboxStoreGroup', {
 
     updateStore: function(newStore, oldStore) {
         if (oldStore) {
-            store.removeEventListener('datachanged', this.onStoreChange, this);
+            oldStore.removeEventListener('datachanged', this.onStoreChange, this);
         }
         newStore.on('datachanged', this.onStoreChange, this);
     },
@@ -59,18 +55,45 @@ Ext.define('Ext.ux.form.CheckboxStoreGroup', {
         Ext.resumeLayouts(true);
 
     },
+    */
 
     initComponent: function() {
-        var me = this;
+        var me = this,
+            store = me.store;
 
         me.callParent(arguments);
-        //me.bindStore(me.store || 'empty-ext-store', true);
-        me.on('afterrender', me.onAfterRender);
+
+        me.bindStore(store || 'empty-ext-store', true);
     },
 
-    onAfterRender: function() {
-        if (this.getStore().totalCount) {
-            this.onStoreChange(this.getStore());
+    onBindStore: function(s) {
+
+        if(s && this.rendered){
+            var me = this,
+                store = me.store;
+
+            Ext.suspendLayouts();
+            me.removeAll();
+
+            var vField = me.valueField;
+            var lField = me.labelField;
+            var cField = me.checkedField;
+            //var fName = this.getBoxFieldName();
+            var rec = null;
+
+            for (var i=0; i<store.getCount(); i++) {
+                rec = store.getAt(i);
+
+                me.add({
+                    //xtype: 'checkbox',
+                    boxLabel: rec.get(lField),
+                    inputValue: rec.get(vField)
+                    //checked: rec.get(cField)
+                    //name: this.name
+                });
+            }
+
+            Ext.resumeLayouts(true);
         }
     }
 });

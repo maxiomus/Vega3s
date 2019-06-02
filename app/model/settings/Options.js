@@ -11,4 +11,4 @@ Ext.define('Vega.model.settings.Options', {
 
     //idProperty: 'Property'
     //identifier: 'negative',
-})
+});

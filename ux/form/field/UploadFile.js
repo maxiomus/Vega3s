@@ -30,6 +30,10 @@ Ext.define('Ext.ux.form.field.UploadFile', {
     formData: null,
 
     initComponent: function(config){
+        if(!Ext.isEmpty(this.filesQueue)){
+            this.filesQueue.length = 0;
+        }
+
         this.on('afterrender', function() {
             /**
              * If multifile = true then multiple select of files is allowed

@@ -1,9 +1,0 @@
-[
-  {"label": "Style #", "field": "style"},
-  {"label": "Body #", "field": "user2"},
-  {"label": "Fabric", "field": "fabrics"},
-  {"label": "Print", "field": "prints"},
-  {"label": "Designer", "field": "designer"},
-  {"label": "Stone Vendor", "field": "stone"},
-  {"label": "Memo", "field": "memo"}
-]

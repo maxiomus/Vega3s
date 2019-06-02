@@ -14,6 +14,7 @@ Ext.define("Vega.view.Display",{
         type: "display"
     },
 
+    focusable: true,
     scrollable: false,
     border: false,
 
@@ -28,17 +29,74 @@ Ext.define("Vega.view.Display",{
     config: {
         inTab: false,
         node: null,
-        active: null
+        active: null,
+        // In order to keyboard nav works,
+        // Non-focusable must be focusable and tabIndex must be supplied.
+        keyHandlers: {
+            Q: 'onEnterKey',
+            B: 'onPrintKeyPressed'
+        }
     },
 
     initComponent: function(){
         var me = this;
 
+        Ext.applyIf(me, {
+            tabIndex: parseInt(me.getId().replace('display-', ''),10)
+        });
+
         //this.tpl = this.createTpl();
         me.dockedItems = me.createToolbar();
-
         //this.items = this.buildItems();
+
         me.callParent(arguments);
+    },
+
+    afterRender: function(){
+        var me = this;
+        me.callParent(arguments);
+    },
+
+    onDisable: function() {
+        this.callParent(arguments); // always!!
+    },
+
+    onEnable: function() {
+        this.callParent(arguments); // always!!
+    },
+
+    onEnterKey: function(event){
+        //console.log(this)
+        //Ext.Msg.alert('KeyMap', 'You pressed ENTER.');
+        event.preventDefault();
+        event.stopEvent();
+
+        var tabpanel = this.ownerCt;
+        if(event.ctrlKey && this.closable){
+            tabpanel.remove(this);
+        }
+    },
+
+    onPrintKeyPressed: function(e){
+        e.stopEvent();
+
+        if(e.ctrlKey){
+            var iframe = this.getComponent('contentIframe');
+
+            if(iframe){
+                var cw = iframe.getEl().dom.contentWindow;
+                //console.log(iframe, cw.document);
+                cw.print();
+            }
+            else{
+                //var innerPnl = this.view.items.items[0].ownerCt;
+                //var img = innerPnl.down('image');
+
+                var innerPnl = this.getComponent('innerPnl');
+                innerPnl.print();
+                //console.log(innerPnl)
+            }
+        }
     },
 
     /**
@@ -51,8 +109,12 @@ Ext.define("Vega.view.Display",{
         me.active = rec;
         me.update(rec.data);
 
-        //var innerPnl = me.getComponent('innerPnl');
-        //innerPnl.update(rec.data);
+        /*
+        var innerPnl = me.getComponent('innerPnl');
+        if(innerPnl){
+            innerPnl.update(rec.data);
+        }
+        */
     },
 
     /**
@@ -67,14 +129,14 @@ Ext.define("Vega.view.Display",{
 
         btnClose = Ext.widget('button', {
             text: 'Close',
-            iconCls: 'fa fa-close',
+            iconCls: 'x-fa fa-close',
             handler: 'onClose'
         });
 
         btnViewTab = Ext.widget('button', {
             text: 'View in new tab',
             //glyph: 102,
-            iconCls: 'fa fa-external-link',
+            iconCls: 'x-fa fa-external-link',
             handler: "openTab",
             scope: this
         });
@@ -82,14 +144,14 @@ Ext.define("Vega.view.Display",{
         btnPrintTab = Ext.widget('button', {
             text: 'Print',
             //glyph: 102,
-            iconCls: 'fa fa-print',
+            iconCls: 'x-fa fa-print',
             handler: "printTab"
         });
 
         btnBookmark = Ext.widget('button', {
             text: 'Add to Bookmark',
             //glyph: 102,
-            iconCls: 'fa fa-bookmark',
+            iconCls: 'x-fa fa-bookmark',
             handler: "bookmarkTab"
         });
 
@@ -129,7 +191,31 @@ Ext.define("Vega.view.Display",{
      * @private
      */
     openTab: function(btn){
-        console.log('openTab', this.active);
+        //console.log('openTab', this.active);
         this.fireEvent('open', this, this.active);
+    },
+
+    loadIframe: function(){
+        var me = this,
+            d = Ext.util.Format,
+            srcPath = d.format('../services/PowPreviewPrint.ashx?ID={0}', me.active.data.powhId);
+
+        me.removeAll();
+
+        if(me.active.data.revision == -1){
+            srcPath = d.format('../services/POWHandler.ashx?date={0}&file={1}', d.date(me.active.data.createdon, 'm/d/Y'), me.active.data.link);
+        }
+
+        me.add({
+            xtype: "component",
+            itemId: "contentIframe",
+            autoEl: {
+                tag: "iframe",
+                style: {height: "100%"},
+                width: "100%",
+                border: "none",
+                src: srcPath
+            }
+        });
     }
 });

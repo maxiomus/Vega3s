@@ -22,7 +22,7 @@ Ext.define("Vega.view.inventory.fabric.Receiving", {
 
     cls: "shadow-panel",
     header: false,
-    margin: 8,
+    margin: '0 0 0 4',
 
     listeners: {
 
@@ -30,14 +30,19 @@ Ext.define("Vega.view.inventory.fabric.Receiving", {
 
     initComponent: function(){
         var me = this;
+
         Ext.applyIf(me, {
             items: [{
                 title: "Fabric Receiving",
-                iconCls: "fa fa-exchange",
+                iconCls: "x-fa fa-exchange",
 
                 layout: {
                     type: "vbox",
                     align: "stretch"
+                },
+
+                style: {
+                    borderTop: '1px solid #cfcfcf'
                 },
 
                 defaults: {
@@ -84,7 +89,7 @@ Ext.define("Vega.view.inventory.fabric.Receiving", {
                         xtype: "button",
                         ui: "default",
                         text: "Search",
-                        iconCls: "fa fa-refresh",
+                        iconCls: "x-fa fa-refresh",
                         width: 90,
                         action: "refresh",
                         listeners: {
@@ -95,7 +100,7 @@ Ext.define("Vega.view.inventory.fabric.Receiving", {
                         xtype: "button",
                         ui: "default",
                         text: "Save",
-                        iconCls: "fa fa-save",
+                        iconCls: "x-fa fa-save",
                         width: 90,
                         action: "save",
                         listeners: {
@@ -107,7 +112,7 @@ Ext.define("Vega.view.inventory.fabric.Receiving", {
                         xtype: "button",
                         ui: "default",
                         text: "Print",
-                        iconCls: "fa fa-print",
+                        iconCls: "x-fa fa-print",
                         width: 90,
                         action: "print",
                         listeners: {
@@ -120,7 +125,10 @@ Ext.define("Vega.view.inventory.fabric.Receiving", {
                     xtype: "form",
                     reference: "poheader",
                     layout: "anchor",
-                    margin: "0 0 5 0",
+                    style: {
+                        borderTop: '1px solid #cfcfcf'
+                    },
+                    padding: "5 0 5 0",
                     defaults: {
                         layout: {
                             type: "hbox",
@@ -133,8 +141,8 @@ Ext.define("Vega.view.inventory.fabric.Receiving", {
                             editable: false,
                             labelAlign: "left",
                             labelWidth: 75,
-                            margin: "-3 0 0 5",
-                            fieldStyle: "background-color: #ddd"
+                            margin: "-2 0 0 5",
+                            fieldStyle: "background-color: #ddd;padding: 3px;vertical-align: middle;"
                         }
                     },
                     items: [{
@@ -148,7 +156,9 @@ Ext.define("Vega.view.inventory.fabric.Receiving", {
                             name: "status"
                         },
                         {
+                            xtype: 'datefield',
                             fieldLabel: "Cancel",
+                            readOnly: true,
                             name: "cancelDate"
                         },
                         {
@@ -183,11 +193,15 @@ Ext.define("Vega.view.inventory.fabric.Receiving", {
                             name: "pono"
                         },
                         {
+                            xtype: 'datefield',
                             fieldLabel: "P.O Date",
+                            readOnly: true,
                             name: "orderDate"
                         },
                         {
+                            xtype: 'datefield',
                             fieldLabel: "ETA Date",
+                            readOnly: true,
                             name: "etaDate"
                         },
                         {
@@ -219,11 +233,15 @@ Ext.define("Vega.view.inventory.fabric.Receiving", {
                             name: "processType"
                         },
                         {
+                            xtype: 'datefield',
                             fieldLabel: "Start Date",
+                            readOnly: true,
                             name: "startDate"
                         },
                         {
+                            xtype: 'datefield',
                             fieldLabel: "Ship Date",
+                            readOnly: true,
                             name: "shipdate"
                         },
                         {

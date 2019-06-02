@@ -47,8 +47,7 @@
     $row-indicator-selected-over-color: lighten($panel-header-background-color, 7%),
     $row-indicator-over-color: transparent
 );
-
-//--------------------------------------------------------
+    //--------------------------------------------------------
 // Create classes for full-size responsive items
 
 .big-100 {
@@ -96,14 +95,14 @@
 
 .vega-logo {
     background-color: $base-color;
-    height: 65px;
+    height: 64px;
 
     font-size: 16px;
     color: $lightest-color;
     margin-left: 17px;
 
     .main-logo {
-        line-height: 65px;
+        line-height: 64px;
         img{
             margin-left: 22px;
             margin-right: 22px;
@@ -145,7 +144,7 @@
     //cursor: pointer;
 }
 
-.collapsed{
+.collapsed {
     .hot-icon,.new-icon{
         &:after{
             display:none;
@@ -158,10 +157,6 @@
     .x-tree-node-text {
         display:none;
     }
-}
-
-.x-grid-cell{
-    position:relative;
 }
 
 .hot-icon,.new-icon{
@@ -190,7 +185,9 @@
 
 .white-txt { color: $lightest-color; }
 
-.blue-txt { color: $color-soft-blue; }
+.gray-txt { color: $color-gray; }
+
+.blue-txt { color: $color-blue; }
 
 .red-txt { color: $color-soft-red; }
 
@@ -219,7 +216,7 @@
 
 //Add border around html editor field
 .x-html-editor-input{
-    border:1px solid #ccc;
+    border-top: 1px solid #ccc;
 }
 
 .delete-focus-bg {
@@ -232,18 +229,21 @@
     display: none !important;
 }
 
+
 //UI Styles for buttons
 @include extjs-button-small-ui(
     $ui: 'soft-blue',
     $background-color: $color-soft-blue,
     $border-color: darken($color-soft-blue, 5%)
 );
+
 @include extjs-button-large-ui(
     $ui: 'soft-blue',
     $line-height: 34px,
     $background-color: $color-soft-blue,
     $border-color: darken($color-soft-blue, 5%)
 );
+
 @include extjs-button-toolbar-small-ui(
     $ui: 'soft-blue',
     $background-color: $color-soft-blue,
@@ -280,43 +280,43 @@
     $border-color:darken($color-soft-green, 5%)
 );
 
-
-
 @include extjs-button-small-ui(
     $ui: 'soft-red',
     $background-color: $color-soft-red,
     $border-color:darken($color-soft-red, 5%)
 );
+
 @include extjs-button-toolbar-small-ui(
     $ui: 'soft-red',
     $background-color: $color-soft-red,
     $border-color:darken($color-soft-red, 5%)
 );
 
-
 @include extjs-button-small-ui(
     $ui: 'soft-purple',
     $background-color: $color-soft-purple,
     $border-color:darken($color-soft-purple, 5%)
 );
+
 @include extjs-button-toolbar-small-ui(
     $ui: 'soft-purple',
     $background-color: $color-soft-purple,
     $border-color:darken($color-soft-purple, 5%)
 );
-
 
 @include extjs-button-small-ui(
     $ui: 'gray',
     $background-color: $color-gray,
     $border-color:darken($color-gray, 5%)
 );
+
 @include extjs-button-large-ui(
     $ui: 'gray',
     $line-height: 34px,
     $background-color: $color-gray,
     $border-color:darken($color-gray, 5%)
 );
+
 @include extjs-button-toolbar-small-ui(
     $ui: 'gray',
     $background-color: $color-gray,
@@ -328,6 +328,7 @@
     $background-color: $color-green,
     $border-color:darken($color-green, 5%)
 );
+
 @include extjs-button-toolbar-small-ui(
     $ui: 'green',
     $background-color: $color-green,
@@ -337,11 +338,12 @@
 
 @include extjs-button-small-ui(
     $ui: 'blue',
-    $background-color: $color-blue,
-    $border-color:darken($color-blue, 5%)
+    $background-color: $base-color,
+    $border-color:darken($base-color, 5%)
 );
+
 @include extjs-button-toolbar-small-ui(
     $ui: 'blue',
-    $background-color: $color-blue,
-    $border-color:darken($color-blue, 5%)
+    $background-color: $base-color,
+    $border-color:darken($base-color, 5%)
 );

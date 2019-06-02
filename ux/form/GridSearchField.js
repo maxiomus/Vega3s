@@ -12,15 +12,16 @@ Ext.define('Ext.ux.form.GridSearchField', {
             cls: Ext.baseCSSPrefix + 'form-clear-trigger',
             tooltip: 'Clear',
             hidden: true,
-            scope: 'this',
-            handler: 'onClearClick'
+            handler: 'onClearClick',
+            scope: 'this'
         },
         search: {
             weight: 1,
             cls: Ext.baseCSSPrefix + 'form-search-trigger',
             tooltip: 'Search',
-            scope: 'this',
-            handler: 'onSearchClick'
+            handler: 'onSearchClick',
+            scope: 'this'
+
         }
     },
 
@@ -44,7 +45,7 @@ Ext.define('Ext.ux.form.GridSearchField', {
             }
         });
 
-        if(!!typeof(me.grid)){
+        if(Ext.isString(me.grid)){
             var view = me.up('panel'),
                 grid = view.lookupReference(me.grid);
 
@@ -105,6 +106,7 @@ Ext.define('Ext.ux.form.GridSearchField', {
 
     onSearchClick: function () {
 
+        //console.log(this, this.grid)
         var me = this,
             cols = me.grid.getColumns(),
             value = me.getValue();
@@ -114,7 +116,6 @@ Ext.define('Ext.ux.form.GridSearchField', {
             Ext.each(cols, function(col){
                 if(col.dataIndex === me.paramName){
                     filter = col.filter;
-                    console.log('inside search', filter, filter.grid)
                     //filter.options = ['Avenue', 'Cjbanks'];
                     //filter.menu = filter.createMenu();
                     return false;

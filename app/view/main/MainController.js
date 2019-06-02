@@ -10,7 +10,7 @@ Ext.define("Vega.view.main.MainController", {
 
     alias: 'controller.main',
 
-    init: function(){
+    init: function(g){
         this.listen({
             controller:{
                 "#": {
@@ -25,27 +25,32 @@ Ext.define("Vega.view.main.MainController", {
                     reconfigure: function(e){
                         //e.getView().setLoading(true);
                     }
+                },
+                'form': {
+
                 }
             }
 
         });
 
         //Ext.app.ViewController.prototype.init.call(this);
+        //console.log('Main Controller', this.getReferences())
     },
 
     initViewModel: function(b){
-        //console.log('initViewModel', b.getStore('setting').isLoaded());
+        //console.log('initViewModel', b.getStore('Settings'));
     },
 
     onLogout: function(e,g,f){
         var h=this;
         Ext.Ajax.request({
-            url: "/security/logout.ashx",
+            //url: "/security/logout.ashx",
+            url: '/api/Sessions/logout',
             method: "GET",
             scope: h,
             success: h.onLogoutSuccess,
             failure: h.onLogoutFailure
-        })
+        });
     },
 
     onLogoutSuccess: function(h,f,j){
@@ -56,7 +61,7 @@ Ext.define("Vega.view.main.MainController", {
 
         if(result.success){
             me.getView().destroy();
-            window.location.reload(true)
+            window.location.reload(true);
         }
         else{
             Vega.util.Utils.showErrorMsg(result.msg);
@@ -66,7 +71,7 @@ Ext.define("Vega.view.main.MainController", {
     onLogoutFailure: function(g,e,h){
         var result = Ext.decode(g.responseText);
 
-        Vega.util.Utils.showErrorMsg(result.msg)
+        Vega.util.Utils.showErrorMsg(result.msg);
     },
 
     onNavigationTreeSelectionChange: function(o,z){
@@ -79,7 +84,8 @@ Ext.define("Vega.view.main.MainController", {
             route[0] = z.get("routeId");
 
             if(view && view.lookupReference("multiview")){
-                var tab = view.getActiveTab(),
+                //console.log(view, view.getActiveTab(), view.lookupReference("multiview"))
+                var tab = view.getActiveTab() || view.lookupReference("multiview"),
                     grid = tab.lookupReference("grid");
                     //store = view.getViewModel().getStore(view.routeId+"s"),
                     //field = store.first().getIdProperty();
@@ -97,10 +103,10 @@ Ext.define("Vega.view.main.MainController", {
                             break;
                         case 2:
                             mode = "tiles";
-                            break
+                            break;
                     }
 
-                    route[1] = mode
+                    route[1] = mode;
 
                     if(grid.getSelectionModel().getSelection().length > 0){
                         var x = grid.getSelectionModel().getSelection();
@@ -109,7 +115,29 @@ Ext.define("Vega.view.main.MainController", {
                     }
                 }
 
-                if(tab.inTab){
+                if(tab.isEdit){
+                    route[1] = tab.opMode;
+
+                    var vm = tab.getViewModel();
+                    if(tab.isXType("style-edit-form")){
+                        if(vm.get('theSample').id > 0) {
+                            route[2] = vm.get('theSample').id;
+                        }
+                    }
+
+                    if(tab.isXType("sales-edit-form")){
+                        if(vm.get('srcPowhId') != null){
+                            route[2] = vm.get('srcPowhId');
+                        }
+                    }
+
+                    if(tab.isXType("pi-form")){
+                        if(vm.get('thePhysical').id > 0) {
+                            route[2] = vm.get('thePhysical').id;
+                        }
+                    }
+                }
+                else if(tab.inTab){
                     route[1] = "tab";
                     if(tab.active){
                         route[2] = tab.active.id;
@@ -119,24 +147,19 @@ Ext.define("Vega.view.main.MainController", {
                         route[2] = tab.reference;
                     }
                 }
-
-                if(tab.isEdit){
-                    route[1] = "edit";
-                    route[2] = tab.getViewModel().get('srcPowhId')
-                }
             }
-
-            this.redirectTo(route.join("/"))
+            //console.log('MainController', route.join('/'))
+            this.redirectTo(route.join("/"));
         }
     },
 
-    onToggleNavigationSize:function(){
+    onToggleNavigationSize:function(b){
         var me = this,
             refs = me.getReferences(),
             nav = refs.navigationTreeList,
-            main = refs.mainContainerWrap,
-            h = !nav.getMicro(),
-            g = h ? 64 : 250;
+            wrap = refs.mainContainerWrap,
+            collapsing = !nav.getMicro(),
+            newWidth = collapsing ? 64 : 250;
 
         if(Ext.isIE9m||!Ext.os.is.Desktop){
             Ext.suspendLayouts();
@@ -148,25 +171,26 @@ Ext.define("Vega.view.main.MainController", {
             main.updateLayout();
         }
         else{
-            if(!h){
+            if(!collapsing){
                 nav.setMicro(false);
             }
 
             refs.vegaLogo.animate({
                 dynamic: true,
                 to: {
-                    width: g
+                    width: newWidth
                 }
             });
 
-            nav.setWidth(g);
+            nav.width = newWidth;
+            wrap.updateLayout({isRoot:true});
+            nav.el.addCls('nav-tree-animating');
 
-            main.updateLayout({isRoot:true});
-
-            if(h){
+            if(collapsing){
                 nav.on({
                     afterlayoutanimation:function(){
                         nav.setMicro(true);
+                        nav.el.removeCls('nav-tree-animating');
                     },
                     single:true
                 });

@@ -17,11 +17,11 @@ Ext.define('Vega.model.Powd', {
         { name: 'bodyref', type: 'string', allowNull: true },
         { name: 'bodydesc', type: 'string', allowNull: true },
         { name: 'stitchdesc', type: 'string', allowNull: true },
-        { name: 'status', allowNull: true },
-        { name: 'cost', type: 'float', allowNull: true },
-        { name: 'price', type: 'float', allowNull: true },
-        { name: 'msrp', type: 'float', allowNull: true },
-        { name: 'units', type: 'float', allowNull: true },
+        { name: 'status', type: 'string', allowNull: true },
+        { name: 'cost', type: 'number', allowNull: true },
+        { name: 'price', type: 'number', allowNull: true },
+        { name: 'msrp', type: 'number', allowNull: true },
+        { name: 'units', type: 'number', allowNull: true },
         { name: 'bodyimgsrc', type: 'string', allowNull: true },
         { name: 'printimgsrc', type: 'string', allowNull: true },
         { name: 'factory', type: 'string', allowNull: true },
@@ -29,9 +29,9 @@ Ext.define('Vega.model.Powd', {
         { name: 'createdon', type: 'date', dateFormat: 'c'},
         { name: 'updatedby', type: 'string', allowNull: true },
         { name: 'updatedon', type: 'date', dateFormat: 'c'},
-        { name: 'fabricby', type: 'date', dateFormat: 'c'},
-        { name: 'markerby', type: 'date', dateFormat: 'c'},
-        { name: 'pnsby', type: 'date', dateFormat: 'c'},
+        { name: 'fabricby', type: 'date', dateFormat: 'c', dateWriteFormat: 'Y-m-d'},
+        { name: 'markerby', type: 'date', dateFormat: 'c', dateWriteFormat: 'Y-m-d'},
+        { name: 'pnsby', type: 'date', dateFormat: 'c', dateWriteFormat: 'Y-m-d'},
         { name: 'remarks', type: 'string', allowNull: true },
         { name: 'bodyimg', type: 'string' },
         { name: 'printimg', type: 'string' },
@@ -43,26 +43,25 @@ Ext.define('Vega.model.Powd', {
                 //
                 //type: 'sales.Powh',
                 //association: 'stylesByHeader',
-                //role: 'powh',
+                role: 'powh',
                 inverse: 'powds'
             }
         }
     ],
-    convertOnSet: false,
+    //convertOnSet: false,
 
     validators: {
         bodyref: 'presence',
-        //cost: { type: 'range', min: 1 },
         units: { type: 'range', min: 1 }
     },
 
     idProperty: 'powdId',
     identifier: 'negative',
-    //convertOnSet: false
 
     proxy: {
         type: 'rest',
         url: '/api/Powd/',
+        timeout: 90000,
 
         pageParam: '',
         startParam: '',
@@ -80,7 +79,7 @@ Ext.define('Vega.model.Powd', {
             allowSingle: false // set false to send a single record in array
         },
 
-        extraParams: {},
+        //extraParams: {},
 
         listeners: {
             exception: function (proxy, response, operation) {

@@ -20,7 +20,7 @@ Ext.define("Vega.view.sales.Pending",{
     //session: true,
     cls: "shadow-panel",
     header: false,
-    margin: 8,
+    margin: '0 0 0 4',
 
     listeners: {
         add: 'onBeforeAdd',
@@ -31,6 +31,7 @@ Ext.define("Vega.view.sales.Pending",{
         actnew: "onActionNew",
         actrefresh: "onActionRefresh",
         actview: 'onActionView',
+        actdelete: 'onActionDelete',
         //ctxmnuopenclick: "onContextMenuOpenClick",
         //ctxmnurefreshclick: "onContextMenuRefreshClick",
         ctxmnueditclick: "onContextMenuEditClick",
@@ -45,19 +46,21 @@ Ext.define("Vega.view.sales.Pending",{
                 xtype: "multiview",
                 reference: "multiview",
                 title: "PENDINGS",
-                iconCls: "fa fa-file-text-o",
+                iconCls: "x-fa fa-file-text-o",
+
                 tbar: {
-                    xtype: "topbar",
+                    xtype: "sales-topbar",
                     reference: "topbar"
                 },
+
                 mainItems:[{
                     xtype: "sales-grid",
                     reference: "grid",
                     cls: 'pending-grid',
                     scrollable: true,
-                    stateful:true,
-                    stateId: "pending-grid",
-                    stateEvents: ["columnmove", "columnresize", "groupchange", "bodyresize"],
+                    //stateful:true,
+                    //stateId: "pending-grid",
+                    //stateEvents: ["columnmove", "columnresize", "groupchange", "bodyresize"],
                     bind: {
                         store: '{pendings}',
                         selection: "{selectedPending}"
@@ -72,18 +75,10 @@ Ext.define("Vega.view.sales.Pending",{
                         getRowClass: function(rec, idx, rowParams, store){
                             var cls = 'custom-row-style';
                             if(rec.data.progress == 'pending'){
-                                cls = cls + ' grid-row-pending'
+                                cls = cls + ' grid-row-pending';
                             }
 
                             return cls;
-                        }
-                    },
-                    listeners: {
-                        reconfigure: function(grid, store, columns, oldStore, oldColumns){
-
-                        },
-                        afterrender: function(grid){
-
                         }
                     }
                 },{
@@ -100,9 +95,12 @@ Ext.define("Vega.view.sales.Pending",{
                         '<div class="thumb-wrap {viewStatus} {progress}" id="mView-{powhId}">',
                         '<div class="thumb">',
                         //'<img src="{linkImage}" title="{Title}" />',
-                        "</div>",
+                        '</div>',
+                        '<tpl if="attachs &gt; 0">',
+                            '<div class="post-attach"></div>',
+                        '</tpl>',
                         '<div class="post-data">',
-                        '<div class="post-title">POW # {powno} <i class="fa fa-check-square-o fa-lg viewIcon {viewStatus}"></i>  <i class="fa fa-exclamation-circle fa-lg viewIcon {progress}"></i></div>',
+                        '<div class="post-title">POW # {powno} <i class="x-fa fa-check-square-o fa-lg viewIcon {viewStatus}"></i>  <i class="x-fa fa-exclamation-circle fa-lg viewIcon {progress}"></i></div>',
                         '<div class="post-date">{createdon:date("M j,Y,g:i a")}</div>',
                         '<div class="post-author">Registered by {userId:capitalize}</div>',
                         "</div>",
@@ -136,7 +134,7 @@ Ext.define("Vega.view.sales.Pending",{
                     reference: "display"
                 }],
 
-                bbar:[{
+                bbar: {
                     xtype: "pagingtoolbar",
                     bind: {
                         store: "{pendings}"
@@ -144,7 +142,7 @@ Ext.define("Vega.view.sales.Pending",{
                     style: {borderWidth: "0px"},
                     dock: "bottom",
                     displayInfo: true
-                }]
+                }
             }]
         });
 
@@ -158,26 +156,23 @@ Ext.define("Vega.view.sales.Pending",{
             display = refs.display,
             topbar = refs.topbar;
 
+        if(Vega.user.inRole('administrators')){
+
+        }
+
         me.contextmenu = Ext.create('Ext.menu.Menu', {
             items: [
                 topbar.actView,
-                topbar.actRefresh
+                topbar.actRefresh,
+                topbar.actDelete
             ]
-        });
-
-        //topbar.items.items[0].setHidden(true);
-        topbar.insert(0, {
-            xtype: "gridsearchfield",
-            width: 300,
-            grid: "grid",
-            paramName: "powno"
         });
 
         topbar.insert(9, [{
             xtype: "cycle",
             ui: "default",
             prependText: "Show:  ",
-            iconCls: "fa fa-filter",
+            iconCls: "x-fa fa-filter",
             showText: true,
             reference: "filterButton",
             changeHandler: "onTypeChange",
@@ -185,32 +180,32 @@ Ext.define("Vega.view.sales.Pending",{
             menu: {
                 items: [{
                     text: "All",
-                    iconCls: "fa fa-filter",
+                    iconCls: "x-fa fa-filter",
                     type: null,
                     itemId: "all",
                     checked: false
                 },{
                     text: "Pending",
-                    iconCls: "fa fa-filter",
+                    iconCls: "x-fa fa-filter",
                     type: 'pending',
                     itemId: "pending",
                     checked: true
                 },{
                     text: "Approved",
-                    iconCls: "fa fa-filter",
+                    iconCls: "x-fa fa-filter",
                     type: 'approved',
                     itemId: "approve",
                     checked: false
                 }]
             }
-        }, '-']);
+        }]);
 
         var segmented = topbar.lookupReference('viewselection');
 
         segmented.items.items[1].setHidden(true);
         segmented.setValue(2);
 
-        this.relayEvents(topbar, ["actnew", "actrefresh", 'actview']);
+        this.relayEvents(topbar, ["actnew", "actrefresh", 'actview', 'actdelete']);
         this.relayEvents(display, ['open', 'revise', 'accept'], 'tab');
         this.relayEvents(grid, ["rowdblclick", "itemcontextmenu"]);
         this.relayEvents(tiles, ["itemdblclick", "itemcontextmenu"]);

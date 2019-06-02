@@ -16,12 +16,15 @@ Ext.define("Vega.view.dal.Grid", {
         type: "dal-grid"
     },
 
-    config: {
-
+    style: {
+        borderTop: '1px solid #cfcfcf',
+        borderBottom: '1px solid #cfcfcf'
     },
-    stateful: true,
-    stateId: "dal-grid",
-    stateEvents: ["columnmove", "columnresize", "groupchange", "bodyresize"],
+
+    //stateful: true,
+    //stateId: "dal-grid",
+    //stateEvents: ["columnmove", "columnresize", "groupchange", "bodyresize"],
+
     listeners: {
         select: {
             fn: "onSelect"
@@ -33,13 +36,13 @@ Ext.define("Vega.view.dal.Grid", {
         '<div class="media-wrapper">' +
             //'<div class="media-icon {type}">&nbsp;</div>' +
         '<div class="media-data">' +
-        '<div class="media-picture"><img class="{F_BFLAG}" src="../{F_LINK}thumbs/{F_LOCATION}_thumb{F_EXT}" title="{F_DESC1}" /></div>' +
-        //'<div class="media-picture"><img class="{F_BFLAG}" src="{[this.getSrcPath(values)]}?w=64&h=64" title="{F_DESC1}" /></div>' +
+        //'<div class="media-picture"><img class="{F_BFLAG}" src="../{F_LINK}thumbs/{F_LOCATION}_thumb{F_EXT}" title="{F_DESC1}" /></div>' +
+        '<div class="media-picture"><img class="{F_BFLAG}" src="{[this.getSrcPath(values)]}?w=64&h=64" title="{F_DESC1}" /></div>' +
         '<div class="{F_BFLAG}">Rejected</div>' +
         '<div class="media-content">' +
         '<div class="media-title">{Title}</div>' +
             //'<div class="media-small">by <span class="news-author">{F_USERID}</span>' +
-            //    '<div><i class="fa fa-calendar"></i> <i class="fa fa-clock-o"></i> {F_CREATED_ON}</div>' +
+            //    '<div><i class="x-fa fa-calendar"></i> <i class="x-fa fa-clock-o"></i> {F_CREATED_ON}</div>' +
         '</div>' +
         '<div class="media-description">{F_DESC1:ellipsis(130, true)}</div>' +
         '</div>' +
@@ -47,14 +50,14 @@ Ext.define("Vega.view.dal.Grid", {
         '<div>',
         {
             getSrcPath: function(a){
-                var str;
+                var str = '../' + a.F_LINK + a.F_PATH + '/';
 
                 if(!Ext.isEmpty(a.F_NAME) && !Ext.isEmpty(a.F_TYPE)) {
                     //str = '../' + a.F_LINK + a.F_PATH + '/' + a.ID + '/' + a.F_NAME.replace(/(\.[^.]+)$/, "_medium$1");
-                    str = '../' + a.F_LINK + a.F_PATH + '/' + a.ID + '/' + a.F_NAME;
+                    str += a.ID + '/' + a.F_NAME;
                 }
                 else {
-                    str = '../' + a.F_LINK + a.F_PATH + '/' + a.F_LOCATION + a.F_EXT;
+                    str += a.F_LOCATION + a.F_EXT;
                 }
 
                 return str;
@@ -72,6 +75,7 @@ Ext.define("Vega.view.dal.Grid", {
     initComponent: function(){
         var b=this;
         b.columns=this.buildColumns();
+
         Ext.applyIf(b, {
             selModel: {
                 //mode: "MULTI",
@@ -87,6 +91,7 @@ Ext.define("Vega.view.dal.Grid", {
             },
             plugins: [{
                 ptype: 'rowediting',
+                pluginId: 'dal-grid-rowedit',
                 clicksToEdit: 1
             },{
                 ptype: "gridfilters",
@@ -101,18 +106,17 @@ Ext.define("Vega.view.dal.Grid", {
         return[{
             dataIndex: "F_NAME",
             text: "Name",
-            flex: 3,
+            flex: 1,
             //filter: {type: "string"},
             renderer: "renderCategoryColumn"
         },
         {
             dataIndex: "F_STYLE",
             text: "Style #",
-            //flex: 1,
-            hidden: false,
+            width: 140,
             filter: {
                 type: "string",
-                operator: 'st'
+                operator: 'like'
             }
         },
         {
@@ -123,22 +127,41 @@ Ext.define("Vega.view.dal.Grid", {
             filter: {type: "string"}
         },
         {
+            dataIndex: "F_MFLAG",
+            text: 'F/B',
+            hidden: false,
+            filter: {
+                type: "string",
+                operator: 'like'
+            },
+            editor: {
+                xtype: 'combo',
+                name: 'F_MFLAG',
+                //fieldLabel: 'FACTORY',
+                hideLabel: true,
+                //editable: false,
+                queryMode: 'local',
+                store: ['FRONT', 'BACK']
+                //triggerAction: 'all',
+            }
+        },
+        {
             dataIndex: "F_OWNER",
             text: '',
             hidden: true,
             filter: {
                 type: "string",
-                operator: 'st'
+                operator: 'like'
             }
         },
         {
             dataIndex: "F_DESC2",
             text: 'Type',
-            flex: 3,
+            //flex: 3,
             hidden: false,
             filter: {
                 type: "string",
-                operator: 'st'
+                operator: 'like'
             },
             editor: {
                 xtype: "tagfield",
@@ -178,7 +201,7 @@ Ext.define("Vega.view.dal.Grid", {
             hidden: true,
             filter: {
                 type: "string",
-                operator: 'st'
+                operator: 'like'
             }
         },
         {
@@ -187,7 +210,7 @@ Ext.define("Vega.view.dal.Grid", {
             hidden: true,
             filter: {
                 type: "string",
-                operator: 'st'
+                operator: 'like'
             }
         },
         {
@@ -196,7 +219,7 @@ Ext.define("Vega.view.dal.Grid", {
             hidden: true,
             filter: {
                 type: "string",
-                operator: "st"
+                operator: 'like'
             }
         },
         {
@@ -205,7 +228,7 @@ Ext.define("Vega.view.dal.Grid", {
             hidden: true,
             filter: {
                 type: "string",
-                operator: 'st'
+                operator: 'like'
             }
         },
         {
@@ -214,7 +237,7 @@ Ext.define("Vega.view.dal.Grid", {
             hidden: true,
             filter: {
                 type: "string",
-                operator: 'st'
+                operator: 'like'
             }
         },
         {
@@ -223,13 +246,13 @@ Ext.define("Vega.view.dal.Grid", {
             hidden: false,
             filter: {
                 type: "string",
-                operator: 'st'
+                operator: 'like'
             }
         },
         {
             dataIndex: "F_DESC9",
             text: 'Theme',
-            flex: 3,
+            flex: 1,
             hidden: false,
             filter: {type: "string"},
             editor: {
@@ -267,7 +290,7 @@ Ext.define("Vega.view.dal.Grid", {
         {
             dataIndex: "F_DESC10",
             text: 'Colorway',
-            flex: 3,
+            flex: 1,
             hidden: false,
             filter: {type: "string"},
             editor: {
@@ -312,7 +335,7 @@ Ext.define("Vega.view.dal.Grid", {
             xtype: 'datecolumn',
             dataIndex: "F_CREATED_ON",
             text: "Date Created",
-            flex: 2,
+            //flex: 2,
             hidden: true,
             filter: {type: "date"},
             format: 'Y-m-d H:i:s A'
@@ -324,10 +347,10 @@ Ext.define("Vega.view.dal.Grid", {
             hidden: true,
             filter: {type: "date"},
             format: 'm-d-Y g:i A'
-        }]
+        }];
     },
 
     loadStore: function(){
-        this.getStore().load()
+        this.getStore().load();
     }
 });

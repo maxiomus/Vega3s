@@ -18,7 +18,7 @@ Ext.define('Vega.view.reports.inventory.InventoryByLotController', {
                     click: me.onSearchClick
                 }
             }
-        })
+        });
     },
 
     onBeforeStoreLoad: function(store, operations, eOpts){
@@ -109,5 +109,5 @@ Ext.define('Vega.view.reports.inventory.InventoryByLotController', {
 
         return filters;
     }
-    
+
 });

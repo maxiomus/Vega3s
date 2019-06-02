@@ -1,18 +1,15 @@
 Ext.define('Vega.view.dashboard.PowsModel', {
     extend: 'Ext.app.ViewModel',
+
     alias: 'viewmodel.dashboard-pows',
 
     requires: [
         'Vega.model.Pow'
     ],
 
-    data: {
-
-    },
-
     stores: {
         Pows: {
-            model: 'Pow',
+            model: 'Vega.model.Pow',
             autoLoad: true,
             proxy: {
                 type: 'rest',

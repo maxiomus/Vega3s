@@ -4,9 +4,5 @@ Ext.define('Vega.view.MultiviewController', {
 
     mixins: [
         'Ext.app.route.Base'
-    ],
-
-    init: function() {
-
-    }
+    ]
 });

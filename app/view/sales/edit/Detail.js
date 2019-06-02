@@ -18,11 +18,14 @@ Ext.define("Vega.view.sales.edit.Detail", {
     alias: 'widget.sales-edit-detail',
     //publishes: ['selectedStyle'],
 
+    cls: 'detail-grid',
+
     minWidth: 1028,
     minHeight: 480,
-    stateful: true,
-    stateId: "detail-grid",
-    stateEvents: ["columnmove", "columnresize", "groupchange", "bodyresize"],
+
+    //stateful: true,
+    //stateId: "detail-grid",
+    //stateEvents: ["columnmove", "columnresize", "groupchange", "bodyresize"],
 
     listeners: {
         afterrender: function(grid){
@@ -32,7 +35,7 @@ Ext.define("Vega.view.sales.edit.Detail", {
             var menu = grid.headerCt.getMenu();
 
             var menuItem = menu.add({
-                iconCls: 'fa fa-calendar',
+                iconCls: 'x-fa fa-calendar',
                 text: 'Set Dates'
             });
 
@@ -91,9 +94,10 @@ Ext.define("Vega.view.sales.edit.Detail", {
 
             var i = h.getSelectionModel();
             if(!i.isSelected(g)){
-                i.select(g)
+                i.select(g);
             }
-            h.ownerCt.contextmenu.showAt(l.getXY())
+
+            h.ownerCt.contextmenu.showAt(l.getXY());
         },
 
         viewready: {
@@ -156,11 +160,14 @@ Ext.define("Vega.view.sales.edit.Detail", {
                         '<tpl for="mats">',
                             '<div class="tbrow">',
                                 '<div class="col col-2">{matcategory}</div>',
+                                '<div class="col col-10">{[this.formatItem(values)]}</div>',
+                                /*
                                 '<tpl if="this.isStone(mattype)">',
                                     '<div class="col col-10">{matvendor} {matcost}</div>',
                                 '<tpl else>',
-                                    '<div class="col col-10">{matdesc} {matcode}-{matcolor}</div>',
+                                    '<div class="col col-10">{matdesc} {matcode} {matcolor}</div>',
                                 '</tpl>',
+                                */
                             '</div>',
                         '</tpl>',
                         '<div class="tbrow">',
@@ -174,10 +181,21 @@ Ext.define("Vega.view.sales.edit.Detail", {
                     '</div>',
                     {
                         getBodySrc: function(a){
-                            return a.bodyimg.indexOf('blob:') !== -1 ? a.bodyimg : '../' + a.bodyimgsrc + '?w=128&h=140';
+                            return a.bodyimg.indexOf('blob:') !== -1 ? a.bodyimg : '../' + encodeURIComponent(a.bodyimgsrc) + '?w=128&h=140';
                         },
                         getPrintSrc: function(a){
-                            return a.printimg.indexOf('blob:') !== -1 ? a.printimg : '../' + a.printimgsrc + '?w=128&h=140';
+                            return a.printimg.indexOf('blob:') !== -1 ? a.printimg : '../' + encodeURIComponent(a.printimgsrc) + '?w=128&h=140';
+                        },
+                        formatItem: function(a){
+                            var stRight = (a.matcode && a.matcolor) ? a.matcode + ' ' + a.matcolor : a.matcode || a.matcolor,
+                                stLeft = a.matdesc;
+
+                            if (a.mattype === 'STONE'){
+                                stLeft = a.matvendor;
+                                stRight = (a.matcost && a.matdesc) ? a.matcost + ' ' + a.matdesc : a.matcost || a.matdesc;
+                            }
+
+                            return Ext.String.format('{0} {1}', stLeft, stRight);
                         },
                         isEmpty: function(value){
                             return Ext.isEmpty(value);
@@ -195,31 +213,37 @@ Ext.define("Vega.view.sales.edit.Detail", {
         me.contextmenu = Ext.create('Ext.menu.Menu', {
             items: [{
                 text: 'Copy',
-                iconCls: 'fa fa-copy',
+                iconCls: 'x-fa fa-copy',
                 tooltip: 'Duplicate Style',
                 handler: 'onCopyStyleClick',
                 scope: me.up('sales-edit-form').getController()
             },{
                 text: 'Edit',
-                iconCls: 'fa fa-edit',
+                iconCls: 'x-fa fa-edit',
                 tooltip: 'Edit Style',
                 handler: 'onEditStyleClick',
                 scope: me.up('sales-edit-form').getController()
             },{
                 text: 'Delete',
-                iconCls: 'fa fa-remove',
+                iconCls: 'x-fa fa-remove',
                 tooltip: 'Delete Style',
                 handler: 'onDeleteStyleClick',
                 scope: me.up('sales-edit-form').getController()
             },{
                 text: 'T&A',
-                iconCls: 'fa fa-tasks',
+                iconCls: 'x-fa fa-tasks',
                 tooltip: 'Open T&A',
                 handler: function(){
                     var rec = this.getSelection()[0];
                     this.fireEvent('opentna', this, rec);
                 },
                 scope: me
+            },{
+                text: 'Export To...',
+                iconCls: 'x-fa fa-external-link',
+                tooltip: 'Export Style',
+                handler: 'onExportStyleClick',
+                scope: me.up('sales-edit-form').getController()
             }]
         });
 
@@ -242,25 +266,7 @@ Ext.define("Vega.view.sales.edit.Detail", {
                 dataIndex: "style",
                 width: 140,
                 menuDisabled: true,
-                sortable: false,
-                renderer: function (value, metaData, record, rowIndex, colIndex) {
-                    /*
-                    if (colIndex === 0) {
-                        metaData.tdAttr = 'data-qtip=' + value;
-                    }
-                    // style the cell differently for even / odd values
-                    var odd = (rowIndex % 2 === 0);
-                    metaData.tdStyle = 'color:' + (odd ? 'gray' : 'red');
-                    */
-
-                    /*
-                    return '<div>'+value+'</div>'+
-                            '<div>'+
-                            '<img src="../DLIB/BLU-ILLUSTRATIONS/thumbs/' + record.get('bodyimgsrc') + '_medium.jpg" width="128" height="140" />'+
-                        '</div>';
-                    */
-                    return value;
-                }
+                sortable: false
             },
             {
                 text: "Color",
@@ -301,7 +307,9 @@ Ext.define("Vega.view.sales.edit.Detail", {
             sortable: false,
             format: '0.00',
             editor: {
-                xtype: 'textfield'
+                xtype: 'numberfield',
+                minValue: 0,
+                hideTrigger: true
             }
         },
         {
@@ -314,7 +322,9 @@ Ext.define("Vega.view.sales.edit.Detail", {
             format: '0.00',
             hidden: false,
             editor: {
-                xtype: 'textfield'
+                xtype: 'numberfield',
+                minValue: 0,
+                hideTrigger: true
             }
         },
         {
@@ -326,7 +336,9 @@ Ext.define("Vega.view.sales.edit.Detail", {
             sortable: false,
             format: '0.00',
             editor: {
-                xtype: 'textfield'
+                xtype: 'numberfield',
+                minValue: 0,
+                hideTrigger: true
             }
         },
         {
@@ -338,7 +350,9 @@ Ext.define("Vega.view.sales.edit.Detail", {
             sortable: false,
             format: '0,000',
             editor: {
-                xtype: 'textfield'
+                xtype: 'numberfield',
+                minValue: 0,
+                hideTrigger: true
             }
         },
         {
@@ -356,9 +370,13 @@ Ext.define("Vega.view.sales.edit.Detail", {
                 valueField: 'text',
                 editable: false,
                 //triggerAction: 'all',
+                queryMode: 'local',
                 bind: {
                     store: '{factories}'
-                }
+                },
+                plugins: [{
+                    ptype: "cleartrigger"
+                }]
             }
         },
         {
@@ -369,9 +387,23 @@ Ext.define("Vega.view.sales.edit.Detail", {
             menuDisabled: true,
             sortable: false,
             disabled: false,
-            hidden: false,
-            stopSelection: true
+            hidden: false
         },
+        /*
+        {
+            xtype: 'widgetcolumn',
+            text: 'Approve?',
+            width: 80,
+            dataIndex: 'status',
+            menuDisabled: true,
+            sortable: false,
+            disabled: false,
+            widget: {
+                xtype: 'checkbox',
+                bind: '{record.status}'
+            }
+        },
+        */
         {
             xtype: 'datecolumn',
             text: "Fabric By",
@@ -460,7 +492,7 @@ Ext.define("Vega.view.sales.edit.Detail", {
             hidden: true,
             items: [{
                 tooltip: 'T&A',
-                iconCls: 'fa fa-tasks blue-txt',
+                iconCls: 'x-fa fa-tasks blue-txt',
                 handler: function(grid, rowIndex, colIndex, item, e, rec, row){
                     //console.log(grid, rowIndex, colIndex, item, rec, row)
                     this.fireEvent('opentna', this, rec);
@@ -471,12 +503,12 @@ Ext.define("Vega.view.sales.edit.Detail", {
             widget: {
                 xtype: 'button',
                 width: 30,
-                iconCls: 'fa fa-edit',
+                iconCls: 'x-fa fa-edit',
                 handler: 'onEditClick',
                 scope: this
             }
             */
-        }]
+        }];
     }
 
     /**

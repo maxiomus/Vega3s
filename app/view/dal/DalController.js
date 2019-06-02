@@ -23,18 +23,97 @@ Ext.define("Vega.view.dal.DalController", {
     },
 
     init: function(g){
+
         var multiview = g.lookupReference("multiview"),
-        refs = multiview.getReferences(),
-        j = refs.topbar.lookupReference("paneselection"),
-        k = refs.topbar.lookupReference("viewselection"),
-        i = j.getActiveItem();
+            refs = multiview.getReferences(),
+            j = refs.topbar.lookupReference("paneselection"),
+            k = refs.topbar.lookupReference("viewselection"),
+            //m = refs.topbar.lookupReference('togglerowedit'),
+            i = j.getActiveItem();
+
+        Ext.Ajax.request({
+            url: 'resources/data/dal/stores.json',
+            scope: g,
+            success: function(response){
+                var o = {};
+
+                try {
+                    o = Ext.decode(response.responseText);
+                }
+                catch(e){
+                    alert(e.message);
+                    return;
+                }
+
+                if(!o.success){
+
+                    // @todo error handling
+                    alert("Unknow error occurs!");
+                    return;
+                }
+
+                Ext.Object.each(o.stores, function(key, value, itself){
+                    var store = g.getViewModel().getStore(key);
+                    //console.log(store, key, value)
+                    if(store && value){
+                        store.loadData(value);
+                    }
+                });
+            },
+            failure: function(response){
+
+            }
+        });
+
+        this.getViewModel().set('viewMode', k.getValue());
+
+        k.setBind({
+            value: '{viewMode}'
+        });
 
         refs.center.getLayout().setActiveItem(k.getValue());
+
+        var m = refs.topbar.insert(20, ['-', {
+            iconCls: 'x-fa fa-lock',
+            reference: 'togglerowedit',
+            ui: 'bootstrap-btn-default',
+            //cls:"delete-focus-bg",
+            tooltip: 'Toggle Row Editing',
+            bind: {
+                disabled: '{viewMode}'
+            },
+            enableToggle: true,
+            toggleHandler: function(btn, pressed){
+                btn.setIconCls(pressed ? 'x-fa fa-unlock' : 'x-fa fa-lock');
+
+                //Save Button...
+                //refs.topbar.items.items[6].setHidden(!pressed);
+                refs.topbar.actSave.setHidden(!pressed);
+
+                var rowEdit = refs.grid.getPlugin("dal-grid-rowedit");
+                rowEdit.cancelEdit();
+            }
+        }]);
+
+        k.on('toggle', function(btn, pressed){
+            //console.log(k.getValue())
+            if(k.getValue() != 0){
+                //check if grid is row edit mode...
+                if(m[1].pressed){
+                    m[1].toggle(false);
+                }
+            }
+        });
+
+        refs.grid.on('beforeedit', function(e, ctx){
+            //console.log('beforeedit', ctx.colIdx, m[1]);
+            if (!m[1].pressed)
+                return false;
+        });
     },
 
-    initViewModel: function(b){
-        console.log('initViewModel')
-        this.fireEvent("viewmodelready", this, b);
+    initViewModel: function(vm){
+        this.fireEvent("viewmodelready", this, vm);
     },
 
     onCompStoreBeforeLoad: function(s){
@@ -65,16 +144,44 @@ Ext.define("Vega.view.dal.DalController", {
         this.getStore("dals").reload();
     },
 
-    onActionSave: function (t,w) {
+    onActionDelete: function(b, c){
+        var me = this,
+            m = this.getView().lookupReference("multiview"),
+            ctn = m.lookupReference('center'),
+            g = ctn.getLayout().getActiveItem(),
+            s = g.getSelection()[0];
 
-        var processMask = Ext.create('Ext.LoadMask', {
-            msg: 'Saving... Please wait',
-            target: this.getView()
+        Ext.Msg.show({
+            title:'Warning!',
+            message: 'Are you sure you want to delete this?',
+            buttons: Ext.Msg.OKCANCEL,
+            icon: Ext.Msg.QUESTION,
+            fn: function(btn) {
+                if (btn === 'ok') {
+                    //grid.getStore().remove(rec);
+                    s.drop();
+
+                    var batch = me.getView().getSession().getSaveBatch();
+                    var processMask = new Ext.LoadMask({
+                        msg: 'Saving... Please wait',
+                        target: me.getView()
+                    });
+                    me.processBatch(batch, null, null, processMask);
+                }
+            }
         });
+    },
+
+    onActionSave: function (t,w) {
 
         var batch = this.getSession().getSaveBatch();
 
         if(batch !== undefined){
+            var processMask = Ext.create('Ext.LoadMask', {
+                msg: 'Saving... Please wait',
+                target: this.getView()
+            });
+
             batch.on({
                 complete: function(batch, op){
                     //refresh In-Review
@@ -96,7 +203,7 @@ Ext.define("Vega.view.dal.DalController", {
                 },
                 exception: function(batch, op){
                     processMask.hide();
-                    var response = JSON.parse(op.getResponse().responseText);
+                    var response = JSON.parse(op.error.response.responseText);
 
                     Vega.util.Utils.showErrorMsg(response);
                 }
@@ -141,10 +248,11 @@ Ext.define("Vega.view.dal.DalController", {
 
     onClearFilters: function(b){
         var me = this,
-            topbar = me.view.lookupReference("multiview").lookupReference("topbar"),
+            multiview = me.getView().lookupReference('multiview'),
+            topbar = multiview.lookupReference("topbar"),
             searchcombo = topbar.lookupReference('searchcombo'),
             searchfield = topbar.lookupReference('searchfield'),
-            grid = me.view.lookupReference("multiview").lookupReference("grid");
+            grid = multiview.lookupReference('grid');
 
         searchcombo.setValue('');
         searchcombo.getTrigger('clear').hide();
@@ -183,7 +291,7 @@ Ext.define("Vega.view.dal.DalController", {
                 }
                 n.paramName = j;
                 n.show();
-                m.hide()
+                m.hide();
                 break;
             default:
                 m.paramName = j;
@@ -191,18 +299,17 @@ Ext.define("Vega.view.dal.DalController", {
                 n.hide();
         }
 
-        //console.log(st);
         var view = this.getView(),
             k = view.getViewModel().getStore(st);
 
         if(k != null){
             k.load();
-            n.bindStore(k)
+            n.bindStore(k);
         }
     },
 
     onViewReady: function(view){
-        console.log('onViewReady', view)
+        //console.log('onViewReady', view)
     },
 
     onOpenBodyClick: function(btn){
@@ -212,7 +319,6 @@ Ext.define("Vega.view.dal.DalController", {
     },
 
     onSaveBody: function(b){
-
         var me = this,
             multiview = me.getView().lookupReference('multiview'),
             grid = multiview.lookupReference('grid');
@@ -226,6 +332,27 @@ Ext.define("Vega.view.dal.DalController", {
 
         var batch = me.getView().getSession().getSaveBatch();
 
+        /*
+        var changes = me.getView().getSession().getChanges();
+        new Ext.window.Window({
+            autoShow: true,
+            title: 'Session Changes',
+            modal: true,
+            width: 600,
+            height: 400,
+            layout: 'fit',
+            items: {
+                xtype: 'textarea',
+                value: JSON.stringify(changes, null, 4)
+            }
+        });
+        */
+
+        var processMask = new Ext.LoadMask({
+            msg: 'Saving... Please wait',
+            target: me.getView()
+        });
+
         this.processBatch(batch, field, {
             url: '/api/Files/Body/upload',
             success: function(response){
@@ -233,12 +360,18 @@ Ext.define("Vega.view.dal.DalController", {
                 grid.getView().refresh();
                 //Ext.Msg.alert('Success', response);
                 // Using Ext.callback for 100 milisecond delay...
-                Ext.callback(Ext.Msg.alert, Ext.Msg, ['Status', 'Changes saved successfully.'], 100);
+                //Ext.callback(Ext.Msg.alert, Ext.Msg, ['Status', 'Changes saved successfully.'], 100);
+                processMask.hide('', function() {
+                    Ext.callback(Ext.Msg.alert, Ext.Msg, ['Status', 'Changes saved successfully.'], 100);
+                });
             },
             failure: function(response) {
-                Ext.Msg.alert('Failure', response);
+                //Ext.Msg.alert('Failure', response);
+                processMask.hide('', function() {
+                    Ext.Msg.alert('Failure', response);
+                });
             }
-        });
+        }, processMask);
 
         this.win.close();
     },
@@ -263,6 +396,10 @@ Ext.define("Vega.view.dal.DalController", {
         });
 
         var batch = me.getView().getSession().getSaveBatch();
+        var processMask = new Ext.LoadMask({
+            msg: 'Saving... Please wait',
+            target: me.getView()
+        });
 
         this.processBatch(batch, field, {
             url: '/api/Files/Prints/upload',
@@ -271,12 +408,16 @@ Ext.define("Vega.view.dal.DalController", {
                 grid.getView().refresh();
                 //Ext.Msg.alert('Success', response);
                 // Using Ext.callback for 100 milisecond delay...
-                Ext.callback(Ext.Msg.alert, Ext.Msg, ['Status', 'Changes saved successfully.'], 100);
+                processMask.hide('', function() {
+                    Ext.callback(Ext.Msg.alert, Ext.Msg, ['Status', 'Changes saved successfully.'], 100);
+                });
             },
             failure: function(response) {
-                Ext.Msg.alert('Failure', response);
+                processMask.hide('', function() {
+                    Ext.Msg.alert('Failure', response);
+                });
             }
-        });
+        }, processMask);
 
         me.win.close();
 
@@ -305,159 +446,6 @@ Ext.define("Vega.view.dal.DalController", {
         */
     },
 
-
-    onSaveMedia: function(){
-
-        var me = this,
-            form = this.win.down('imageupload'),
-            field = form.getDockedItems('toolbar[dock="top"] > uploadfiles')[0],
-            isEdit = me.isEdit,
-            id;
-
-        /*
-        if(field.getFilesQueue().length > 0){
-            //field.formData.append('changes', JSON.stringify(changes));
-            //var file = field.filesQueue[0];
-        }
-        */
-
-        var rec = me.win.getViewModel().get('theMedia');
-
-        var hiddenName = form.query('container > hidden[name=name]')[0],
-            hiddenType = form.query('container > hidden[name=type]')[0],
-            hiddenSize = form.query('container > hidden[name=size]')[0];
-
-        /*
-        hiddens.forEach(function(hidden){
-            switch(hidden.name){
-                case 'name':
-                    break;
-                case 'type':
-                    break;
-                case 'size':
-                    break;
-            }
-        });
-        */
-
-        var newName = hiddenName.getValue(),
-            newType = hiddenType.getValue(),
-            newSize = hiddenSize.getValue();
-
-        var idx = 1, oldIdx = 1;
-        if(!Ext.isEmpty(rec.data.F_NAME)){
-            var i = rec.data.F_CATEGORY.toLowerCase() == 'body' ? 2 : 3,
-                oldName = rec.data.F_NAME.split('.')[0],
-                oldIdx = oldName.split('_')[i];
-
-            if(oldName.split('_').length > i + 1){
-                idx = parseInt(oldName.split('_')[i+1],10) + 1;
-            }
-        }
-
-        switch (rec.data.F_CATEGORY.toLowerCase()) {
-            case 'body':
-                rec.set('F_NAME', rec.data.F_DESC5 + '_ref ' + (rec.data.F_OWNER || " ") + '_' + (rec.data.F_MFLAG || " ") + '_' + idx + '.' + newName.split('.').pop());
-                break;
-            case 'photos':
-                rec.set('F_NAME', rec.data.F_STYLE + '_' + (rec.data.F_DESC5 || " ") + '_' + (rec.data.F_DESC6 || " ") + '_' + oldIdx + '_' + idx + '.' + newName.split('.').pop());
-                break;
-            default:
-                break;
-        }
-
-        rec.set('F_TYPE', newType);
-        rec.set('F_SIZE', newSize);
-        rec.set('F_EXT', '.' + newName.split('.').pop());
-        rec.set('F_LOCATION', newName + '_' + newSize);
-
-        rec.set('F_MOD_USER_ID', Vega.user.data.Userid);
-        rec.set('F_UPDATED_ON', new Date());
-
-        if(!isEdit){
-            // Since we're not editing, we have a newly inserted record. Grab the id of
-            // that record that exists in the child session
-            id = me.win.getViewModel().get('theMedia').id;
-        }
-        me.win.getSession().save();
-
-        if(!isEdit){
-            // Use the id of that child record to find the phantom in the parent session,
-            // we can then use it to insert the record into our store
-            me.getStore('dals').add(me.getSession().getRecord('Media', id));
-        }
-
-        var batch = me.getView().getSession().getSaveBatch(),
-            multiview = me.getView().lookupReference('multiview'),
-            grid = multiview.lookupReference('grid');
-        //rec = grid.getSelectionModel().getSelection()[0];
-
-        this.processBatch(batch, field, {
-            url: '/api/Files/'+ rec.get('F_CATEGORY') +'/upload',
-            success: function(response){
-                console.log('SaveMedia', response);
-                grid.getView().refreshNode(rec);
-                //Ext.Msg.alert('Success', response);
-
-                // Using Ext.callback for 100 milisecond delay...
-                Ext.callback(Ext.Msg.alert, Ext.Msg, ['Status', 'Changes saved successfully.'], 100);
-                //Ext.Msg.alert('Status', 'Changes saved successfully.');
-            },
-            failure: function(response) {
-                Ext.Msg.alert('Failure', response);
-            }
-        });
-
-        this.win.close();
-
-        /*
-        form.submitWithImage({
-            method: 'POST',
-            url: '/api/Dals/upload',
-            params: {
-                newStatus: 'delivered'
-            },
-            success: function(form, action) {
-                console.log(form, action);
-                Ext.Msg.alert('Success', form);
-            },
-            failure: function(form, action) {
-                switch (action.failureType) {
-                    case Ext.form.action.Action.CLIENT_INVALID:
-                        Ext.Msg.alert('Failure', 'Form fields may not be submitted with invalid values');
-                        break;
-                    case Ext.form.action.Action.CONNECT_FAILURE:
-                        Ext.Msg.alert('Failure', 'Ajax communication failed');
-                        break;
-                    case Ext.form.action.Action.SERVER_INVALID:
-                        Ext.Msg.alert('Failure', action);
-                }
-            }
-        });
-        */
-
-        /*
-        var changes = this.getView().getSession().getChanges();
-        if(changes){
-            new Ext.window.Window({
-                autoShow: true,
-                title: 'Session Changes',
-                modal: true,
-                width: 600,
-                height: 400,
-                layout: 'fit',
-                items: {
-                    xtype: 'textarea',
-                    value: JSON.stringify(changes, null, 4)
-                }
-            });
-        }
-        else {
-            Ext.Msg.alert('No Changes', 'There are no changes to the session.');
-        }
-        */
-    },
-
     showWindow: function(rec, xtype, fid){
         var me = this,
             view = me.getView(),
@@ -476,7 +464,8 @@ Ext.define("Vega.view.dal.DalController", {
             viewModel: {
                 stores: {
                     fileStore: {
-                        model: 'Vega.model.Media'
+                        model: 'Vega.model.Media',
+                        autoDestroy: true
                     }
                 }
             },
@@ -502,7 +491,7 @@ Ext.define("Vega.view.dal.DalController", {
             if(key !== 'all'){
                 items.push({
                     xtype: 'menucheckitem',
-                    iconCls: Ext.baseCSSPrefix + 'menu-item-indent-right-icon fa fa-flickr',
+                    iconCls: Ext.baseCSSPrefix + 'menu-item-indent-right-icon x-fa fa-flickr',
                     type: key,
                     text: key,
                     checked: key === compType ? true : false
@@ -516,7 +505,7 @@ Ext.define("Vega.view.dal.DalController", {
                 xtype: "cycle",
                 ui: "default",
                 prependText: "Select:  ",
-                iconCls: "fa fa-flickr",
+                iconCls: "x-fa fa-flickr",
                 showText: true,
                 reference: "categorySelect",
                 menu: {
@@ -525,7 +514,7 @@ Ext.define("Vega.view.dal.DalController", {
                 changeHandler: function(cycle, activeItem){
                     me.win.down('grid').getStore().each(function(rec){
                         rec.set('F_CATEGORY', activeItem.text);
-                    })
+                    });
                 }
             });
 
@@ -533,26 +522,82 @@ Ext.define("Vega.view.dal.DalController", {
             records.forEach(function(rec){
                 rec.set('FID', fid);
 
-                console.log(cycle)
+                //console.log(cycle)
                 //rec.set('F_TYPE', rec.data.type);
                 //rec.set('F_SIZE', rec.data.size);
-                rec.set('F_EXT', '.' + rec.data.name.split('.').pop());
+                var fname = rec.data.name,
+                    dot =  fname.lastIndexOf('.'),
+                    ext = fname.substring(dot, fname.length),
+                    name = fname.substring(0, dot);
+
+                rec.set('F_EXT', ext);
                 rec.set('F_LINK', fid > 2 ? 'DLIB/BLU-PHOTOS/' : (fid == 2 ? 'DLIB/BLU-PRINTCAD/' : 'DLIB/BLU-ILLUSTRATIONS/'));
                 rec.set('F_CATEGORY', cycle.getActiveItem().text);
-                rec.set('F_LOCATION', rec.data.name + '_' + rec.data.size);
+                rec.set('F_LOCATION', fname + '_' + rec.data.size);
                 rec.set('F_APPLICATION', 'DAL');
 
-                var tmp = rec.data.name.split('.')[0];
-                if(compType == 'Body'){
+                //var fileName = rec.data.name.split('.')[0];
+                var a = name.split('_');
 
-                    rec.set('F_DESC5', tmp.split('_')[0]);
-                    rec.set('F_OWNER', tmp.replace('ref ', '').split('_')[1]);
-                    rec.set('F_MFLAG', tmp.split('_')[2]);
+                if(compType == 'Body'){
+                    rec.set('F_DESC5', a.shift());
+
+                    if(a.length == 1){
+                        rec.set('F_MFLAG', a.shift());
+                    }
+
+                    if(a.length > 1){
+
+                        rec.set('F_OWNER', a.shift().replace('ref', ''));
+                        rec.set('F_MFLAG', a.shift());
+                    }
                 }
 
                 if(compType == 'Prints'){
-                    rec.set('F_DESC6', tmp.split('_')[0]);
-                    rec.set('F_DESC1', tmp);
+                    var code = a.shift(),
+                        color = '00',
+                        type = 'SUBLIMATION',
+                        side = 'FRONT',
+                        vendor = 'BLUPRINT';
+
+                    switch(code.substring(2,3).toUpperCase()){
+                        case 'V':
+                            type = 'SILK SCREEN';
+                            break;
+                        case 'T':
+                            type = 'TEXTILE';
+                            break;
+                        case 'E':
+                            type = 'EMBROIDERY';
+                        default:
+                            break;
+                    }
+
+                    /*
+                    if(a.length == 1){
+
+                    }
+
+                    if(a.length > 1){
+
+                    }
+                    */
+
+                    //console.log(name, name.split('_').pop())
+                    if(name.split('_').pop() != 'CAD'){
+                        side = name.split('_').pop().toUpperCase();
+                    }
+
+                    if(name.substring(0,2).toUpperCase() != 'BP'){
+                        vendor = '';
+                    }
+
+                    rec.set('F_DESC6', code);
+                    rec.set('F_DESC3', color);
+                    rec.set('F_DESC2', type);
+                    rec.set('F_MFLAG', side);
+                    rec.set('F_DESC4', vendor);
+                    //rec.set('F_DESC1', name.split('_')[1]);
                 }
 
                 rec.set('F_BFLAG', true);
@@ -569,6 +614,124 @@ Ext.define("Vega.view.dal.DalController", {
         me.win.show('', function(){
             view.up('maincontainerwrap').mask();
         });
+    },
+
+    onSaveMedia: function(){
+
+        var me = this,
+            form = this.win.down('imageupload'),
+            field = form.getDockedItems('toolbar[dock="top"] > uploadfiles')[0],
+            isEdit = me.isEdit,
+            id;
+
+        /*
+         if(field.getFilesQueue().length > 0){
+            //field.formData.append('changes', JSON.stringify(changes));
+            //var file = field.filesQueue[0];
+         }
+
+        if(field && field.getFilesQueue().length > 0){
+
+        }
+        */
+
+        if(!isEdit){
+            // Since we're not editing, we have a newly inserted record. Grab the id of
+            // that record that exists in the child session
+            id = me.win.getViewModel().get('theMedia').id;
+        }
+
+        me.win.getSession().save();
+
+        if(!isEdit){
+            // Use the id of that child record to find the phantom in the parent session,
+            // we can then use it to insert the record into our store
+            me.getStore('dals').add(me.getSession().getRecord('Media', id));
+        }
+
+        var batch = me.getView().getSession().getSaveBatch(),
+            multiview = me.getView().lookupReference('multiview'),
+            grid = multiview.lookupReference('grid'),
+            rec = me.win.getViewModel().get('theMedia');
+        //rec = grid.getSelectionModel().getSelection()[0];
+
+        var processMask = new Ext.LoadMask({
+            msg: 'Saving... Please wait',
+            target: me.getView()
+        });
+
+        this.processBatch(batch, field, {
+            url: '/api/Files/'+ rec.get('F_CATEGORY') +'/upload',
+            success: function(response){
+                //console.log('SaveMedia', response);
+
+                grid.getView().refreshNode(rec);
+                //Ext.Msg.alert('Success', response);
+                // Using Ext.callback for 100 milisecond delay...
+                //Ext.callback(Ext.Msg.alert, Ext.Msg, ['Status', 'Changes saved successfully.'], 100);
+                processMask.hide('', function() {
+                    Ext.callback(Ext.Msg.alert, Ext.Msg, ['Status', 'Changes saved successfully.'], 100);
+                });
+
+            },
+            failure: function(response) {
+                //Ext.Msg.alert('Failure', response);
+
+                processMask.hide('', function() {
+                    Ext.Msg.alert('Failure', response);
+                });
+
+            }
+        }, processMask);
+
+        this.win.close();
+
+        /*
+         form.submitWithImage({
+         method: 'POST',
+         url: '/api/Dals/upload',
+         params: {
+         newStatus: 'delivered'
+         },
+         success: function(form, action) {
+         console.log(form, action);
+         Ext.Msg.alert('Success', form);
+         },
+         failure: function(form, action) {
+         switch (action.failureType) {
+         case Ext.form.action.Action.CLIENT_INVALID:
+         Ext.Msg.alert('Failure', 'Form fields may not be submitted with invalid values');
+         break;
+         case Ext.form.action.Action.CONNECT_FAILURE:
+         Ext.Msg.alert('Failure', 'Ajax communication failed');
+         break;
+         case Ext.form.action.Action.SERVER_INVALID:
+         Ext.Msg.alert('Failure', action);
+         }
+         }
+         });
+         */
+
+        /*
+         var changes = this.getView().getSession().getChanges();
+         if(changes){
+         new Ext.window.Window({
+         autoShow: true,
+         title: 'Session Changes',
+         modal: true,
+         width: 600,
+         height: 400,
+         layout: 'fit',
+         items: {
+         xtype: 'textarea',
+         value: JSON.stringify(changes, null, 4)
+         }
+         });
+         }
+         else {
+         Ext.Msg.alert('No Changes', 'There are no changes to the session.');
+         }
+         */
     },
 
     showEditWindow: function(rec){
@@ -592,7 +755,7 @@ Ext.define("Vega.view.dal.DalController", {
             viewModel: {
                 data: {
                     title: (rec ? 'Edit: ' : 'Add: ') + rec.get('F_CATEGORY'),
-                    previewImageSrc: !Ext.isEmpty(rec.data.F_NAME) && !Ext.isEmpty(rec.data.F_TYPE) ? '../' + rec.get('F_LINK') +  rec.get('F_PATH') + '/' + rec.get('ID') + '/' + rec.get('F_NAME') + '?w=320&h=320' :
+                    previewImageSrc: !Ext.isEmpty(rec.data.F_NAME) && !Ext.isEmpty(rec.data.F_TYPE) ? '../' + rec.get('F_LINK') +  rec.get('F_PATH') + '/' + rec.get('ID') + '/' + rec.get('F_NAME') + '?w=264&h=288' :
                     '../' + rec.get('F_LINK') + rec.get('F_PATH') + '/' + rec.get('F_LOCATION') + rec.get('F_EXT') + '?w=264&h=288'
                 },
                 // If we are passed a rec, a copy of it will be created in the newly spawned sesson.
@@ -617,7 +780,102 @@ Ext.define("Vega.view.dal.DalController", {
                 imageWidth: 264,
                 imageHeight: 288,
                 //previewImageSrc: 'resources/images/default.png',
-                fields: (rec.data.FID > 0 && rec.data.FID < 3) ? (rec.data.FID > 1 ? this.buildCompFields() : this.buildBodyFields()) : this.buildPhotoFields()
+                fields: (rec.data.FID > 0 && rec.data.FID < 3) ? (rec.data.FID > 1 ? this.buildCompFields() : this.buildBodyFields()) : this.buildPhotoFields(),
+                listeners: {
+                    dropped: {
+                        fn: function(form, field){
+                            var rec = me.win.getViewModel().get('theMedia');
+                            var hiddenName = form.query('container > hidden[name=name]')[0],
+                                hiddenType = form.query('container > hidden[name=type]')[0],
+                                hiddenSize = form.query('container > hidden[name=size]')[0];
+
+                            var newName = hiddenName.getValue(),
+                                newType = hiddenType.getValue(),
+                                newSize = hiddenSize.getValue();
+
+                            var idx = 0;
+                            if(!Ext.isEmpty(rec.data.F_NAME)){
+                                var oldName = rec.data.F_NAME.split('.')[0];
+
+                                if(oldName.indexOf('_v') != -1){
+                                    idx = oldName.split('_v').pop();
+                                }
+
+                                idx = idx + 1;
+                            }
+
+                            var fileName = newName.split('.')[0];
+
+                            switch (rec.data.F_CATEGORY.toLowerCase()) {
+                                case 'body':
+                                    var bodyCode = fileName.split('_')[0],
+                                        reference = fileName.replace('ref ', '').split('_')[1],
+                                        fabricType = fileName.split('_')[2];
+
+                                    rec.set('F_DESC5', bodyCode);
+                                    rec.set('F_OWNER', reference);
+                                    rec.set('F_MFLAG', fabricType);
+
+                                    rec.set('F_NAME', bodyCode + (!Ext.isEmpty(reference) ? '_ref ' + reference : '') + (!Ext.isEmpty(fabricType) ? '_' + fabricType : '') + '.' + newName.split('.').pop());
+                                    //rec.set('F_NAME', bodyCode + (!Ext.isEmpty(reference) ? '_ref ' + reference : '') + (!Ext.isEmpty(fabricType) ? '_' + fabricType : '') + '_v' + idx + '.' + newName.split('.').pop());
+                                    break;
+                                case 'prints':
+                                    var code = fileName.split('_')[0],
+                                        color = '00',
+                                        type = 'SUBLIMATION',
+                                        side = 'Front',
+                                        vendor = 'BLUPRINT',
+                                        descript = fileName.split('_')[1];
+
+                                    switch(fileName.substring(2,3).toUpperCase()){
+                                        case 'V':
+                                            type = 'SILK SCREEN';
+                                            break;
+                                        case 'T':
+                                            type = 'TEXTILE';
+                                            break;
+                                        case 'E':
+                                            type = 'EMBROIDERY';
+                                        default:
+                                            break;
+                                    }
+
+                                    if(fileName.split('_').pop() != 'CAD'){
+                                        side = fileName.split('_').pop().toUpperCase();
+                                    }
+
+                                    if(fileName.substring(0,2).toUpperCase() != 'BP'){
+                                        vendor = '';
+                                    }
+
+                                    rec.set('F_DESC6', code);
+                                    rec.set('F_DESC3', color);
+                                    rec.set('F_DESC2', type);
+                                    rec.set('F_MFLAG', side);
+                                    rec.set('F_DESC4', vendor);
+                                    rec.set('F_DESC1', descript);
+
+                                    rec.set('F_NAME', code + (!Ext.isEmpty(descript) ? '_' + descript : '') + (!Ext.isEmpty(side) ? '_' + side : '') + '_CAD' + '.' + newName.split('.').pop());
+                                    //rec.set('F_NAME', code + (!Ext.isEmpty(descript) ? '_' + descript : '') + (!Ext.isEmpty(side) ? '_' + side : '') + '_CAD' + '_v' + idx + '.' + newName.split('.').pop());
+                                    break;
+                                case 'photos':
+                                    rec.set('F_NAME', rec.data.F_STYLE + (!Ext.isEmpty(rec.data.F_DESC5) ? + '_' + rec.data.F_DESC5 : '') + (!Ext.isEmpty(rec.data.F_DESC6) ? '_' + rec.data.F_DESC6 : '') + '.' + newName.split('.').pop());
+                                    //rec.set('F_NAME', rec.data.F_STYLE + (!Ext.isEmpty(rec.data.F_DESC5) ? + '_' + rec.data.F_DESC5 : '') + (!Ext.isEmpty(rec.data.F_DESC6) ? '_' + rec.data.F_DESC6 : '') + '_v' + idx + '.' + newName.split('.').pop());
+                                    break;
+                                default:
+                                    rec.set('F_NAME', newName);
+                                    break;
+                            }
+
+                            rec.set('F_TYPE', newType);
+                            rec.set('F_SIZE', newSize);
+                            rec.set('F_EXT', '.' + newName.split('.').pop());
+                            rec.set('F_LOCATION', newName + '_' + newSize);
+                            rec.set('F_MOD_USER_ID', Vega.user.data.Userid);
+                            rec.set('F_UPDATED_ON', new Date());
+                        }
+                    }
+                }
             }]
         });
 
@@ -685,20 +943,11 @@ Ext.define("Vega.view.dal.DalController", {
             autoLoadOnValue: true,
             //queryParam: "filter",
             //triggerAction: 'all',
-            minChars: 1,
+            //minChars: 1,
             matchFieldWidth: true,
             plugins: [{
                 ptype: "cleartrigger"
-            }],
-            listeners: {
-                triggerClear: function(combo){
-
-                },
-
-                select: function(combo, rec, e){
-
-                }
-            }
+            }]
         },{
             //xtype: 'textfield',
             name: 'F_DESC5',
@@ -715,21 +964,22 @@ Ext.define("Vega.view.dal.DalController", {
             //labelWidth: 50,
             //width: 160,
             hideTrigger: true,
+            store: 'memBodies',
+            remoteStore: 'Bodies',
             bind: {
-                store: '{bodies}',
                 value: '{theMedia.F_OWNER}'
             },
             valueField: "id",
             displayField: "id",
             forceSelection: false,
             selectOnFocus: true,
-            queryMode: 'remote',
-            queryParam: "filter",
+            pageSize: 50,
+            queryMode: 'local',
+            //queryParam: "filter",
             //triggerAction: 'all',
             //lastQuery: '',
             //filterPickList: true,
-            pageSize: 25,
-            minChars: 1,
+            //minChars: 0,
             matchFieldWidth: false,
             listConfig: {
                 loadindText: 'Searching...',
@@ -766,7 +1016,7 @@ Ext.define("Vega.view.dal.DalController", {
             //lastQuery: '',
             //filterPickList: true,
             //pageSize: 25,
-            minChars: 1,
+            //minChars: 1,
             matchFieldWidth: false,
             listConfig: {
                 loadindText: 'Searching...',
@@ -775,7 +1025,14 @@ Ext.define("Vega.view.dal.DalController", {
             },
             plugins: [{
                 ptype: "cleartrigger"
-            }]
+            }],
+            listeners: {
+                render: function(c){
+                    c.on('focus', function () {
+                        c.expand();
+                    });
+                }
+            }
         },{
             xtype: "tagfield",
             name: 'F_DESC2',
@@ -796,7 +1053,7 @@ Ext.define("Vega.view.dal.DalController", {
             //lastQuery: '',
             //filterPickList: true,
             //pageSize: 100,
-            minChars: 1,
+            //minChars: 1,
             matchFieldWidth: false,
             listConfig: {
                 loadindText: 'Searching...',
@@ -813,7 +1070,7 @@ Ext.define("Vega.view.dal.DalController", {
             bind: {
                 value: '{theMedia.F_DESC1}'
             }
-        }]
+        }];
     },
 
     buildCompFields: function(){
@@ -823,6 +1080,8 @@ Ext.define("Vega.view.dal.DalController", {
          autoLoad: true
          }),
          */
+
+        Ext.getStore('memComponents').clearFilter();
 
         return [{
             xtype: 'hiddenfield',
@@ -889,9 +1148,6 @@ Ext.define("Vega.view.dal.DalController", {
                 ptype: "cleartrigger"
             }],
             listeners: {
-                triggerClear: function(combo){
-
-                },
                 select: function(combo, rec, e){
                     var cboCode = combo.ownerCt.query('combo[name="F_DESC6"]')[0],
                         store = cboCode.getStore();
@@ -910,19 +1166,20 @@ Ext.define("Vega.view.dal.DalController", {
                 }
             }
         },{
-            xtype: "memorycombo",
+            xtype: "combo",
             name: 'F_DESC6',
             //reference: 'cboComponent',
             fieldLabel: "Code #",
             //hideLabel: true,
             //labelWidth: 50,
             //width: 160,
-            hideTrigger: true,
+            //hideTrigger: true,
             bind: {
                 //store: '{components}',
                 value: '{theMedia.F_DESC6}'
             },
             store: 'memComponents',
+            remoteStore: 'Components',
             valueField: "label",
             displayField: "label",
             forceSelection: false,
@@ -930,7 +1187,7 @@ Ext.define("Vega.view.dal.DalController", {
             matchFieldWidth: false,
             autoLoadOnValue: true,
             pageSize: 50,
-            minChars: 1,
+            //minChars: 1,
             queryMode: "local",
             //queryParam: "filter",
             //queryDelay: 800,
@@ -963,9 +1220,6 @@ Ext.define("Vega.view.dal.DalController", {
                 ptype: "cleartrigger"
             }],
             listeners: {
-                triggerClear: function(combo){
-
-                },
                 beforequery: function(qe){
                     //delete qe.combo.lastQuery;
                 },
@@ -989,26 +1243,27 @@ Ext.define("Vega.view.dal.DalController", {
                 }
             }
         },{
-            xtype: "memorycombo",
+            xtype: "combo",
             name: 'F_DESC3',
             fieldLabel: "Color",
             //hideLabel: true,
             //labelWidth: 50,
             //width: 160,
-            hideTrigger: true,
+            //hideTrigger: true,
             bind: {
                 //store: '{compColors}',
                 value: '{theMedia.F_DESC3}'
             },
-            store: 'memColors',
-            valueField: "label",
-            displayField: "label",
+            store: 'memRawColors',
+            remoteStore: 'rawColors',
+            valueField: "id",
+            displayField: "id",
             forceSelection: false,
             selectOnFocus: true,
             autoLoadOnValue: true,
             matchFieldWidth: false,
             pageSize: 50,
-            minChars: 1,
+            //minChars: 1,
             queryMode: "local",
             //queryParam: "filter",
             //queryDelay: 800,
@@ -1023,14 +1278,8 @@ Ext.define("Vega.view.dal.DalController", {
                 ptype: "cleartrigger"
             }],
             listeners: {
-                triggerClear: function(combo){
-
-                },
                 beforequery: function(qe){
                     //delete qe.combo.lastQuery;
-                },
-                select: function(combo, record, e){
-                    // Error
                 }
             }
         },{
@@ -1038,7 +1287,7 @@ Ext.define("Vega.view.dal.DalController", {
             name: 'F_DESC2',
             fieldLabel: "Type",
             //hideLabel: true,
-            hideTrigger: true,
+            //hideTrigger: true,
             bind: {
                 store: '{bomtypes}',
                 value: '{theMedia.F_DESC2}'
@@ -1053,7 +1302,7 @@ Ext.define("Vega.view.dal.DalController", {
             //queryParam: "filter",
             //triggerAction: 'all',
             //lastQuery: '',
-            minChars: 1,
+           // minChars: 1,
             matchFieldWidth: false,
             listConfig: {
                 loadindText: 'Searching...',
@@ -1064,15 +1313,14 @@ Ext.define("Vega.view.dal.DalController", {
                 ptype: "cleartrigger"
             }],
             listeners: {
-                triggerClear: function(combo){
-
+                render: function(c){
+                    c.on('focus', function(c){
+                        c.expand();
+                    });
                 },
                 beforequery: function(qe){
                     //if triggerAction: 'last'
                     //delete qe.combo.lastQuery;
-                },
-                select: function(combo, record, e){
-                    // Error
                 }
             }
         },{
@@ -1080,7 +1328,7 @@ Ext.define("Vega.view.dal.DalController", {
             name: 'F_MFLAG',
             fieldLabel: 'Side',
             //hideLabel: true,
-            hideTrigger: true,
+            //hideTrigger: true,
             bind: {
                 store: '{sides}',
                 value: '{theMedia.F_MFLAG}'
@@ -1094,7 +1342,7 @@ Ext.define("Vega.view.dal.DalController", {
             //queryParam: "filter",
             //triggerAction: 'all',
             //lastQuery: '',
-            minChars: 1,
+            //minChars: 1,
             matchFieldWidth: true,
             listConfig: {
                 loadindText: 'Searching...',
@@ -1103,18 +1351,26 @@ Ext.define("Vega.view.dal.DalController", {
             },
             plugins: [{
                 ptype: "cleartrigger"
-            }]
+            }],
+            listeners: {
+                render: function(c){
+                    c.on('focus', function(c){
+                        c.expand();
+                    });
+                }
+            }
         },{
             xtype: "combo",
             name: 'F_DESC4',
             fieldLabel: "Vendor",
             //hideLabel: true,
-            hideTrigger: true,
+            //hideTrigger: true,
             bind: {
-                store: '{vendors}',
+                //store: '{vendors}',
                 value: '{theMedia.F_DESC4}'
 
             },
+            store: 'Vendors',
             valueField: "id",
             displayField: "id",
             forceSelection: false,
@@ -1124,7 +1380,7 @@ Ext.define("Vega.view.dal.DalController", {
             //queryParam: "filter",
             //triggerAction: 'all',
             //lastQuery: '',
-            minChars: 1,
+            //minChars: 1,
             matchFieldWidth: false,
             listConfig: {
                 loadindText: 'Searching...',
@@ -1133,18 +1389,26 @@ Ext.define("Vega.view.dal.DalController", {
             },
             plugins: [{
                 ptype: "cleartrigger"
-            }]
+            }],
+            listeners: {
+                render: function(c){
+                    c.on('focus', function(c){
+                        c.expand();
+                    });
+                }
+            }
         },{
             xtype: "combo",
             name: 'F_DESC8',
             fieldLabel: "Account",
             //hideLabel: true,
-            hideTrigger: true,
+            //hideTrigger: true,
             bind: {
-                store: '{customers}',
+                //store: '{customers}',
                 value: '{theMedia.F_DESC8}'
 
             },
+            store: 'Customers',
             valueField: "id",
             displayField: "id",
             forceSelection: false,
@@ -1154,7 +1418,7 @@ Ext.define("Vega.view.dal.DalController", {
             //queryParam: "filter",
             //triggerAction: 'all',
             //lastQuery: '',
-            minChars: 1,
+            //minChars: 1,
             matchFieldWidth: false,
             listConfig: {
                 loadindText: 'Searching...',
@@ -1163,7 +1427,14 @@ Ext.define("Vega.view.dal.DalController", {
             },
             plugins: [{
                 ptype: "cleartrigger"
-            }]
+            }],
+            listeners: {
+                render: function(c){
+                    c.on('focus', function () {
+                        c.expand();
+                    });
+                }
+            }
         },{
             xtype: "tagfield",
             name: 'F_DESC9',
@@ -1182,9 +1453,9 @@ Ext.define("Vega.view.dal.DalController", {
             autoLoadOnValue: true,
             filterPickList: true,
             //queryParam: "filter",
-            triggerAction: 'all',
+            //triggerAction: 'all',
             //lastQuery: '',
-            minChars: 1,
+            //minChars: 1,
             matchFieldWidth: false,
             listConfig: {
                 loadindText: 'Searching...',
@@ -1197,7 +1468,7 @@ Ext.define("Vega.view.dal.DalController", {
         },{
             xtype: "tagfield",
             name: 'F_DESC10',
-            fieldLabel: "Colorwise",
+            fieldLabel: "Colorway",
             //hideLabel: true,
             hideTrigger: true,
             bind: {
@@ -1208,15 +1479,14 @@ Ext.define("Vega.view.dal.DalController", {
             displayField: "id",
             forceSelection: false,
             selectOnFocus: true,
-            caseSensitive: false,
             autoLoadOnValue: true,
             queryMode: 'local',
             //queryParam: "filter",
-            triggerAction: 'all',
+            //triggerAction: 'all',
             //lastQuery: '',
-            //filterPickList: true,
+            filterPickList: true,
             //pageSize: 100, // only works with queryMode = 'remote'
-            minChars: 1,
+            //minChars: 1,
             matchFieldWidth: false,
             listConfig: {
                 loadindText: 'Searching...',
@@ -1296,11 +1566,12 @@ Ext.define("Vega.view.dal.DalController", {
             //forceSelection: true,
             //selectOnFocus: true,
             editable: false,
-            queryMode: "local",
+            readOnly: true,
             autoLoadOnValue: true,
+            queryMode: "local",
             //queryParam: "filter",
             //triggerAction: 'all',
-            minChars: 1,
+            //minChars: 1,
             matchFieldWidth: false,
             listConfig: {
                 loadindText: 'Searching...',
@@ -1311,10 +1582,6 @@ Ext.define("Vega.view.dal.DalController", {
                 ptype: "cleartrigger"
             }],
             listeners: {
-                triggerClear: function(combo){
-
-                },
-
                 select: function(combo, rec, e){
                     var cboCode = combo.ownerCt.query('combo[name="F_DESC6"]')[0],
                         store = cboCode.getStore();
@@ -1333,7 +1600,7 @@ Ext.define("Vega.view.dal.DalController", {
                 }
             }
         },{
-            xtype: "memorycombo",
+            xtype: "combo",
             name: 'F_STYLE',
             fieldLabel: "Style #",
             //hideLabel: true,
@@ -1345,12 +1612,13 @@ Ext.define("Vega.view.dal.DalController", {
                 value: '{theMedia.F_STYLE}'
             },
             store: 'memStyles',
+            remoteStore: 'Styles',
             valueField: "id",
             displayField: "id",
             forceSelection: false,
             selectOnFocus: true,
             pageSize: 50,
-            minChars: 1,
+            //minChars: 1,
             matchFieldWidth: false,
             queryMode: "local",
             //queryParam: "filter",
@@ -1366,18 +1634,12 @@ Ext.define("Vega.view.dal.DalController", {
                 ptype: "cleartrigger"
             }],
             listeners: {
-                triggerClear: function(combo){
-
-                },
                 beforequery: function(qe){
                     //delete qe.combo.lastQuery;
-                },
-                select: function(combo, rec, e){
-
                 }
             }
         },{
-            xtype: "memorycombo",
+            xtype: "combo",
             name: 'F_DESC5',
             fieldLabel: "Body #",
             //hideLabel: true,
@@ -1389,6 +1651,7 @@ Ext.define("Vega.view.dal.DalController", {
                 value: '{theMedia.F_DESC5}'
             },
             store: 'memBodies',
+            remoteStore: 'Bodies',
             valueField: "id",
             displayField: "id",
             forceSelection: false,
@@ -1398,7 +1661,7 @@ Ext.define("Vega.view.dal.DalController", {
             //queryParam: "filter",
             //triggerAction: 'last',
             //lastQuery: '',
-            minChars: 1,
+            //minChars: 1,
             matchFieldWidth: false,
             listConfig: {
                 loadindText: 'Searching...',
@@ -1409,18 +1672,12 @@ Ext.define("Vega.view.dal.DalController", {
                 ptype: "cleartrigger"
             }],
             listeners: {
-                triggerClear: function(combo){
-
-                },
                 beforequery: function(qe){
                     //delete qe.combo.lastQuery;
-                },
-                select: function(combo, rec, e){
-
                 }
             }
         },{
-            xtype: "memorycombo",
+            xtype: "combo",
             name: 'F_DESC6',
             //reference: 'cboPrints',
             fieldLabel: "Print #",
@@ -1431,6 +1688,7 @@ Ext.define("Vega.view.dal.DalController", {
                 value: '{theMedia.F_DESC6}'
             },
             store: 'memComponents',
+            remoteStore: 'Components',
             valueField: "label",
             displayField: "label",
             forceSelection: false,
@@ -1440,7 +1698,7 @@ Ext.define("Vega.view.dal.DalController", {
             //queryParam: "filter",
             //triggerAction: 'all',
             //lastQuery: '',
-            minChars: 1,
+            //minChars: 1,
             matchFieldWidth: false,
             listConfig: {
                 loadindText: 'Searching...',
@@ -1469,17 +1727,22 @@ Ext.define("Vega.view.dal.DalController", {
                 ptype: "cleartrigger"
             }],
             listeners: {
-                triggerClear: function(combo){
-
-                },
                 beforequery: function(qe){
                     //if triggerAction: 'last'
                     //delete qe.combo.lastQuery;
-                },
-                select: function(combo, record, e){
-                    // Error
                 }
             }
+        },{
+            xtype: 'combo',
+            name: 'F_MFLAG',
+            fieldLabel: 'F/B',
+            editable: false,
+            bind: {
+                value: '{theMedia.F_MFLAG}'
+            },
+            queryMode: 'local',
+            store: ['FRONT', 'BACK'],
+            hidden: false
         },{
             xtype: 'combo',
             name: 'F_DESC8',
@@ -1487,9 +1750,10 @@ Ext.define("Vega.view.dal.DalController", {
             //hideLabel: true,
             hideTrigger: true,
             bind: {
-                store: '{customers}',
+                //store: '{customers}',
                 value: '{theMedia.F_DESC8}'
             },
+            store: 'Customers',
             valueField: "id",
             displayField: "id",
             forceSelection: false,
@@ -1497,39 +1761,9 @@ Ext.define("Vega.view.dal.DalController", {
             queryMode: 'local',
             autoLoadOnValue: true,
             //queryParam: "filter",
-            triggerAction: 'all',
+            //triggerAction: 'all',
             //lastQuery: '',
-            minChars: 1,
-            matchFieldWidth: true,
-            listConfig: {
-                loadindText: 'Searching...',
-                emptyText: 'No matching items found.',
-                width: 340
-            },
-            plugins: [{
-                ptype: "cleartrigger"
-            }]
-        },{
-            xtype: "combo",
-            name: 'F_DESC4',
-            fieldLabel: "Vendor",
-            //hideLabel: true,
-            hideTrigger: true,
-            bind: {
-                store: '{vendors}',
-                value: '{theMedia.F_DESC4}'
-
-            },
-            valueField: "id",
-            displayField: "id",
-            forceSelection: false,
-            selectOnFocus: true,
-            autoLoadOnValue: true,
-            queryMode: 'local',
-            //queryParam: "filter",
-            triggerAction: 'all',
-            //lastQuery: '',
-            minChars: 1,
+            //minChars: 1,
             matchFieldWidth: false,
             listConfig: {
                 loadindText: 'Searching...',
@@ -1538,7 +1772,52 @@ Ext.define("Vega.view.dal.DalController", {
             },
             plugins: [{
                 ptype: "cleartrigger"
-            }]
+            }],
+            listeners: {
+                render: function(c){
+                    c.on('focus', function () {
+                        c.expand();
+                    });
+                }
+            }
+        },{
+            xtype: "combo",
+            name: 'F_DESC4',
+            fieldLabel: "Vendor",
+            //hideLabel: true,
+            hideTrigger: true,
+            bind: {
+                //store: '{vendors}',
+                value: '{theMedia.F_DESC4}'
+
+            },
+            store: 'Vendors',
+            valueField: "id",
+            displayField: "id",
+            forceSelection: false,
+            selectOnFocus: true,
+            autoLoadOnValue: true,
+            queryMode: 'local',
+            //queryParam: "filter",
+            //triggerAction: 'all',
+            //lastQuery: '',
+            //minChars: 1,
+            matchFieldWidth: false,
+            listConfig: {
+                loadindText: 'Searching...',
+                emptyText: 'No matching items found.',
+                width: 340
+            },
+            plugins: [{
+                ptype: "cleartrigger"
+            }],
+            listeners: {
+                render: function(c){
+                    c.on('focus', function () {
+                        c.expand();
+                    });
+                }
+            }
         },{
             xtype: "textfield",
             name: 'F_DESC7',
@@ -1570,7 +1849,7 @@ Ext.define("Vega.view.dal.DalController", {
             var idx = 0;
             items.push({
                 xtype: 'menucheckitem',
-                iconCls: Ext.baseCSSPrefix + 'menu-item-indent-right-icon fa fa-filter',
+                iconCls: Ext.baseCSSPrefix + 'menu-item-indent-right-icon x-fa fa-filter',
                 group: button.id,
                 //itemIndex: ++idx,
                 type: rec.data.id,
@@ -1594,7 +1873,7 @@ Ext.define("Vega.view.dal.DalController", {
             x = grid.getPlugin("gridfilters"),
             r = grid.getColumns(),
             topbar = refs.topbar,
-            btn = multiview.getDockedItems('toolbar[dock="bottom"] > button[name="btnCustInfo"]')[0],
+            btn = multiview.getDockedItems('pagingtoolbar > button[name="btnCustInfo"]')[0],
 
             w = topbar.down("multisortbutton[name=body]"),
             p = topbar.down("multisortbutton[name=print]"),
@@ -1604,6 +1883,7 @@ Ext.define("Vega.view.dal.DalController", {
         p.setVisible(t.type == "Prints");
         n.setVisible(t.type == "Photos");
 
+        //console.log(btn);
         btn.setDisabled(t.type != "Prints");
 
         /*
@@ -1639,7 +1919,7 @@ Ext.define("Vega.view.dal.DalController", {
 
     onCategoryLoad: function(j, f, h){
         var i = this.getViewModel(),
-        g = this.lookupReference("filterSelection")
+        g = this.lookupReference("filterSelection");
     },
 
     onSortItemChange: function(i, j, h, g){
@@ -1690,10 +1970,15 @@ Ext.define("Vega.view.dal.DalController", {
             fn: function(btn) {
                 if (btn === 'ok') {
                     //grid.getStore().remove(rec);
+
                     d.drop();
 
                     var batch = me.getView().getSession().getSaveBatch();
-                    me.processBatch(batch);
+                    var processMask = new Ext.LoadMask({
+                        msg: 'Saving... Please wait',
+                        target: me.getView()
+                    });
+                    me.processBatch(batch, null, null, processMask);
                 }
             }
         });
@@ -1713,7 +1998,12 @@ Ext.define("Vega.view.dal.DalController", {
             s = l.topbar,
             m = l.display;
 
-        m.setActive(r);
+        m.active = r;
+        //me.update(rec.data);
+        var innerPnl = m.getComponent('innerPnl');
+        innerPnl.update(r.data);
+
+        //m.setActive(r);
 
         var k = [],
             q = s.lookupReference("viewselection");
@@ -1722,7 +2012,7 @@ Ext.define("Vega.view.dal.DalController", {
         k[1] = q.value == 0 ? "default" : q.value == 1 ? "medium" : "tiles";
         k[2] = r.get("ID");
 
-        this.redirectTo(k.join("/"))
+        this.redirectTo(k.join("/"));
     },
 
     onItemContextMenu: function(h, j, k, g, l){
@@ -1733,35 +2023,54 @@ Ext.define("Vega.view.dal.DalController", {
             i.select(g);
         }
 
+        this.view.contextmenu.items.items[4].setHidden(!(Vega.user.userOwn(j.data.userId) || Vega.user.inRole('administrators')));
         this.view.contextmenu.showAt(l.getXY());
     },
 
-    processBatch: function(batch, field, options){
-        var changes = this.getView().getSession().getChanges();
+    processBatch: function(batch, field, options, pMask){
+        //var changes = this.getView().getSession().getChanges();
 
         if(batch !== undefined){
             batch.on({
+                /*
                 operationcomplete: function(batch, op){
 
                 },
+                */
                 complete: function(batch, op){
                     //refresh In-Review
-                    var response = JSON.parse(op.getResponse().responseText);
+
+                    var objResp = op.getResponse();
+                    if(!Ext.isEmpty(objResp)){
+                        var response = JSON.parse(objResp.responseText);
+
+                        if(field && field.getFilesQueue().length > 0){
+                            field.send(options, {
+                                Media: JSON.stringify(response.data)
+                            });
+                        }
+                        else {
+                            pMask.hide('', function() {
+                                Ext.Msg.alert('Status', 'Changes saved successfully.');
+                            });
+                        }
+                    }
                     //console.log(typeof response.data, response.data, JSON.stringify(response.data));
-                    if(field && field.getFilesQueue().length > 0){
-                        field.send(options, {
-                            Media: JSON.stringify(response.data)
-                        });
-                    }
-                    else {
-                        Ext.Msg.alert('Status', 'Changes saved successfully.');
-                    }
                 },
-                exception: function(){
-                    Ext.Msg.alert('Error', 'Error occurred');
+                exception: function(batch, op){
+                    //Ext.Msg.alert('Error', 'Error occurred');
+                    var objResp = op.error.response;
+                    //console.log(objResp)
+                    pMask.hide('', function() {
+                        if(!Ext.isEmpty(objResp)){
+                            var response = JSON.parse(objResp.responseText);
+                            Ext.Msg.alert(objResp.statusText, objResp.responseText);
+                        }
+                    });
                 }
             });
 
+            pMask.show();
             batch.start();
         }
         else {

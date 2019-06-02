@@ -3,7 +3,7 @@
  */
 Ext.define("Vega.view.inventory.fabric.Rolls", {
     extend: 'Vega.view.Viewer',
-    
+
     requires: [
         'Vega.view.inventory.fabric.RollsController',
         'Vega.view.inventory.fabric.RollsModel'
@@ -23,38 +23,57 @@ Ext.define("Vega.view.inventory.fabric.Rolls", {
 
     cls: "shadow-panel",
     header: false,
-    margin: 8,
+    margin: '0 0 0 4',
 
     initComponent: function(){
-        var b=this;
+        var b = this;
 
+        Ext.getStore('memComponents').clearFilter();
 
         Ext.applyIf(b, {
             items: [{
-                xtype: "rolls-grid",
                 title: "Fabric Rolls",
-                reference: "rolls-grid",
-                iconCls: "fa fa-dot-circle-o",
+                iconCls: "x-fa fa-dot-circle-o",
+
+                layout: {
+                    type: "fit"
+                },
+
+                style: {
+                    borderTop: '1px solid #cfcfcf'
+                },
+
+                defaults: {
+                    //margin: "5 0 0 0"
+                },
+
+                //bodyPadding: 8,
+                fieldDefaults: {
+
+                },
+
                 dockedItems: [{
                     xtype: "toolbar",
                     dock: "top",
                     items: [{
-                        xtype: "memorycombo",
+                        xtype: "combo",
                         itemId: "cboFabric",
-                        labelAlign: "left",
+                        //labelAlign: "left",
                         fieldLabel: "Fabric",
                         labelWidth: 50,
                         width: 200,
                         store: "memComponents",
+                        remoteStore: 'Components',
                         valueField: "label",
                         displayField: "label",
                         forceSelection: false,
-                        selectOnFocus: false,
+                        selectOnFocus: true,
+                        autoLoadOnValue: true,
                         pageSize: 50,
                         matchFieldWidth: false,
                         queryMode: "local",
                         //queryParam: "filter",
-                        minChars: 1,
+                        //minChars: 1,
                         listConfig: {
                             loadindText: "Searching...",
                             emptyText: "No matching items found.",
@@ -72,36 +91,39 @@ Ext.define("Vega.view.inventory.fabric.Rolls", {
                             },
                             beforequery: {
                                 fn: function(qe){
+                                    /*
                                     var store = qe.combo.getStore();
-                                    console.log(qe.combo, qe.combo.getValue())
+                                    console.log('FABRIC COMBO', qe.combo.getStore(), qe.combo.getValue())
                                     store.clearFilter();
                                     store.filter([{
                                         property: 'text',
                                         value: 'FABRICS',
                                         operator: '='
                                     }]);
+                                    */
                                 }
                             }
                         }
                     },
                     {xtype: "tbspacer"},
                     {
-                        xtype: "memorycombo",
+                        xtype: "combo",
                         itemId: "cboColor",
-                        labelAlign: "left",
+                        //labelAlign: "left",
                         fieldLabel: "Color",
                         labelWidth: 50,
                         width: 200,
-                        store: "memColors",
+                        store: "memRawColors",
+                        remoteStore: 'rawColors',
                         valueField: "label",
                         displayField: "label",
                         forceSelection: false,
-                        selectOnFocus: false,
+                        selectOnFocus: true,
                         pageSize: 50,
                         matchFieldWidth: false,
                         queryMode: "local",
                         //queryParam: "filter",
-                        minChars: 1,
+                        //minChars: 1,
                         listConfig: {
                             loadindText: "Searching...",
                             emptyText: "No matching items found.",
@@ -119,13 +141,13 @@ Ext.define("Vega.view.inventory.fabric.Rolls", {
                                     var cboStyle = qe.combo.ownerCt.query('combo[itemId="cboFabric"]')[0],
                                         store = qe.combo.getStore();
 
-                                    console.log(cboStyle, cboStyle.getValue())
+                                    //console.log(cboStyle, cboStyle.getValue())
                                     store.clearFilter();
 
                                     if(!Ext.isEmpty(cboStyle.getValue())){
 
                                         store.filter([{
-                                            property: 'descript',
+                                            property: 'text',
                                             value: cboStyle.getValue().toUpperCase(),
                                             operator: '='
                                         }]);
@@ -137,22 +159,23 @@ Ext.define("Vega.view.inventory.fabric.Rolls", {
                     },
                     {xtype: "tbspacer"},
                     {
-                        xtype: "memorycombo",
+                        xtype: "combo",
                         itemId: "cboLotno",
                         labelAlign: "left",
                         fieldLabel: "Lot #",
                         labelWidth: 50,
                         width: 200,
                         store: 'memLotnos',
+                        remoteStore: 'Lotnos',
                         valueField: "label",
                         displayField: "label",
                         forceSelection: false,
-                        selectOnFocus: false,
+                        selectOnFocus: true,
                         pageSize: 50,
                         matchFieldWidth: false,
                         queryMode: "local",
                         //queryParam: "filter",
-                        minChars: 1,
+                        //minChars: 1,
                         listConfig: {
                             loadindText: "Searching...",
                             emptyText: "No matching items found.",
@@ -161,7 +184,7 @@ Ext.define("Vega.view.inventory.fabric.Rolls", {
                         plugins:[{
                             ptype: "cleartrigger"
                         }],
-                        tpl: '<tpl for="."><tpl if="[xindex] == 1"><table class="cbo-list"><tr><th width="60%">Lot #</th><th width="40%">On Hand</th></tr></tpl><tr class="x-boundlist-item"><td>{id}</td><td>{text}</td></tr><tpl if="[xcount-xindex]==0"></table></tpl></tpl>'},
+                        tpl: '<tpl for="."><tpl if="[xindex] == 1"><table class="cbo-list"><tr><th width="60%">Lot #</th><th width="40%">On Hand</th></tr></tpl><tr class="x-boundlist-item"><td>{label}</td><td>{text}</td></tr><tpl if="[xcount-xindex]==0"></table></tpl></tpl>'},
                     {
                         xtype: "tbspacer"
                     },
@@ -170,7 +193,7 @@ Ext.define("Vega.view.inventory.fabric.Rolls", {
                         ui: "default",
                         width: 90,
                         text: "Search",
-                        iconCls: "fa fa-refresh",
+                        iconCls: "x-fa fa-refresh",
                         action: "refresh",
                         tooltip: "Refresh Current View"
                     },
@@ -179,7 +202,7 @@ Ext.define("Vega.view.inventory.fabric.Rolls", {
                         ui: "default",
                         width: 90,
                         text: "Save",
-                        iconCls: "fa fa-save",
+                        iconCls: "x-fa fa-save",
                         action: "save",
                         tooltip: "Save Current Changes"
                     },
@@ -218,7 +241,7 @@ Ext.define("Vega.view.inventory.fabric.Rolls", {
                         ui: "default",
                         width: 120,
                         text: "Print Barcode",
-                        iconCls: "fa fa-print",
+                        iconCls: "x-fa fa-print",
                         action: "printbarcode",
                         tooltip: "Print Barcodes",
                         handler: "onPrintBarcodeClicked"
@@ -235,21 +258,28 @@ Ext.define("Vega.view.inventory.fabric.Rolls", {
                         glyph: "xf021@FontAwesome",
                         scope: this,
                         toggleHandler: function(a, d){
-                            this.down("rolls-grid").store.autoSync=d
+                            this.down("rolls-grid").store.autoSync=d;
                         }
                     }]
                 },
                 {
-                    xtype: "toolbar",
-                    dock: "bottom",
-                    items: [{
-                        xtype: "pagingtoolbar",
-                        bind: {
-                            store: "{rolls}"
-                        },
-                        ui: "default",
-                        displayInfo: true
-                    }]
+                    xtype: "pagingtoolbar",
+                    bind: {
+                        store: "{rolls}"
+                    },
+                    ui: "default",
+                    dock: 'bottom',
+                    displayInfo: true
+                }],
+
+                items: [{
+                    xtype: "rolls-grid",
+                    reference: "rolls-grid",
+                    flex: 1,
+                    style: {
+                        borderTop: '1px solid #cfcfcf',
+                        borderBottom: '1px solid #cfcfcf'
+                    }
                 }]
             }]
         });
@@ -257,4 +287,3 @@ Ext.define("Vega.view.inventory.fabric.Rolls", {
         this.callParent(arguments);
     }
 });
-

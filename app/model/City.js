@@ -12,7 +12,7 @@ Ext.define('Vega.model.City', {
         {name: 'lon'},
         {name: 'coord',
             calculate: function(data){
-                return {lon: data.lon, lat: data.lat}
+                return {lon: data.lon, lat: data.lat};
             }
         }
     ],

@@ -35,11 +35,17 @@ Ext.define("Vega.view.inventory.fabric.panel.OrderList", {
         align: "center",
         filter: { type: "string" },
         summaryRenderer: function (f, e, d) {
-            return "Total:"
+            return "Total:";
         }
     },
     { text: "Color",
         dataIndex: "color",
+        width: 120,
+        align: "center",
+        filter: { type: "string"}
+    },
+    { text: "Lot #",
+        dataIndex: "lotno",
         width: 120,
         align: "center",
         filter: { type: "string"}
@@ -50,7 +56,7 @@ Ext.define("Vega.view.inventory.fabric.panel.OrderList", {
         width: 80,
         align: "center",
         renderer: Ext.util.Format.numberRenderer("0,0.00"),
-        filter: { type: "float"}
+        filter: { type: "number"}
     },
     {
         text: "Rec. Qty",
@@ -58,7 +64,7 @@ Ext.define("Vega.view.inventory.fabric.panel.OrderList", {
         width: 80,
         align: "center",
         renderer: Ext.util.Format.numberRenderer("0,0.00"),
-        filter: { type: "float"}
+        filter: { type: "number"}
     },
     {
         text: "Balance",
@@ -68,9 +74,9 @@ Ext.define("Vega.view.inventory.fabric.panel.OrderList", {
         renderer: Ext.util.Format.numberRenderer("0,0.00"),
         summaryType: "sum",
         summaryRenderer: function (f, e, d) {
-            return Ext.util.Format.number(f, "0,0.00")
+            return Ext.util.Format.number(f, "0,0.00");
         },
-        filter: { type: "float" }
+        filter: { type: "number" }
     },
     {
         text: "Price",
@@ -78,7 +84,7 @@ Ext.define("Vega.view.inventory.fabric.panel.OrderList", {
         width: 80,
         align: "center",
         renderer: Ext.util.Format.usMoney,
-        filter: { type: "float"}
+        filter: { type: "number"}
     },
     {
         text: "On-Hand",
@@ -90,7 +96,7 @@ Ext.define("Vega.view.inventory.fabric.panel.OrderList", {
         summaryRenderer: function (f, e, d) {
             return Ext.util.Format.number(f, "0,0.00");
         },
-        filter: { type: "float" }
+        filter: { type: "number" }
     },
     {
         text: "UOM",
@@ -100,9 +106,11 @@ Ext.define("Vega.view.inventory.fabric.panel.OrderList", {
         filter: { type: "string" }
     },
     {
+        xtype: 'datecolumn',
         text: "ETA",
         dataIndex: "etadate",
         width: 100,
+        format: 'Y-m-d',
         align: "center",
         filter: { type: "date" }
     },
@@ -139,14 +147,14 @@ Ext.define("Vega.view.inventory.fabric.panel.OrderList", {
         dataIndex: "pono",
         width: 80,
         align: "center",
-        filter: { type: "int" }
+        filter: { type: "number" }
     },
     {
         text: "podId",
         dataIndex: "podId",
         width: 80,
         align: "center",
-        filter: { type: "int" }
+        filter: { type: "number" }
     },
     {
         text: "Memo",
@@ -162,4 +170,3 @@ Ext.define("Vega.view.inventory.fabric.panel.OrderList", {
     }
 
 });
-

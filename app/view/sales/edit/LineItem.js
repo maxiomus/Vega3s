@@ -159,7 +159,7 @@ Ext.define('Vega.view.sales.edit.LineItem', {
                 defaultType: 'button',
                 items:[{
                     tooltip: 'Copy',
-                    iconCls: 'fa fa-copy',
+                    iconCls: 'x-fa fa-copy',
                     hidden: true,
                     margin: '0 0 2 0',
                     handler: function(btn){
@@ -172,7 +172,7 @@ Ext.define('Vega.view.sales.edit.LineItem', {
                 },{
                     tooltip: 'Delete',
                     hidden: true,
-                    iconCls: 'fa fa-remove',
+                    iconCls: 'x-fa fa-remove',
                     handler: function(btn){
                         var panel = me.ownerCt;
                         panel.remove(me);
@@ -1035,7 +1035,7 @@ Ext.define('Vega.view.sales.edit.LineItem', {
                 }
             },
             failure: function(response, opts){
-                Ext.Msg.alert(response.status.toString(), response.statusText + ', an error occurred during your request. Please try again.' );
+                Ext.Msg.alert(response.statusText, response.status + ' - ' + response.responseText );
             },
             callback: function(response, opts){
 

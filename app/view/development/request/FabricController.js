@@ -157,9 +157,9 @@ Ext.define('Vega.view.development.request.FabricController', {
 
         var i = h.getSelectionModel();
         if(!i.isSelected(g)){
-            i.select(g)
+            i.select(g);
         }
-        this.view.contextmenu.showAt(l.getXY())
+        this.view.contextmenu.showAt(l.getXY());
     },
 
     onFilterItemChange: function(combo, q, r, o){
@@ -175,7 +175,7 @@ Ext.define('Vega.view.development.request.FabricController', {
             case "Status":
                 n.paramName = j;
                 n.show();
-                m.hide()
+                m.hide();
                 break;
             default:
                 m.paramName = j;
@@ -187,7 +187,7 @@ Ext.define('Vega.view.development.request.FabricController', {
 
         if(store != null){
             store.load();
-            n.bindStore(store)
+            n.bindStore(store);
         }
     },
 
@@ -355,7 +355,9 @@ Ext.define('Vega.view.development.request.FabricController', {
             },
             failure: function(batch, op){
                 //console.log(op);
-                rec.drop();
+                processMask.hide('', function() {
+                    Ext.Msg.alert('Status', 'Error occurs! Changes not saved.');
+                });
             },
             callback: function(batch, op){
                 processMask.hide('', function() {
@@ -364,5 +366,5 @@ Ext.define('Vega.view.development.request.FabricController', {
             }
         });
     }
-    
+
 });

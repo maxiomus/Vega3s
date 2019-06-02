@@ -48,8 +48,7 @@
      */
     
     "toolkit": "classic",
-    
-    
+
     /**
      * The name of the theme for this application.
      */
@@ -70,6 +69,9 @@
      */
     "requires": [
         "font-awesome",
+        "font-ext",
+        "calendar",
+        "exporter",
         "charts",
         "ux"
     ],
@@ -237,7 +239,9 @@
         "js": [
             // Remove this entry to individually load sources from the framework.
             {
-                "path": "${framework.dir}/build/ext-all-rtl-debug.js"
+                //"path": "${framework.dir}/build/ext-all-rtl-debug.js"
+                // Fix 6.2.0 grid column align to right.
+                "path": "${framework.dir}/build/ext-all-debug.js"
             }
         ]
     },

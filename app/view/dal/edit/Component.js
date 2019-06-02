@@ -36,13 +36,13 @@ Ext.define('Vega.view.dal.edit.Component', {
                 //bodyBefore: true,
                 getAdditionalData: function(data, idx, record, orig){
                     var themes = !Ext.isEmpty(data.F_DESC9) ? data.F_DESC9 : '',
-                        colorway = !Ext.isEmpty(data.F_DESC10) ? data.F_DESC10 : ''
+                        colorway = !Ext.isEmpty(data.F_DESC10) ? data.F_DESC10 : '',
                         descript = !Ext.isEmpty(data.F_DESC1) ? data.F_DESC1 : '';
 
                     var tpl =  '<div class="thumbnail" style="padding-left: 1.8em; margin-right: 0.6em; float:left;">' +
                         '<img id="' + record.id + '" src="' + data.path + '" width="80" height="90" /></div>' +
                         '<div style="padding-top: 0.8em;">Themes: ' + themes + '</div>' +
-                        '<div style="padding-left: 0.8em">Colorway: ' + colorway + '</div>' +
+                        '<div style="padding-left: 0.8em;padding-top: 0.3em;">Colorway: ' + colorway + '</div>' +
                         '<div style="padding-left: 0.8em;padding-top: 0.3em;">Desc: ' + descript + '</div>';
 
                     tpl += '<div style="padding: 1em;"><b>File Name: ' + data.name + " - Size: " + Ext.util.Format.fileSize(data.size) + '</b></div>';
@@ -66,7 +66,7 @@ Ext.define('Vega.view.dal.edit.Component', {
             text: 'Save',
             formBind: true,
             //glyph: 86,
-            iconCls: 'fa fa-save',
+            iconCls: 'x-fa fa-save',
             handler: function(btn){
                 me.fireEvent('saveclick', btn, me);
             }
@@ -74,7 +74,7 @@ Ext.define('Vega.view.dal.edit.Component', {
             action: 'close',
             text: 'Close',
             //glyph: 88,
-            iconCls: 'fa fa-close',
+            iconCls: 'x-fa fa-close',
             handler: function(btn){
                 btn.up('window').close();
             }
@@ -200,8 +200,8 @@ Ext.define('Vega.view.dal.edit.Component', {
             }
         },{
             xtype: 'actioncolumn',
-            text: '<i class="fa fa-close fa-lg red-txt"></i>',
-            //iconCls: 'fa fa-close red-txt',
+            text: '<i class="x-fa fa-close fa-lg red-txt"></i>',
+            //iconCls: 'x-fa fa-close red-txt',
             width: 50,
             align: 'center',
             menuDisabled: true,
@@ -210,7 +210,7 @@ Ext.define('Vega.view.dal.edit.Component', {
                 //icon: 'resources/images/shared/icon-error.png',
                 //glyph: 45,
                 //ui: 'default',
-                iconCls: 'fa fa-remove red-txt',
+                iconCls: 'x-fa fa-remove red-txt',
                 tooltip: 'Remove',
                 handler: function(view, rowIndex, colIndex) {
                     //var store = grid.getStore();
@@ -229,13 +229,7 @@ Ext.define('Vega.view.dal.edit.Component', {
     },
 
     buildFields: function(){
-        //var compStore = Ext.create('Vega.store.Components');
         /*
-         compTypeStore = Ext.create('Vega.store.RawMatTypes', {
-         autoLoad: true
-         }),
-         */
-
         var memComponents = Ext.create('Ext.data.Store', {
             pageSize: 50,
             remoteFilter: true,
@@ -297,9 +291,13 @@ Ext.define('Vega.view.dal.edit.Component', {
             }
         });
 
-        Ext.apply(remoteComponents.getProxy().extraParams, {
+        Ext.apply(Ext.getStore('Components').getProxy().extraParams, {
             type: 'PRINTS'
         });
+        */
+
+        Ext.getStore('memComponents').clearFilter();
+        Ext.getStore('memComponents').filter('text', 'PRINTS');
 
         return [{
             xtype: 'combo',
@@ -337,10 +335,6 @@ Ext.define('Vega.view.dal.edit.Component', {
                 ptype: "cleartrigger"
             }],
             listeners: {
-                triggerClear: function(combo){
-
-                },
-
                 select: function(combo, rec, e){
                     var cboCode = combo.ownerCt.query('combo[name="F_DESC6"]')[0],
                         store = cboCode.getStore();
@@ -349,22 +343,19 @@ Ext.define('Vega.view.dal.edit.Component', {
                         type: rec.data.text.trim()
                     });
 
-                    store.reload({
-                        callback: function(){
-
-                        }
-                    });
+                    store.reload();
                 }
             }
         },{
-            xtype: "memorycombo",
+            xtype: "combo",
             name: 'F_DESC6',
             fieldLabel: "Code #",
             //hideLabel: true,
             //labelWidth: 50,
             //width: 160,
             hideTrigger: true,
-            store: memComponents,
+            store: 'memComponents',
+            remoteStore: 'Components',
             bind: {
                 value: '{components.selection.F_DESC6}',
                 disabled: '{!components.selection}'
@@ -375,7 +366,7 @@ Ext.define('Vega.view.dal.edit.Component', {
             selectOnFocus: true,
             selectOnTab: true,
             autoLoadOnValue: true,
-            minChars: 1,
+            //minChars: 1,
             matchFieldWidth: false,
             pageSize: 50,
             queryMode: 'local',
@@ -412,9 +403,6 @@ Ext.define('Vega.view.dal.edit.Component', {
                 ptype: "cleartrigger"
             }],
             listeners: {
-                triggerClear: function(combo){
-
-                },
                 beforequery: function(qe){
                     //delete qe.combo.lastQuery;
                 },
@@ -438,14 +426,15 @@ Ext.define('Vega.view.dal.edit.Component', {
                 }
             }
         },{
-            xtype: "memorycombo",
+            xtype: "combo",
             name: 'F_DESC3',
             fieldLabel: "Color",
             //hideLabel: true,
             //labelWidth: 50,
             //width: 160,
             hideTrigger: true,
-            store: memColors,
+            store: 'memColors',
+            remoteStore: 'Colors',
             bind: {
                 //store: '{compColors}',
                 value: '{components.selection.F_DESC3}',
@@ -471,14 +460,8 @@ Ext.define('Vega.view.dal.edit.Component', {
                 ptype: "cleartrigger"
             }],
             listeners: {
-                triggerClear: function(combo){
-
-                },
                 beforequery: function(qe){
                     //delete qe.combo.lastQuery;
-                },
-                select: function(combo, record, e){
-                    // Error
                 }
             }
         },{
@@ -517,9 +500,6 @@ Ext.define('Vega.view.dal.edit.Component', {
                     this.on('focus', function () {
                         this.expand();
                     });
-                },
-                triggerClear: function(combo){
-
                 },
                 beforequery: function(qe){
                     //if triggerAction: 'last'
@@ -580,11 +560,12 @@ Ext.define('Vega.view.dal.edit.Component', {
             //hideLabel: true,
             hideTrigger: true,
             bind: {
-                store: '{vendors}',
+                //store: '{vendors}',
                 value: '{components.selection.F_DESC4}',
                 disabled: '{!components.selection}'
 
             },
+            store: 'Vendors',
             valueField: "id",
             displayField: "id",
             forceSelection: false,
@@ -594,7 +575,7 @@ Ext.define('Vega.view.dal.edit.Component', {
             //queryParam: "filter",
             triggerAction: 'all',
             //lastQuery: '',
-            minChars: 1,
+            //minChars: 1,
             matchFieldWidth: false,
             listConfig: {
                 loadindText: 'Searching...',
@@ -603,7 +584,14 @@ Ext.define('Vega.view.dal.edit.Component', {
             },
             plugins: [{
                 ptype: "cleartrigger"
-            }]
+            }],
+            listeners: {
+                render: function(c){
+                    c.on('focus', function () {
+                        c.expand();
+                    });
+                }
+            }
         },{
             xtype: "combo",
             name: 'F_DESC8',
@@ -611,11 +599,12 @@ Ext.define('Vega.view.dal.edit.Component', {
             //hideLabel: true,
             hideTrigger: true,
             bind: {
-                store: '{customers}',
+                //store: '{customers}',
                 value: '{components.selection.F_DESC8}',
                 disabled: '{!components.selection}'
 
             },
+            store: 'Customers',
             valueField: "id",
             displayField: "id",
             forceSelection: false,
@@ -623,9 +612,9 @@ Ext.define('Vega.view.dal.edit.Component', {
             autoLoadOnValue: true,
             queryMode: 'local',
             //queryParam: "filter",
-            triggerAction: 'all',
+            //triggerAction: 'all',
             //lastQuery: '',
-            minChars: 1,
+            //minChars: 1,
             matchFieldWidth: false,
             listConfig: {
                 loadindText: 'Searching...',
@@ -634,7 +623,14 @@ Ext.define('Vega.view.dal.edit.Component', {
             },
             plugins: [{
                 ptype: "cleartrigger"
-            }]
+            }],
+            listeners: {
+                render: function(c){
+                    c.on('focus', function () {
+                        c.expand();
+                    });
+                }
+            }
         },{
             xtype: "tagfield",
             name: 'F_DESC9',
@@ -654,9 +650,9 @@ Ext.define('Vega.view.dal.edit.Component', {
             queryMode: 'local',
             filterPickList: true,
             //queryParam: "filter",
-            triggerAction: 'all',
+            //triggerAction: 'all',
             //lastQuery: '',
-            minChars: 1,
+            //minChars: 1,
             matchFieldWidth: false,
             listConfig: {
                 loadindText: 'Searching...',
@@ -681,13 +677,13 @@ Ext.define('Vega.view.dal.edit.Component', {
             displayField: "id",
             forceSelection: false,
             selectOnFocus: true,
-            queryMode: 'remote',
-            queryParam: "filter",
-            triggerAction: 'all',
+            queryMode: 'local',
+            //queryParam: "filter",
+            //triggerAction: 'all',
             //lastQuery: '',
-            //filterPickList: true,
+            filterPickList: true,
             //pageSize: 100,
-            minChars: 1,
+            //minChars: 1,
             matchFieldWidth: false,
             listConfig: {
                 loadindText: 'Searching...',

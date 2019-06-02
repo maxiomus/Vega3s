@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "text": "SELF",
+    "type": "FABRICS"
+  },
+  {
+    "id": 2,
+    "text": "PRINTS",
+    "type": "PRINTS"
+  },
+  {
+    "id": 3,
+    "text": "STONE",
+    "type": "STONE"
+  },
+  {
+    "id": 4,
+    "text": "TRIMS",
+    "type": "TRIMS"
+  },
+  {
+    "id": 5,
+    "text": "CONTRAST1",
+    "type": "FABRICS"
+  },
+  {
+    "id": 6,
+    "text": "CONTRAST2",
+    "type": "FABRICS"
+  },
+  {
+    "id": 7,
+    "text": "CONTRAST3",
+    "type": "FABRICS"
+  },
+  {
+    "id": 8,
+    "text": "CONTRAST4",
+    "type": "FABRICS"
+  }
+]
