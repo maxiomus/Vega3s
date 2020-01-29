@@ -2,7 +2,7 @@
  * Created by tech on 5/28/2019.
  */
 Ext.define('Vega.view.company.board.manage.Category', {
-    extend: 'Ext.form.Panel',
+    extend: 'Vega.view.company.board.manage.Grid',
 
     requires: [
         'Vega.model.company.BoardCategory'
@@ -13,30 +13,28 @@ Ext.define('Vega.view.company.board.manage.Category', {
     viewModel: {
         stores: {
             categories: {
-                model: 'Vega.model.company.BoardCategory',
+                model: 'company.BoardCategory',
                 autoLoad: true,
                 //autoSync: false,
+                session: true,
                 pageSize: 0
             }
         }
     },
 
+    title: 'Category',
+    iconCls: 'x-fa fa-folder-open-o',
     //margin: '0 8 8 8',
+    session: true,
 
-    style: {
-        borderTop: '1px solid #cfcfcf'
+    bind: {
+        store: '{categories}'
     },
 
     initComponent: function() {
         var me = this;
 
-        me.items = [{
-            xtype: 'grid',
-            bind: {
-                store: '{categories}'
-            },
-            columns: me.buildColumns()
-        }];
+        me.columns = me.buildColumns();
 
         Ext.applyIf(me, {
 
@@ -49,12 +47,29 @@ Ext.define('Vega.view.company.board.manage.Category', {
         return [{
             text: "Name",
             dataIndex: "name",
-            flex: 1
+            flex: 1,
+            editor: {
+                xtype: 'textfield',
+                selectOnFocus: true,
+                allowBlank: false
+                //disabled: rec ? !rec.phantom : false
+            },
+            filter: {
+                type: "string",
+                operator: 'st'
+            }
         },
         {
             text: "Description",
             dataIndex: "desc",
-            flex: 2
+            flex: 2,
+            filter: {
+                type: "string",
+                operator: 'st'
+            },
+            editor: {
+                xtype: 'textfield'
+            }
         },{
             xtype: 'actioncolumn',
             text: '<i class="x-fa fa-close"></i>',

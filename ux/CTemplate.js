@@ -7,6 +7,8 @@
 Ext.define('Ext.ux.CTemplate', {
     extend: 'Ext.XTemplate',
 
+    alias: 'widget.ctemplate',
+
     statics: {
         AUTO_ID: 0
     },

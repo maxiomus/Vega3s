@@ -50,7 +50,7 @@ Ext.define("Vega.view.company.board.Default",{
                 width: 320,
                 split: true,
                 reference: 'navigate-tree',
-                collapsible: true,   // make collapsible
+                //collapsible: false,   // make collapsible
                 rootVisible: true,
                 dockedItems: [{
                     xtype: 'toolbar',
@@ -58,22 +58,23 @@ Ext.define("Vega.view.company.board.Default",{
                         text: 'Add',
                         iconCls: 'x-fa fa-plus',
                         itemId: 'add-button',
-                        handler: 'showAddForm'
+                        handler: 'onToolbarAddClick'
                     },{
                         xtype: 'button',
                         text: 'Manage',
                         iconCls: 'x-fa fa-edit',
-
+                        handler: 'onToolbarManageClick'
+                        /*
                         menu: {
                             items: [{
                                 text: 'Board',
                                 iconCls: 'x-fa fa-file-text-o',
-                                handler: 'showManageBoard'
+                                handler: 'onMenuItemBoardClick'
 
                             },{
                                 text: 'Category',
                                 iconCls: 'x-fa fa-reorder',
-                                handler: 'showManageCategory'
+                                handler: 'onMenuItemCategoryClick'
                             }],
                             listeners: {
                                 beforeshow: function(p){
@@ -84,6 +85,7 @@ Ext.define("Vega.view.company.board.Default",{
                                 }
                             }
                         }
+                        */
                     }]
                 }],
 
@@ -139,6 +141,6 @@ Ext.define("Vega.view.company.board.Default",{
             }]
         });
 
-        me.callParent(arguments);
+        me.callParent();
     }
 });

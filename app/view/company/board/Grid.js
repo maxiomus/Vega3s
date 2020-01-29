@@ -17,8 +17,19 @@ Ext.define('Vega.view.company.board.Grid',{
     },
     */
 
+    bind: {
+        title: '{title}',
+        store: '{topics}'
+    },
+
     cls: "board-grid",
+
     iconCls: 'x-fa fa-folder-open-o',
+
+    header: false,
+    hideHeaders: true,
+
+    //bodyPadding: 10,
 
     style: {
         borderTop: '1px solid #cfcfcf'
@@ -26,7 +37,7 @@ Ext.define('Vega.view.company.board.Grid',{
     },
 
     tbar: {
-        xtype: "company-board-topbar",
+        xtype: "board-topbar",
         reference: "topbar"
     },
 
@@ -35,21 +46,20 @@ Ext.define('Vega.view.company.board.Grid',{
         select: {
             fn: 'onRowSelect'
         },
-        itemcontextmenu: "onItemContextMenu",
-        cellclick: 'onCellClick',
-        rowdblclick: 'onRowDblClick',
-        actadd: 'onToolbarAddClick',
-        actedit: 'onToolbarEditClick',
-        actremove: 'onToolbarRemoveClick',
+        itemcontextmenu: "onItemContextMenu"
+        //cellclick: 'onCellClick',
+        //actadd: 'onToolbarAddClick',
+        //actedit: 'onToolbarEditClick',
+        //actremove: 'onToolbarRemoveClick',
         //actcopy: 'onToolbarCopyClick',
-        actrefresh: 'onToolbarRefreshClick'
+        //actrefresh: 'onToolbarRefreshClick'
         //actsave: 'onToolbarSaveClick'
     },
 
     initComponent: function(c){
         var me = this;
 
-        //me.columns = me.buildColumns();
+        me.columns = me.buildColumns();
 
         Ext.applyIf(me, {
 
@@ -84,15 +94,19 @@ Ext.define('Vega.view.company.board.Grid',{
             }]
         });
 
-        me.callParent(arguments);
+        me.callParent();
 
         var topbar = me.lookupReference('topbar');
+
         topbar.insert(0, {
-            xtype: "gridsearchfield",
+            xtype: "searchfield",
             reference: 'searchfield',
             width: 300,
-            grid: me,
-            paramName: "code"
+            //grid: me,
+            bind: {
+                store: '{topics}'
+            },
+            paramName: ["subject","content"]
         });
 
         me.contextmenu = Ext.create("Ext.menu.Menu", {
@@ -105,5 +119,57 @@ Ext.define('Vega.view.company.board.Grid',{
         });
 
         me.relayEvents(topbar, ['actadd', 'actedit', 'actremove', 'actcopy', 'actrefresh', 'actsave']);
+    },
+
+    buildColumns: function(){
+        return [{
+            text: "Title",
+            dataIndex: "subject",
+            flex: 1,
+            renderer: function(value, f, rec){
+
+                var xf = Ext.util.Format;
+                return Ext.String.format(
+                    '<div class="topic">' +
+                    '<span class="title">{0}</span>' +
+                    '<span class="author">Posted by {2}, last updated {3}</span>' +
+                    '</div>',
+                    value, rec.get("userId")|| "Unknown", xf.date(rec.get('created'), 'M j, Y, g:i a'))
+            }
+
+        },
+        {
+            text: 'User',
+            dataIndex: 'userId',
+            hidden: true
+        },
+        {
+            text: '<i style="text-align: center;" class="x-fa fa-paperclip fa-lg"></i>',
+            dataIndex: "files",
+            width: 80,
+            align: 'center',
+            renderer: function(value, metaData, rec, rowIndex, colIndex, store, view){
+
+                if(Ext.isEmpty(value)){
+                    return;
+                }
+
+                var strValue = '',
+                    icon = '<i class="x-fa fa-paperclip fa-lg fa-fw"></i>';
+                //metaData.tdStyle = 'font-weight:bold;color:' + (rec.data.mp ? 'green' : 'transparent');
+                strValue = Ext.String.format('<span style="color: #6593cf;">{0} {1}</span>', value.length, icon);
+                return strValue;
+            }
+        },
+        {
+            text: "Replies",
+            dataIndex: "postTotal",
+            width: 200,
+            renderer: function(val, meta, rec){
+
+                return Ext.String.format('<div style="font-size: 14px; color: #6593cf;">{0}</div>', Ext.util.Format.plural(val, 'Reply', 'Replies'));
+
+            }
+        }];
     }
 });

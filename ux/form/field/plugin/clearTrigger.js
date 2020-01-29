@@ -29,7 +29,9 @@ Ext.define("Ext.ux.form.plugin.ClearTrigger", {
                         } else {
                             g.setValue(null)
                         }
+
                         g.getTrigger("clear").hide();
+
                         if(g.isXType('combo')){
                             g.collapse();
                         }

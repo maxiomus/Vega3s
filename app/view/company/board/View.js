@@ -15,7 +15,7 @@ Ext.define("Vega.view.company.board.View", {
     //trackOver: false,
     enableTextSelection: false,
 
-    //cls: "board-image-view",
+    cls: "board-view",
 
     loadMask: true,
     overItemCls: "x-item-over",
@@ -24,12 +24,7 @@ Ext.define("Vega.view.company.board.View", {
     preserveScrollOnRefresh: true,
     //deferInitialRefresh: true,
 
-    padding: '27 0 0 7',
-
-    style: {
-        borderTop: '1px solid #cfcfcf',
-        borderBottom: '1px solid #cfcfcf'
-    },
+    padding: 10,
 
     prepareData: function(f, d, e){
         Ext.apply(f, {
@@ -54,7 +49,8 @@ Ext.define("Vega.view.company.board.View", {
 
     buildTemplate: function(){
         return new Ext.XTemplate(
-            '<div style="margin: auto; width: 80%; border-top: 1px solid #dadadb; border-bottom: 1px solid #dadadb; font-size: 16px;">',
+            '<div style="max-width: 1400px; margin: auto; padding: 40px 0 30px 0; font-size: 26px;">Bluprint Boards</div>',
+            '<div style="max-width: 1400px; margin: auto; border-top: 1px solid #cfcfcf; border-bottom: 1px solid #cfcfcf; font-size:16px; color:#a0a7b8;">',
                 '<div style="display: flex; height: 50px;">',
                     '<div class="post-title">Board</div>',
                     '<div class="post-data">Topics</div>',
@@ -63,7 +59,7 @@ Ext.define("Vega.view.company.board.View", {
                 '</div>',
             '</div>',
             '<tpl for=".">',
-                '<div class="thumb-wrap x-unselectable">',
+                '<div style="border-bottom: 1px solid #dadadb;" class="thumb-wrap x-unselectable">',
                     '<div class="thumb">',
                         '<div class="post-title"">',
                             '{name}',

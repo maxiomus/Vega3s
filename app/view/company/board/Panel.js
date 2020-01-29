@@ -4,7 +4,8 @@ Ext.define('Vega.view.company.board.Panel',{
 
     requires: [
         'Vega.view.company.board.PanelController',
-        'Vega.view.company.board.PanelModel'
+        'Vega.view.company.board.PanelModel',
+        'Vega.view.company.board.Topic'
     ],
 
     alias: 'widget.board-panel',
@@ -26,6 +27,16 @@ Ext.define('Vega.view.company.board.Panel',{
 
     session: true,
 
+    listeners: {
+        rowdblclick: 'onGridRowDblClick',
+        //itemcontextmenu: 'onItemContextMenu',
+        actadd: 'onToolbarAddClick',
+        actedit: 'onToolbarEditClick',
+        actremove: 'onToolbarRemoveClick',
+        //actcopy: 'onToolbarCopyClick',
+        actrefresh: 'onToolbarRefreshClick'
+    },
+
     initComponent: function () {
         var me = this;
 
@@ -33,7 +44,11 @@ Ext.define('Vega.view.company.board.Panel',{
 
         });
 
-        me.callParent(arguments);
+        me.callParent();
+
+        var grid = me.down('board-grid');
+
+        me.relayEvents(grid, ['rowdblclick', 'itemcontextmenu', 'actadd', 'actedit', 'actremove', 'actrefresh']);
     },
 
     buildBottomBar: function(){

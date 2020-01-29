@@ -43,8 +43,8 @@ Ext.define("Vega.view.production.Schedule",{
                     scrollable: true,
                     flex: 2,
                     style: {
-                        borderTop: '1px solid #cfcfcf',
-                        borderBottom: '1px solid #cfcfcf'
+                        //borderTop: '1px solid #cfcfcf',
+                        //borderBottom: '1px solid #cfcfcf'
                     },
                     bind: {
                         store: "{schedules}",

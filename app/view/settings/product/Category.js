@@ -4,7 +4,7 @@ Ext.define('Vega.view.settings.product.Category',{
 
     requires: [
         //'Vega.view.settings.product.CategoryController',
-        'Vega.view.settings.product.CategoryModel',
+        //'Vega.view.settings.product.CategoryModel',
         'Vega.model.Category'
     ],
 

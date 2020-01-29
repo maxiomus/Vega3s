@@ -89,7 +89,7 @@ Ext.define("Vega.view.development.style.Sample", {
                 },{
                     xtype: 'style-view',
                     reference: "tiles",
-                    //cls: '',
+
                     region: 'center',
                     flex: 1,
                     /*

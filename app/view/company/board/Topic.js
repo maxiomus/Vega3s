@@ -1,20 +1,25 @@
 
 Ext.define('Vega.view.company.board.Topic',{
-    extend: 'Ext.container.Container',
+    extend: 'Ext.panel.Panel',
 
     requires: [
         'Vega.view.company.board.TopicController',
-        'Vega.view.company.board.TopicModel'
+        'Vega.view.company.board.TopicModel',
+        'Vega.view.company.board.Post'
     ],
 
-    alias: 'board-topic',
+    alias: 'widget.board-topic',
 
     controller: 'board-topic',
     viewModel: {
         type: 'board-topic'
     },
 
-    cls: 'topic-preview',
+    cls: 'topic-view',
+    //cls: 'topic-attach-view',
+    config: {
+        active: null
+    },
 
     scrollable: true,
 
@@ -22,26 +27,28 @@ Ext.define('Vega.view.company.board.Topic',{
         borderTop: '1px solid #cfcfcf'
     },
 
-    config: {
-        active: null
-    },
+    session: true,
 
     listeners: {
+        //render: 'onRender',
         addbookmark: 'onAddBookmark',
-        render: {
-            fn: 'onRender'
-        }
+        dataitemeditclick: 'onEditButtonClick',
+        dataitemdeleteclick: 'onDeleteButtonClick'
     },
 
     initComponent: function(){
         var me = this;
 
         //this.tpl = this.createTpl();
-        this.dockedItems = this.createToolbar();
-        this.items = this.buildItems();
-        this.contextmenu = this.buildContextMenu();
+        me.dockedItems = this.createToolbar();
+
+        me.items = this.buildItems();
+        me.contextmenu = this.buildContextMenu();
 
         me.callParent();
+
+        var dataview = me.down('board-post');
+        me.relayEvents(dataview, ['dataitemeditclick', 'dataitemdeleteclick']);
 
         // adding attribute target = _blank
         // so every clicks on the links will open in the new tab/window
@@ -55,55 +62,53 @@ Ext.define('Vega.view.company.board.Topic',{
     },
 
     createTpl: function() {
-        var me = this;
         return new Ext.XTemplate(
-            '<div class="post-data">',
-            '<span class="post-date">{CreatedOn:this.formatDate}</span>',
-            '<div class="post-title">{Title}</div>',
-            '<div class="post-author">by {Author:this.defaultValue}</div>',
+            '<div class="body-wrap">',
+                '<div class="subject">{subject}</div>',
+                '<div class="body">',
+                    '<div class="header">',
+                        '<div style="font-size: 20px; width: 120px; margin: 0 0 0 16px;"><i class="x-fa fa-user fa-lg"></i> {userId:this.defaultValue}</div>',
+                        '<div style="margin: auto;"></div>',
+                        '<div style="width: 180px;"><i class="x-fa fa-clock-o fa-lg"></i> {created:this.formatDate}</div>',
+                    '</div>',
+                    '<div class="content">{content}</div>',
+                    //'<div class="post-link {hasAttach}">{Link:this.formatLink(values)}</div>',
+                    //'<div>Attachments</div>',
+                    '<div class="topic-attach-view">',
+                        '<tpl for="files">',
+                            '<div class="thumb-wrap x-unselectable file-attachment" fileId="{fileId}">',
+                                '<div class="thumb">',
+                                    '<div class="img""><i class="fa fa-file-{type:this.getFileType}-o fa-3x"></i></div>',
+                                    '<div class="title">{name:ellipsis(38)}</div>',
+                                '</div>',
+                            '</div>',
+                        '</tpl>',
+                    '</div>',
+                '</div>',
             '</div>',
-            '<div class="post-link {hasAttach}">{Link:this.formatLink(values)}</div>',
-            '<div class="post-body">{Description:this.getBody}</div>',
             {
-                getBody: function(value){
-                    return Ext.util.Format.stripScripts(value);
+                getBody: function(a){
+                    return Ext.util.Format.stripScripts(a);
                 },
-
-                defaultValue: function(v){
-                    return v ? v : 'Unknown';
+                defaultValue: function(a){
+                    return a ? a : 'Unknown';
                 },
-
-                formatDate: function(value){
-                    if (!value) {
+                formatDate: function(a){
+                    if (!a) {
                         return '';
                     }
-                    return Ext.Date.format(value, 'M j, Y, g:i a');
+                    return Ext.Date.format(new Date(a), "M j, Y, g: i a");
                 },
+                getFileType: function(v){
+                    var a = ['image', 'pdf', 'excel', 'word', 'powerpoint'];
 
-                formatLink: function(value, data){
-                    var rec = me.active,
-                        str = '<i class="x-fa fa-paperclip fa-lg"></i><a href="../DLIB/BOARD-ATTACHMENTS/{0}/{1}/{2}/{3}" target="_blank">{4};</a>',
-                        tmp = '';
-
-                    var d = new Date(data.CreatedOn),
-                        ar = value.split(",");
-
-                    for (i = 0; i <= ar.length - 1; i++) {
-                        var path = ar[i];
-                        if(rec.filesInArticles().getCount() > 0){
-                            rec.filesInArticles(function(files){
-                                files.each(function(file){
-                                    if(ar[i].toString() === file.data.name){
-                                        path = data.ArticleID + '/' + ar[i];
-                                    }
-                                });
-                            });
+                    for(var i = 0; i < a.length; i++){
+                        if(v.indexOf(a[i]) != -1) {
+                            return a[i];
                         }
-
-                        tmp += Ext.String.format(str, d.getFullYear(), d.getMonth()+1, d.getDate(), path, ar[i]);
                     }
 
-                    return tmp;
+                    return 'code';
                 }
             }
         );
@@ -111,9 +116,15 @@ Ext.define('Vega.view.company.board.Topic',{
 
     buildItems: function(){
         return [{
-            xtype: 'panel',
+            xtype: 'component',
+            //cls: 'topic-view',
+            padding: 10,
             itemId: 'inPanel',
-            tpl: this.createTpl()
+            tpl: this.createTpl(),
+            listeners: {
+                render: 'onComponentRender',
+                filedblclick: 'onFileDblClick'
+            }
         },{
             xtype: 'board-post'
         }];
@@ -161,31 +172,36 @@ Ext.define('Vega.view.company.board.Topic',{
      * @returns {Ext.toolbar.Toolbar}
      */
     createToolbar: function(){
-        var config = {},
-            items = [];
+        var config = [{
+            xtype: 'toolbar',
+            dock: 'top',
+            items: [{
+                text: 'Close',
+                iconCls: 'x-fa fa-close',
+                handler: function(b){
+                    this.close();
+                },
+                scope: this
+            },{
+                text: 'Reply',
+                iconCls: 'x-fa fa-mail-reply',
+                handler: 'onReplyButtonClick'
+            },'->',{
+                text: 'Print',
+                //glyph: 102,
+                iconCls: 'x-fa fa-print',
+                hidden: true,
+                handler: 'printTab',
+                scope: this
+            }]
+        }]
 
-        items.push({
-            text: 'Close',
-            iconCls: 'x-fa fa-close',
-            handler: function(b){
-                this.close();
-            },
-            scope: this
-        },{
-            text: 'Print',
-            //glyph: 102,
-            iconCls: 'x-fa fa-print',
-            handler: 'printTab',
-            scope: this
-        });
-
-        config.items = items;
-        return Ext.create('Ext.toolbar.Toolbar', config);
+        return config;
     },
 
     printTab: function() {
 
-        var innerPnl = this.getComponent('innerPnl');
+        var innerPnl = this.getComponent('inPanel');
 
         innerPnl.print();
         //console.log(widget);

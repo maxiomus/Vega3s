@@ -69,6 +69,7 @@
      */
     "requires": [
         "font-awesome",
+        //"font-awesome-5",
         "font-ext",
         "calendar",
         "exporter",

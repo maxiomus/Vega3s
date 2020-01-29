@@ -54,7 +54,7 @@ Ext.define("Vega.view.sales.Request",{
                 xtype: "multiview",
                 reference: "multiview",
                 title: "REQUESTS",
-                iconCls: "x-fa fa-file-text-o",
+                iconCls: "x-fa far-file-alt",
                 tbar: {
                     xtype: "sales-topbar",
                     reference: "topbar"

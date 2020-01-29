@@ -83,75 +83,85 @@ Ext.define('Ext.app.route.Base', {
             route[0] = view.routeId;
 
         if(tab){
-            //console.log('Base', tab.getXType());
-            var tvm = tab.getViewModel();
+            //console.log('Base', view, tab.getXType());
+            var type = tab.getXType(),
+                tvm = tab.getViewModel();
 
-            if(tab.isXType("multiview")){
-                var mode = "",
-                    ctn = tab.lookupReference("center"),
-                    grid = ctn.getLayout().getActiveItem(),
-                    index = ctn.getLayout().getActiveIndex();
+            switch(type){
+                case 'multiview':
+                    var mode = "",
+                        ctn = tab.lookupReference("center"),
+                        grid = ctn.getLayout().getActiveItem(),
+                        index = ctn.getLayout().getActiveIndex();
 
-                switch(index){
-                    case 0:
-                        mode = "default";
-                        break;
-                    case 1:
-                        mode = "medium";
-                        break;
-                    case 2:
-                        mode = "tiles";
-                        break
-                }
-
-                route[1] = mode;
-
-                var xtypes = ['grid', 'gridpanel', 'dataview'];
-                //console.log(grid, grid.getXType(), grid.superclass.getXType())
-                if(xtypes.indexOf(grid.superclass.getXType()) == -1) {
-                    if(xtypes.indexOf(grid.getXType()) == -1){
-                        grid = grid.down();
+                    switch(index){
+                        case 0:
+                            mode = "default";
+                            break;
+                        case 1:
+                            mode = "medium";
+                            break;
+                        case 2:
+                            mode = "tiles";
+                            break
                     }
-                }
-                //console.log(grid, grid.getXType())
-                if(grid && grid.getSelectionModel().getSelection().length > 0){
-                    var p = grid.getSelectionModel().getSelection();
 
-                    route[2] = p[0].id;
-                }
+                    route[1] = mode;
 
-                //console.log('getTabRoute - multiview', p);
-            }
-            else if (tab.isXType("sales-edit-form")){
-                route[1] = tab.opMode;
-
-                if(tvm.get('srcPowhId') != null){
-                    route[2] = tvm.get('srcPowhId');
-                }
-
-            }
-            else if (tab.isXType("style-edit-form")){
-                route[1] = tab.opMode;
-
-                if(tvm.get('theSample').id > 0) {
-                    route[2] = tvm.get('theSample').id;
-                }
-                else {
-                    if(tab.opMode == 'import'){
-                        if(tvm.get('srcId') != null){
-                            route[2] = tvm.get('srcId');
+                    var xtypes = ['grid', 'gridpanel', 'dataview'];
+                    //console.log(grid, grid.getXType(), grid.superclass.getXType())
+                    if(xtypes.indexOf(grid.superclass.getXType()) == -1) {
+                        if(xtypes.indexOf(grid.getXType()) == -1){
+                            grid = grid.down();
                         }
                     }
-                }
+                    //console.log(grid, grid.getXType())
+                    if(grid && grid.getSelectionModel().getSelection().length > 0){
+                        var p = grid.getSelectionModel().getSelection();
 
+                        route[2] = p[0].id;
+                    }
+
+                    //console.log('getTabRoute - multiview', p);
+                    break;
+                case 'board-grid':
+                    var vm = view.getViewModel();
+                    if(vm != null){
+                        route[1] = vm.get('boardId');
+                    }
+                    break;
+                case 'sales-edit-form':
+                    route[1] = tab.opMode;
+
+                    if(tvm.get('srcPowhId') != null){
+                        route[2] = tvm.get('srcPowhId');
+                    }
+                    break;
+                case 'style-edit-form':
+                    route[1] = tab.opMode;
+
+                    if(tvm.get('theSample').id > 0) {
+                        route[2] = tvm.get('theSample').id;
+                    }
+                    else {
+                        if(tab.opMode == 'import'){
+                            if(tvm.get('srcId') != null){
+                                route[2] = tvm.get('srcId');
+                            }
+                        }
+                    }
+                    break;
+                case 'pi-form':
+                    route[1] = tab.opMode;
+                    if(tvm.get('thePhysical').id > 0) {
+                        route[2] = tvm.get('thePhysical').id;
+                    }
+                    break;
+                default:
+                    break;
             }
-            else if (tab.isXType("pi-form")){
-                route[1] = tab.opMode;
-                if(tvm.get('thePhysical').id > 0) {
-                    route[2] = tvm.get('thePhysical').id;
-                }
-            }
-            else if(tab.inTab){
+
+            if(tab.inTab){
                 route[1] = "tab";
                 if(tab.active) {
                     route[2] = tab.active.id;
@@ -240,7 +250,7 @@ Ext.define('Ext.app.route.Base', {
         });*/
 
         var fieldname = record.getIdProperty();
-        console.log(record.getFields())
+        //console.log(record.getFields())
         Ext.Ajax.request({
             //url: Ext.urlAppend(proxy.url + '.' + proxy.format + encodeURIComponent('')),
             url: '/api/Bookmarks',

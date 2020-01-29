@@ -1,0 +1,113 @@
+{
+  "success": true,
+  "stores": {
+    "users": [
+      {
+        "text": "All users",
+        "id": "1"
+      },
+      {
+        "text": "Process starter",
+        "id": "2"
+      },
+      {
+        "text": "Managers",
+        "id": "3"
+      },
+      {
+        "text": "Accounting",
+        "id": "4"
+      },
+      {
+        "text": "Design",
+        "id": "5"
+      },
+      {
+        "text": "Development",
+        "id": "6"
+      },
+      {
+        "text": "HR",
+        "id": "7"
+      },
+      {
+        "text": "Import",
+        "id": "8"
+      },
+      {
+        "text": "IT",
+        "id": "9"
+      },
+      {
+        "text": "Management",
+        "id": "10"
+      },
+      {
+        "text": "Pattern",
+        "id": "11"
+      },
+      {
+        "text": "Preproduction",
+        "id": "12"
+      },
+      {
+        "text": "Production",
+        "id": "13"
+      },
+      {
+        "text": "Shipping ",
+        "id": "14"
+      }
+    ],
+    "submissions": [
+      {
+        "label": "AD Sample",
+        "id": "1"
+      },
+      {
+        "label": "Buyer Sample",
+        "id": "2"
+      },
+      {
+        "label": "Ecom Sample",
+        "id": "3"
+      },
+      {
+        "label": "Fabric Testing",
+        "id": "4"
+      },
+      {
+        "label": "Fit Sample",
+        "id": "5"
+      },
+      {
+        "label": "Garment Testing",
+        "id": "6"
+      },
+      {
+        "label": "Marketing Sample",
+        "id": "7"
+      },
+      {
+        "label": "Panel Sample",
+        "id": "8"
+      },
+      {
+        "label": "PP Sample",
+        "id": "9"
+      },
+      {
+        "label": "Third Party Inspection",
+        "id": "10"
+      },
+      {
+        "label": "TOP Sample",
+        "id": "11"
+      },
+      {
+        "label": "Concept Approval",
+        "id": "12"
+      }
+    ]
+  }
+}

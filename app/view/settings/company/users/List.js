@@ -4,7 +4,8 @@ Ext.define('Vega.view.settings.company.users.List', {
     requires: [
         'Vega.view.settings.company.users.ListModel',
         'Vega.view.settings.company.users.ListController',
-        'Vega.view.settings.company.users.Window'
+        'Vega.view.settings.company.users.Window',
+        'Ext.grid.plugin.Exporter'
     ],
 
     alias: 'widget.users-list',
@@ -341,6 +342,17 @@ Ext.define('Vega.view.settings.company.users.List', {
                     //console.log(this);
                     this.up('grid').store.autoSync = pressed;
                 }
+            },{
+                xtype: 'button',
+                iconCls: 'x-fa fa-external-link-square',
+                text: 'Export',
+                handler: function(b){
+                    me.saveDocumentAs({
+                        type: 'excel',
+                        title: 'User List',
+                        fileName: 'user list ' + Ext.Date.format(new Date(), 'Y-m-d') + '.xlsx'
+                    });
+                }
             }]
         }],
 
@@ -395,8 +407,11 @@ Ext.define('Vega.view.settings.company.users.List', {
             },
 
             plugins: [{
-                ptype: 'gridfilters'
+                ptype: "gridfilters"
+            },{
+                ptype: 'gridexporter'
             }],
+
             features: [
                 {
                     ftype: 'summary',

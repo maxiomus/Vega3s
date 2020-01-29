@@ -1187,7 +1187,7 @@ Ext.define("Vega.view.sales.edit.Form",{
             failure = options.failure,
             params = options.params,
             waitMsg = options.waitMsg,
-            formData = new FormData(this);
+            formData = new FormData();
 
         for (var attr in params) {
             formData.append(attr, params[attr]);

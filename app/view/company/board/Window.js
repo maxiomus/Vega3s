@@ -5,33 +5,38 @@ Ext.define('Vega.view.company.board.Window', {
     extend: 'Ext.window.Window',
 
     requires: [
-        'Vega.view.company.board.WindowController'
+        'Vega.view.company.board.WindowController',
+        'Vega.view.company.board.edit.Form'
     ],
 
     alias: 'widget.board-window',
 
     controller: 'board-window',
 
+    bind: {
+        title: '{title}'
+    },
+
     layout: {
         type: 'fit'
     },
 
-    minHeight: 240,
     minWidth: 360,
+    minHeight: 360,
 
     monitorResize: true,
     maximizable: true,
-    constrain: true,
+    //constrain: true,
+
     closable: true,
     modal: true,
-
-    session: true,
 
     tools: [{
         type: 'pin'
     }],
 
     config: {
+        isEdit: false,
         /**
          * @cfg {Object} saveButton
          * The config for the save button.
@@ -39,6 +44,7 @@ Ext.define('Vega.view.company.board.Window', {
         saveButton: {
             text: 'Save',
             iconCls: 'x-fa fa-save',
+            tabIndex: 3,
             handler: 'onSaveTap'
         },
 
@@ -49,6 +55,7 @@ Ext.define('Vega.view.company.board.Window', {
         cancelButton: {
             text: 'Cancel',
             iconCls: 'x-fa fa-close',
+            tabIndex: 4,
             handler: 'onCancelTap'
         }
     },
@@ -62,10 +69,14 @@ Ext.define('Vega.view.company.board.Window', {
         me.form = me.items.first();
 
         me.on({
-            cancel: function(v){
-                me = Ext.destroy(v);
+            close: function(win){
+                var mv = Vega.app.getMainView();
+
+                if(mv.isMasked){
+                    mv.unmask();
+                }
             }
-        })
+        });
     },
 
     generateButtons: function() {

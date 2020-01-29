@@ -9,29 +9,30 @@ Ext.define('Vega.view.company.board.GridController', {
 
     },
 
-    onRowDblClick: function(view, rec, el, index){
-
-    },
-
-    openTopic: function(rec){
-        var me = this,
-            grid = me.getView(),
-            topic = me.lookupReference('topic'+rec.getId());
-
-
-
-    },
-
+    /**
+     *
+     * @param h {Object} tableview
+     * @param j {Object} record
+     * @param k
+     * @param g
+     * @param l
+     */
     onItemContextMenu:function(h, j, k, g, l){
+
         l.stopEvent();
 
-        var sm = h.getSelectionModel();
+        var me = this,
+            //topbar = me.lookupReference('topbar'),
+            sm = h.getSelectionModel();
 
         if(!sm.isSelected(g)){
             sm.select(g);
         }
 
-        this.view.contextmenu.showAt(l.getXY());
+        me.view.contextmenu.items.items[0].setDisabled(!(Vega.user.userOwn(j.data.userId)));
+        me.view.contextmenu.items.items[1].setDisabled(j.data.postTotal || !(Vega.user.userOwn(j.data.userId)));
+
+        me.view.contextmenu.showAt(l.getXY());
     },
 
     /**
@@ -54,18 +55,23 @@ Ext.define('Vega.view.company.board.GridController', {
         //console.log(grid.getHeaderContainer(), grid.getColumns()[cIdx].focus(), column.dataIndex)
     },
 
-    onToolbarAddClick: function(b, e){
-
+    onClearFilters: function(b){
         var me = this,
-            grid = me.getView(),
-            rowEdit = grid.getPlugins()[0],
-            store = grid.getStore();
+            layout = me.view.lookupReference("multiview"),
+            topbar = layout.lookupReference("topbar"),
+            searchcombo = topbar.lookupReference('searchcombo'),
+            searchfield = topbar.down('gridsearchfield'),
+            grid = layout.lookupReference("grid");
 
-        rowEdit.cancelEdit();
-        var nr = store.insert(0, {
-            displayCheck: 1
-        });
-        rowEdit.startEdit(nr[0], 0);
+        searchcombo.setValue('');
+        searchcombo.getTrigger('clear').hide();
+        searchfield.setValue('');
+        searchfield.getTrigger('clear').hide();
+
+        // Clear Sort...
+        grid.getStore().sorters.clear();
+        // Clear Grid filters...
+        grid.filters.clearFilters();
     },
 
     onToolbarCopyClick: function(b, e){
@@ -79,40 +85,6 @@ Ext.define('Vega.view.company.board.GridController', {
         grid.getStore().insert(0, nr);
         rowEdit.startEdit(nr, 0);
 
-    },
-
-    onToolbarEditClick: function(b, e){
-        var me = this,
-            grid = me.getView(),
-            rowEdit = grid.getPlugins()[0],
-            store = grid.getStore(),
-            rec = grid.getSelection()[0];
-
-        rowEdit.cancelEdit();
-
-        rowEdit.startEdit(rec, store.indexOf(rec));
-    },
-
-    onToolbarRemoveClick: function(b, e){
-        var me = this,
-            grid = me.getView(),
-            sm = grid.getSelectionModel();
-
-        Ext.Array.each(sm.getSelection(), function(rec, idx, a){
-            rec.drop();
-        });
-
-        //console.log(sm.selected);
-        if(sm.selected){
-            sm.deselectAll();
-        }
-    },
-
-    onToolbarRefreshClick: function(b, e){
-        var me = this,
-            store = me.getView().getStore();
-
-        store.reload();
     },
 
     onToolbarSaveClick: function(b, e){

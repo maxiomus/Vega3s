@@ -31,8 +31,8 @@ Ext.define("Vega.view.dal.View", {
     },
 
     style: {
-        borderTop: '1px solid #cfcfcf',
-        borderBottom: '1px solid #cfcfcf'
+        //borderTop: '1px solid #cfcfcf',
+        //borderBottom: '1px solid #cfcfcf'
     },
 
     scrollable: "y",

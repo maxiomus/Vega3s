@@ -50,8 +50,8 @@ Ext.define("Vega.view.production.WIP", {
                     flex: 2,
 
                     style: {
-                        borderTop: '1px solid #cfcfcf',
-                        borderBottom: '1px solid #cfcfcf'
+                        //borderTop: '1px solid #cfcfcf',
+                        //borderBottom: '1px solid #cfcfcf'
                     },
                     /*
                     split: {

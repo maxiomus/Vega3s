@@ -17,8 +17,8 @@ Ext.define("Vega.view.dal.Grid", {
     },
 
     style: {
-        borderTop: '1px solid #cfcfcf',
-        borderBottom: '1px solid #cfcfcf'
+        //borderTop: '1px solid #cfcfcf',
+        //borderBottom: '1px solid #cfcfcf'
     },
 
     //stateful: true,

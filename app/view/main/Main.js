@@ -8,6 +8,7 @@ Ext.define("Vega.view.main.Main", {
         'Vega.view.dashboard.Default',
         'Vega.view.company.notice.Notice',
         'Vega.view.company.board.Default',
+        'Vega.view.company.work.Default',
         'Vega.view.sales.Pow',
         'Vega.view.sales.Request',
         'Vega.view.sales.Review',
@@ -81,7 +82,7 @@ Ext.define("Vega.view.main.Main", {
             },{
                 margin: "0 0 0 8",
                 cls: "delete-focus-bg",
-                iconCls: "x-fa fa-navicon",
+                iconCls: "x-fa fa-bars",
                 id: "main-navigation-btn",
                 handler: "onToggleNavigationSize"
             },{

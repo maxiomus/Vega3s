@@ -333,7 +333,7 @@ Ext.override(Ext.FormPanel, {
             failure = options.failure,
             params = Ext.merge(this.getValues(), options.params),
             waitMsg = options.waitMsg,
-            formData = new FormData(this);
+            formData = new FormData();
 
         for (var attr in params) {
             formData.append(attr, params[attr]);

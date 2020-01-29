@@ -18,8 +18,8 @@ Ext.define("Vega.view.development.style.Grid", {
     },
 
     style: {
-        borderTop: '1px solid #cfcfcf',
-        borderBottom: '1px solid #cfcfcf'
+        //borderTop: '1px solid #cfcfcf',
+        //borderBottom: '1px solid #cfcfcf'
     },
 
     selModel: {
@@ -335,7 +335,7 @@ Ext.define("Vega.view.development.style.Grid", {
             {
                 text: '<i style="text-align: center;" class="x-fa fa-paperclip fa-lg"></i>',
                 dataIndex: 'photos',
-                width: 45,
+                width: 50,
                 align: 'center',
                 renderer: function(value, metaData, rec, rowIndex, colIndex, store, view){
                     var strValue = value != 0 ? value : '',
@@ -343,7 +343,7 @@ Ext.define("Vega.view.development.style.Grid", {
                     //metaData.tdStyle = 'font-weight:bold;color:' + (rec.data.mp ? 'green' : 'transparent');
 
                     if(rec.data.name){
-                        strValue = icon+'<div>'+value+'</div>';
+                        strValue = '<span>'+(value != 0 ? value : '')+'</span>'+icon;
                     }
 
                     return strValue;

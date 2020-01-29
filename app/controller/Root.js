@@ -596,7 +596,7 @@ Ext.define('Vega.controller.Root', {
             item, innerTab, prefix = node + '-',
             xf = Ext.util.Format;
 
-        console.log('Route - openTab', node, id, sub, vm.getStore(node+'s'), fieldname, rec);
+        //console.log('Route - openTab', node, id, sub, vm.getStore(node+'s'), fieldname, rec);
         //console.log(store, store.isLoaded(), store.isLoading())
         switch(node) {
             case 'dal':
@@ -1020,9 +1020,9 @@ Ext.define('Vega.controller.Root', {
     onRoute: function(node, sub){
         var mainView = Vega.app.getMainView(),
             vm = mainView.getViewModel(),
-            view = vm.get('currentView'),
-            multiview = view.lookupReference('multiview'),
-            store = view.getViewModel().getStore(node.replace('-','')+'s');
+            view = vm.get('currentView');
+            //multiview = view.lookupReference('multiview'),
+            //store = view.getViewModel().getStore(node.replace('-','')+'s');
 
         //console.log('onRoute', node, sub)
         switch(node){
@@ -1359,10 +1359,10 @@ Ext.define('Vega.controller.Root', {
 
                 var num = parseInt(id, 10);
 
-                Vega.model.Powh.load(parseInt(num / 10), {
+                Vega.model.Powh.load(parseInt(num / 100), {
                     success: function (rec, ope) {
 
-                        var powd = rec.powds().getAt(num % 10);
+                        var powd = rec.powds().getAt(num % 100);
 
                         vm.linkTo('theSample', {
                             type: 'sample.Product',

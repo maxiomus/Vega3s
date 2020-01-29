@@ -3,32 +3,36 @@
 */
 
 
-.topic {
-  padding: 4px 0 4px 20px;
+.board-grid .topic {
+  padding: 14px 0 4px 20px;
 }
 
-.x-rtl .topic {
-  padding: 4px 20px 0 0;
+.board-grid .x-rtl .topic {
+  padding: 14px 20px 0 0;
 }
 
-.topic span {
+.board-grid .topic span {
   font-family: tahoma, verdana;
   display: block;
   color: #333;
 }
 
-.author {
+.board-grid .author {
   padding: 8px 0 0 0;
   color: #333
 }
 
-.title {
+.board-grid .title {
   font-size: 18px;
   color: #333;
 }
 
-i.hidden {
+.board-grid i.hidden {
   display: none;
+}
+
+.board-grid .x-grid-row .x-grid-cell {
+  cursor: pointer;
 }
 
 .board-grid .x-grid-rowbody {

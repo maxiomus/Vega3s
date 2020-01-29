@@ -1,4 +1,5 @@
 @import url('http://fonts.googleapis.com/css?family=Open+Sans:400,700');
+//@import url('https://fonts.googleapis.com/css?family=Open+Sans&display=swap');
 
 @import "iconColors";
 
@@ -162,15 +163,6 @@
 }
 */
 
-/**
- * The Initial Developer of the Original Code is Sean McDaniel <sean@mcdconsulting.com>
- * Copyright(c) 2010, http://www.mcdconsultingllc.com Licensed under the terms
- * of the Open Source LGPL 3.0 http://www.gnu.org/licenses/lgpl.html
- * @see https://github.com/steelThread/ExtJs-ToggleSlide
- *
- * @author Harald Hanek (c) 2011-2012
- * @license http://harrydeluxe.mit-license.org
- */
 .x-toggle-slide-container, .x-toggle-slide-container label {
   user-select: none;
   -moz-user-select: none;
@@ -365,4 +357,13 @@ label.x-toggle-slide-label-off span {
 
 .x-toolbar-right .x-toggle-slide-label-on {
   text-align: left;
+}
+
+
+.x-toolbar-docked-top {
+  border-bottom-width: 1px !important;
+}
+
+.x-toolbar-docked-bottom {
+  border-top-width: 1px !important;
 }

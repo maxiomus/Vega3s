@@ -464,8 +464,12 @@ Ext.define('Vega.view.sales.edit.FormController', {
             index = store.indexOf(selection),
             rec = store.getAt(index);
 
-        //console.log(rec.modified.powhId)
-        this.redirectTo('product/import/' + rec.modified.powhId + index)
+        if(index < 10){
+            index = '0' + index;
+        }
+
+        console.log('product/import/' + rec.modified.powhId + index);
+        this.redirectTo('product/import/' + rec.modified.powhId + index);
     },
 
     onSaveStyleClick: function(){
@@ -1137,10 +1141,14 @@ Ext.define('Vega.view.sales.edit.FormController', {
                             rec.set('confirmon', Ext.Date.format(new Date(), 'Y-m-d'));
                             break;
                         case 'pending':
-                            powStatus = 'REVISED';
+                            if (rec.data.status != 'CANCELLED'){
+                                powStatus = 'REVISED';
+                            }
                             break;
                         case 'approved':
-                            powStatus = 'CONFIRMED NEW';
+                            if (rec.data.status != 'CANCELLED') {
+                                powStatus = 'CONFIRMED NEW';
+                            }
                             break;
                         case 'audit':
                             powStatus = 'PENDING';
@@ -1177,7 +1185,7 @@ Ext.define('Vega.view.sales.edit.FormController', {
                 field = view.lookupReference('attachments').down('viewupload').fileUpload;
 
             //changes = session.getChanges();
-            //console.log(changes, batch);
+            //console.log(changes, batch, rec);
 
             me.processBatch(batch, field, {
                 url: '/api/Files/Powh/upload',

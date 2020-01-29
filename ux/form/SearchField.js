@@ -37,6 +37,10 @@ Ext.define('Ext.ux.form.SearchField', {
             if (e.getKey() == e.ENTER) {
                 me.onSearchClick();
             }
+
+            if(e.getKey() == e.TAB) {
+                console.log('Tab Pressed.')
+            }
         });
 
         /**
@@ -110,11 +114,24 @@ Ext.define('Ext.ux.form.SearchField', {
         if (value.length > 0) {
             // Param name is ignored here since we use custom encoding in the proxy.
             // id is used by the Store to replace any previous filter
+            /*
             me.activeFilter = new Ext.util.Filter({
                 operator: 'st',
                 property: me.paramName,
                 value: value
             });
+             */
+
+            me.activeFilter = [];
+            me.paramName.forEach(function(item, index, self){
+                var filter = Ext.util.Filter({
+                    operator: 'st',
+                    property: item,
+                    value: value
+                });
+                me.activeFilter.push(filter);
+            });
+
             me.store.getFilters().add(me.activeFilter);
             me.getTrigger('clear').show();
             me.updateLayout();

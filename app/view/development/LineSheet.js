@@ -31,7 +31,7 @@ Ext.define("Vega.view.development.LineSheet",{
     //border: true,
 
     style: {
-        borderTop: '1px solid #cfcfcf'
+        //borderTop: '1px solid #cfcfcf'
     },
 
     config: {

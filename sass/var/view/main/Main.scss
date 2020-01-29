@@ -6,10 +6,11 @@ $panel-navigation-item-text-color: #ADB3B8;
 $circle-border-radius:50%;
 $base-border-color: #ddd;
 $lightest-color:#fff;
+$default-txt-color: #333;
 $font-weight: normal;
 
 $accordion-header-background-color: $lightest-color;
-$accordion-header-color: #333;
+$accordion-header-color: $default-txt-color;
 
 $social-facebook-btn-background: #167abc;
 $social-twitter-btn-background: #03b4d5;
@@ -21,8 +22,8 @@ $social-envelope-btn-background: #7754aa;
 $button-toolbar-hover-background-color: $lightest-color; //#efefef;
 
 //Grid UI colors
-$grid-row-cell-selected-background-color: #FFEFBB;
-$grid-row-cell-selected-border-color: $grid-row-cell-border-color;
+//$grid-row-cell-selected-background-color: #FFEFBB;
+//$grid-row-cell-selected-border-color: $grid-row-cell-border-color;
 
 //Form and Toolbar Button UI colors
 

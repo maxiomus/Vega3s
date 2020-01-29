@@ -16,21 +16,14 @@ Ext.define('Vega.view.company.board.DefaultController', {
     listen: {
         controller: {
             'board-window': {
-                save: 'onSaveTreeNode'
+                //save: 'onSaveTreeNode'
             }
         }
     },
 
-    onBeforeTopicsLoad: function(store, op){
-        var me = this,
-            view = me.getView(),
-            tree = view.lookupReference('navigate-tree'),
-            rec = tree.selModel.getSelection()[0];
-
-        //console.log(tree.selModel.getSelection()[0]);
-        Ext.apply(store.getProxy().extraParams, {
-            extra: rec.data.id // boardId
-        });
+    init: function(){
+        var me = this;
+        me.mv = Vega.app.getMainView();
     },
 
     onTreeItemClicked: function(view, rec, item, index, eOpts) {
@@ -93,15 +86,18 @@ Ext.define('Vega.view.company.board.DefaultController', {
     },
 
     onTreeSelectionChange: function(selModel, selection){
-        //console.log(selModel, selection);
+        var panel = this.getView().lookupReference('board-panel');
+        //console.log(panel, this.getView().getReferences()['board-panel'], selModel, selection);
 
         if(!selection.data.root){
-            var store = this.getStore('topics');
-            store.load({
-                callback: function(records, options, success) {
-                    //console.log('store load', store);
-                }
-            });
+            if(panel != null){
+                var topicStore = panel.getViewModel().getStore('topics');
+                topicStore.load({
+                    callback: function(records, options, success) {
+                        //console.log('store load', store);
+                    }
+                });
+            }
         }
         /*
         var me = this,
@@ -152,10 +148,150 @@ Ext.define('Vega.view.company.board.DefaultController', {
     onBreadCrumbChange: function(bc, node, prev){
         //console.log('onBreadCrumbChange', node, prev)
         if(node){
-            //this.redirectTo('settings/' + node.data.routeId);
+            this.redirectTo('board/' + node.data.id);
 
             this.navigateBoards(node.data.id);
         }
+    },
+
+    onToolbarAddClick: function(){
+        var me = this;
+
+        if(!Vega.user.inRole('managers')){
+            Ext.Msg.alert('Warning', 'you do not have enough access privileges for this operation.');
+        }
+        else {
+            me.showAddForm(null);
+        }
+    },
+
+    showAddForm: function(rec) {
+        var me = this,
+            view = me.getView();
+
+        me.win = view.add({
+            xtype: 'board-window',
+            title: 'Add Message Board',
+            defaultFocus: 'name',
+            isEdit: !!rec,
+
+            viewModel: {
+                links: {
+                    theBoard: rec || {
+                        type: 'company.Board',
+                        create: {
+                            userId: Vega.user.get('Userid'),
+                            created: new Date(),
+                            topTotal: 0,
+                            status: 1
+                        }
+                    }
+                }
+            },
+
+            width: window.innerWidth < 1360 ? (view.getWidth() * 0.7) : 800,
+            height: window.innerHeight < 760 ? (view.getHeight() * 0.45) : 320,
+
+            items: [{
+                xtype: 'add-board'
+            }],
+
+            session: true
+        });
+
+        me.win.show('', function() {
+            me.mv.mask();
+        });
+
+        me.win.on({
+            cancel: function (b) {
+                me.win.close();
+            },
+            save: me.onSaveTreeNode,
+            //save: me.onSaveBoard,
+            scope: this
+        });
+    },
+
+    onToolbarManageClick: function() {
+        this.showManageBoard();
+    },
+
+    /*
+    onMenuItemBoardClick: function() {
+        this.showManageBoard(null);
+    },
+
+    onMenuItemCategoryClick: function() {
+        this.showManageCategory();
+    },
+    */
+
+    showManageBoard: function (rec) {
+        var me = this,
+            view = me.getView();
+
+        me.win = view.add({
+            xtype: 'board-window',
+            title: 'Manage Message Board',
+
+            saveButton: null,
+
+            width: window.innerWidth < 1360 ? (view.getWidth() * 0.7) : 1024,
+            height: window.innerHeight < 760 ? (view.getHeight() * 0.9) : 640,
+
+            items: [{
+                xtype: 'tabpanel',
+                items: [{
+                    xtype: 'manage-board'
+                },{
+                    xtype: 'manage-category'
+                }]
+            }]
+        });
+
+        me.win.on({
+            cancel: function (b) {
+                me.win.close();
+            },
+            //save: me.onSaveTreeNode,
+            save: me.onSaveBoard,
+            scope: this
+        });
+
+        me.win.show('', function() {
+            me.mv.mask();
+        });
+    },
+
+    showManageCategory: function () {
+        var me = this,
+            view = me.getView();
+
+        me.win = view.add({
+            xtype: 'board-window',
+            title: 'Manage Category',
+
+            width: window.innerWidth < 1360 ? (view.getWidth() * 0.7) : 1024,
+            height: window.innerHeight < 760 ? (view.getHeight() * 0.9) : 640,
+
+            items: [{
+                xtype: 'manage-category'
+            }]
+        });
+
+        me.win.on({
+            cancel: function (b) {
+                me.win.close();
+            },
+            //save: me.onSaveTreeNode,
+            save: me.onSaveBoard,
+            scope: this
+        });
+
+        me.win.show('', function() {
+            me.mv.mask();
+        });
     },
 
     navigateBoards: function(id){
@@ -171,7 +307,7 @@ Ext.define('Vega.view.company.board.DefaultController', {
             navi = refs['navigate-menu'],
             center = refs['center-base'],
             //view = refs['board-base'],
-            item = view.lookupReference('board' + id);
+            item = view.lookupReference('board-' + (id === 'root' ? id : 'panel'));
 
         if(navi.getStore() == null){
             navi.setStore(store);
@@ -189,17 +325,21 @@ Ext.define('Vega.view.company.board.DefaultController', {
                         align: 'stretch'
                     },
                     header: false,
-                    reference: 'board' + id,
+                    reference: 'board-root',
+                    //routeId: 'board',
                     items: [{
                         xtype: 'toolbar',
-                        border: '1 0 0 0',
+                        border: '1 0 1 0',
 
                         items: [{
                             text: 'Refresh',
                             iconCls: 'x-fa fa-refresh',
                             handler: function(b){
-                                var store = b.ownerCt.ownerCt.down('board-view').getStore();
-                                store.reload();
+                                store.load(function (recs, op, success) {
+                                    var boardStore = item.down('board-view').getStore();
+                                    boardStore.load();
+                                })
+
                             }
                         }]
                     },{
@@ -214,139 +354,36 @@ Ext.define('Vega.view.company.board.DefaultController', {
                 });
             }
             else {
-                //item = view.query('board-panel[reference=board_' + id + ']')[0];
+                item = Ext.widget('board-panel', {
+                    reference: 'board-panel',
+                    routeId: 'board',
+                    items: [{
+                        xtype: 'board-grid',
+                        iconCls: 'x-fa fa-folder-o',
+                        reference: 'grid',
+                        flex: 1
+                        //session: true,
+                    }]
+                });
+
                 if (nd.data.mtype == 'board') {
 
-                    item = Ext.widget('board-panel', {
-                        reference: 'board' + id,
-                        items: [{
-                            xtype: 'board-grid',
-                            title: nd.data.text,
-                            iconCls: 'x-fa fa-folder-o',
-                            store: 'topics',
-
-                            columns: me.buildTopicColumns()
-                        }]
-                    })
 
                 }
                 else if(nd.data.mtype == 'category'){
-                    item = view.lookupReference('board' + nd.data.parentId);
+                    //item = view.lookupReference('board-' + nd.data.parentId);
                 }
             }
-
         }
 
-        center.getLayout().setActiveItem(item);
-    },
-
-    buildTopicColumns: function(){
-        return [{
-            text: "Title",
-            dataIndex: "subject",
-            flex: 1,
-            renderer: function(value, f, rec){
-                var xf = Ext.util.Format;
-                return Ext.String.format(
-                    '<div class="topic">' +
-                    '<span class="title">{0}</span>' +
-                    '<i style="float: right" class="x-fa fa-paperclip fa-lg {1}"></i>' +
-                    '<span class="author">Posted by {2}, last updated {3}</span>' +
-                    '</div>',
-                    value, rec.get('hasAttach') ? '': 'hidden', rec.get("userId")|| "Unknown", xf.date(rec.get('created'), 'M j, Y, g:i a'))
-            }
-
-        },
-        {
-            text: 'User',
-            dataIndex: 'userId',
-            hidden: true
-        },
-        {
-            text: "Replies",
-            dataIndex: "postTotal"
-        }];
-    },
-
-    showAddForm: function() {
-        var me = this,
-            view = me.getView();
-
-        if(!Vega.user.inRole('managers')){
-            Ext.Msg.alert('Warning', 'you do not have enough access privileges for this operation.');
-        }
-        else {
-            me.win = view.add({
-                xtype: 'board-window',
-                title: 'Add Message Board',
-
-                viewModel: {
-                    links: {
-                        theBoard: {
-                            type: 'Vega.model.company.Board',
-                            create: {
-                                userId: Vega.user.get('Userid'),
-                                status: 1
-                            }
-                        }
-                    }
-                },
-
-                width: window.innerWidth < 1360 ? (view.getWidth() * 0.7) : 800,
-                height: window.innerHeight < 760 ? (view.getHeight() * 0.45) : 320,
-
-                items: [{
-                    xtype: 'add-board'
-                }]
+        if(!nd.data.root){
+            item.getViewModel().set({
+                boardId: nd.data.id,
+                title: nd.data.text
             });
         }
 
-        me.win.show();
-    },
-
-    showManageBoard: function () {
-        var me = this,
-            view = me.getView();
-
-        me.win = view.add({
-            xtype: 'board-window',
-            title: 'Manage Message Board',
-
-            width: window.innerWidth < 1360 ? (view.getWidth() * 0.7) : 1024,
-            height: window.innerHeight < 760 ? (view.getHeight() * 0.9) : 640,
-
-            items: [{
-                xtype: 'manage-board'
-            }]
-        });
-
-        me.win.show();
-    },
-
-    showManageCategory: function () {
-        var me = this,
-            view = me.getView();
-
-        me.win = view.add({
-            xtype: 'board-window',
-            title: 'Manage Category',
-
-            saveButton: null,
-
-            width: window.innerWidth < 1360 ? (view.getWidth() * 0.7) : 1024,
-            height: window.innerHeight < 760 ? (view.getHeight() * 0.9) : 640,
-
-            tbar: {
-                xtype: "company-board-topbar",
-                reference: "topbar"
-            },
-
-            items: [{
-                xtype: 'manage-category'
-            }]
-        });
-
-        me.win.show();
+        center.getLayout().setActiveItem(item);
     },
 
     onSaveTreeNode: function(win, data){
@@ -364,6 +401,7 @@ Ext.define('Vega.view.company.board.DefaultController', {
             text: data.name,
             desc: data.desc,
             status: data.status,
+            created: new Date(),
             children: [],
             mtype: 'board',
             leaf: true
@@ -374,11 +412,11 @@ Ext.define('Vega.view.company.board.DefaultController', {
 
         var processMask = new Ext.LoadMask({
             msg: 'Saving... Please wait',
-            target: me.view
+            target: me.mv
         });
 
         processMask.show('', function(){
-            me.win.close();
+            win.close();
         });
 
         newBoard.save({
@@ -390,6 +428,7 @@ Ext.define('Vega.view.company.board.DefaultController', {
             },
             success: function(record, operation) {
                 // do something if the save succeeded
+                //console.log('Board Save', record);
                 me.getStore('boards').load({
                     callback: function(records, options, success) {
                         //console.log('store load', store);
@@ -414,20 +453,58 @@ Ext.define('Vega.view.company.board.DefaultController', {
         //tree.selModel.select(node);
     },
 
-    onSaveBoard: function(win, data){
+    onSaveBoard: function(win, values){
         var me = this,
-            vm = me.getViewModel(),
-            session = vm.getSession(),
-            batch = session.getSaveBatch(),
-            changes = session.getChanges();
+            isEdit = win.isEdit,
+            view = me.getView(),
+            tree = view.lookupReference('navigate-tree'),
+            target = tree.selModel.getSelection()[0] || tree.getRootNode(),
+            dataview = view.down('board-view'),
+            rec = dataview.getSelectionModel().getSelection()[0],
+            id, data = [];
 
-        //console.log(session, batch, changes);
+        if (!isEdit) {
+            // Since we're not editing, we have a newly inserted record. Grab the id of
+            // that record that exists in the child session
+            id = win.getViewModel().get('theBoard').id;
+        }
 
-        /*
+        win.getSession().save();
+
+        if (!isEdit) {
+            // Use the id of that child record to find the phantom in the parent session,
+            // we can then use it to insert the record into our store
+            rec = view.getSession().getRecord('company.Board', id);
+
+            var node = Ext.create('Vega.model.company.tree.Board', {
+                name: values.name,
+                text: values.name,
+                desc: values.desc,
+                status: values.status,
+                children: [],
+                mtype: 'board',
+                leaf: true
+            });
+
+            target.appendChild(node);
+
+            dataview.getStore().insert(0, rec);
+        }
+
+        var batch = view.getSession().getSaveBatch();
+
+        //console.log(view.getSession(), batch, values);
+
+        me.processBatch(batch);
+    },
+
+    processBatch: function (batch) {
+        var me = this;
+
         if(batch !== undefined){
             var processMask = new Ext.LoadMask({
                 msg: 'Saving... Please wait',
-                target: me.view
+                target: me.mv
             });
 
             batch.on({
@@ -473,8 +550,6 @@ Ext.define('Vega.view.company.board.DefaultController', {
         else {
             Ext.Msg.alert('No Changes', 'There are no changes to the session.');
         }
-
-         */
     }
 
 });

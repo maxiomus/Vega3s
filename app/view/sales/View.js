@@ -23,8 +23,8 @@ Ext.define("Vega.view.sales.View", {
     padding: '7 0 0 7',
 
     style: {
-        borderTop: '1px solid #cfcfcf',
-        borderBottom: '1px solid #cfcfcf'
+        //borderTop: '1px solid #cfcfcf',
+        //borderBottom: '1px solid #cfcfcf'
     },
 
     prepareData: function(f, d, e){

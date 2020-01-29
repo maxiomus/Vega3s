@@ -10,7 +10,7 @@ Ext.define('Vega.model.company.Board', {
         { name: 'desc', type: 'string' },
         { name: 'userId', type: 'string' },
         { name: 'created' },
-        { name: 'status', type: 'int' }
+        { name: 'status' }
     ],
 
     /*
@@ -28,6 +28,10 @@ Ext.define('Vega.model.company.Board', {
     proxy: {
         type: 'rest',
         url: "/api/Board",
+
+        pageParam: '',
+        startParam: '',
+        limitParam: '',
 
         reader: {
             type: "json",

@@ -6,8 +6,7 @@ Ext.define('Vega.view.company.board.DefaultModel', {
     requires: [
         'Vega.model.company.tree.Board',
         'Vega.model.company.Board',
-        'Vega.model.company.Topic',
-        'Vega.model.company.Post'
+        'Vega.model.company.Topic'
     ],
 
     stores: {
@@ -28,6 +27,7 @@ Ext.define('Vega.view.company.board.DefaultModel', {
             root: {
                 text: 'BOARD',
                 name: 'root',
+                routeId: 'root',
                 expanded: true
             }
             /*
@@ -69,24 +69,6 @@ Ext.define('Vega.view.company.board.DefaultModel', {
                     //console.log('Board store Load', store, options);
                 }
             }
-        },
-
-        topics: {
-            model: 'Vega.model.company.Topic',
-            storeId: 'topics',
-            session: true,
-            remoteFilter: true,
-            autoLoad: false,
-            listeners: {
-                beforeload: 'onBeforeTopicsLoad'
-            }
-        },
-
-        posts: {
-            model: 'Vega.model.company.Post',
-            storeId: 'posts',
-            remoteFilter: true,
-            autoLoad: false
         }
     }
 });

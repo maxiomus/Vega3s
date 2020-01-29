@@ -1,0 +1,81 @@
+.topic-view {
+
+}
+
+.topic-view .body-wrap {
+  max-width: 1400px;
+  margin: auto;
+}
+
+.topic-view .body-wrap .subject {
+  font-size: 28px;
+  margin: 40px 0 40px 0;
+}
+
+.topic-view .body {
+  border: 1px solid #cfcfcf;
+  padding: 10px 0 30px 0;
+}
+
+.topic-view .body div.header {
+  display: flex;
+}
+
+.topic-view .body div.content {
+  font-size: 14px;
+  line-height: 1.5em;
+  border-bottom: 1px solid #cfcfcf;
+  margin: 36px 20px 20px 44px;
+  padding: 0 0 30px 0;
+}
+
+.topic-attach-view {
+  display: flex;
+  margin: 10px 20px 10px 20px;
+  font: 11px Arial, Helvetica, sans-serif;
+  //padding: 8px 0 8px 8px;
+  //margin: 10px 0 10px 10px;
+}
+
+.topic-attach-view .thumb-wrap {
+  border: 1px solid transparent;
+  width: 86px;
+  height: 98px;
+  cursor: pointer;
+}
+
+.topic-attach-view .thumb {
+  padding: 4px 0 4px 0;
+  text-align: center;
+  //padding: 3px;
+}
+
+.topic-attach-view .thumb .title {
+  text-align: center;
+  line-height: 1.2em;
+  //opacity:0.4;
+  //-moz-opacity:0.4;
+  //-khtml-opacity:0.4;
+  //filter:alpha(opacity=40); /* For IE8 and earlier */
+}
+
+.topic-attach-view .thumb .img
+{
+  padding-bottom: 6px;
+}
+
+.topic-attach-view .x-item-over {
+  border: 1px solid #6593cf;
+  //margin: 1px;
+  background: #E2EFF8;
+}
+
+.topic-attach-view .x-item-selected {
+  //border: 1px solid #6593cf;
+  //background: #C1DDF2;
+  border: 1px solid #6593cf;
+  //padding: 1px;
+  //background: #FFEFBB;
+  //background: #DFEDFF;
+  //padding: 1px;
+}

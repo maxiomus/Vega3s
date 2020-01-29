@@ -14,6 +14,14 @@ Ext.define('Ext.ux.view.Upload', {
         dropZone: null
     },
 
+    selectionModel: {
+        mode: 'multi'
+    },
+
+    preserveScrollOnRefresh: true,
+    deferInitialRefresh: true,
+    enableTextSelection: false,
+
     initComponent: function(c){
         var me = this;
 

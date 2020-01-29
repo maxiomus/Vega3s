@@ -24,8 +24,8 @@ Ext.define("Vega.view.sales.Grid", {
     //stateEvents: ["columnmove", "columnresize", "groupchange", "bodyresize"],
 
     style: {
-        borderTop: '1px solid #cfcfcf',
-        borderBottom: '1px solid #cfcfcf'
+        //borderTop: '1px solid #cfcfcf',
+        //borderBottom: '1px solid #cfcfcf'
     },
 
     initComponent: function(){

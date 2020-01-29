@@ -84,8 +84,8 @@ Ext.define('Vega.view.development.Line',{
                         layout: 'fit',
                         width: 326,
                         style: {
-                            borderTop: '1px solid #cfcfcf',
-                            borderBottom: '1px solid #cfcfcf'
+                            //borderTop: '1px solid #cfcfcf',
+                            //borderBottom: '1px solid #cfcfcf'
                         },
                         header: {
                             //overflowHandler: 'menu',

@@ -6,14 +6,15 @@ Ext.define('Vega.model.company.Post', {
 
     fields: [
         { name: 'postId' },
-        { name: 'name', mapping: 'subject' },
-        { name: 'desc', mapping: 'content' },
+        { name: 'subject', type: 'string'  },
+        { name: 'content', type: 'string'  },
         { name: 'userId', type: 'string' },
         { name: 'created' },
+        { name: 'files', type: 'auto', persist: false },
         {
             name: 'topicId',
             reference: {
-                parent: 'Vega.model.company.Topic',
+                parent: 'company.Topic',
                 //
                 //type: 'sales.Powh',
                 //association: 'stylesByHeader',
@@ -40,7 +41,7 @@ Ext.define('Vega.model.company.Post', {
     */
     proxy: {
         type: 'rest',
-        url: "/api/Post",
+        url: "/api/BoardPost",
         timeout: 90000,
 
         pageParam: '',

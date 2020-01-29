@@ -19,9 +19,10 @@ Ext.define('Vega.model.company.tree.Board', {
 
     fields: [ 'id',
         { name: 'name', convert: undefined },
-        { name: 'text', mapping: 'name', type: 'string' },
+        { name: 'text', mapping: 'name', type: 'string', persist: false },
         { name: 'desc', type: 'string' },
-        { name: 'status' }
+        { name: 'status' },
+        { name: 'routeId', mapping: 'name', type: 'string', persist: false }
     ],
 
     /*

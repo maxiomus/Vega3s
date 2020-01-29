@@ -40,7 +40,7 @@ Ext.define('Vega.view.development.style.SampleController', {
             grid = layout.lookupReference('grid') || layout.lookupReference('tiles'),
             rec = grid.getSelection()[0];
 
-        console.log(rec.data.id);
+        //console.log(rec.data.id);
         //this.showWindow(grid.getSelection()[0]);
         this.redirectTo("sample/edit/" + rec.data.id);
     },

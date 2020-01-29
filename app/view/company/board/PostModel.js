@@ -1,6 +1,24 @@
 Ext.define('Vega.view.company.board.PostModel', {
     extend: 'Ext.app.ViewModel',
 
-    alias: 'viewmodel.board-post'
+    requires: [
+        'Vega.model.company.Post'
+    ],
+
+    alias: 'viewmodel.board-post',
+
+    stores: {
+
+        posts: {
+            model: 'company.Post',
+            storeId: 'posts',
+            remoteFilter: true,
+            autoLoad: true,
+            listeners: {
+                beforeload: 'onBeforePostsLoad'
+            }
+        }
+
+    }
 
 });

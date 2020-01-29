@@ -22,17 +22,26 @@ Ext.define('Vega.view.company.board.Add', {
                 name: 'name',
                 fieldLabel: "Title",
                 allowBlank: false,
-                bind: '{theBoard.name}'
+                itemId: 'name',
+                tabIndex: 1,
+                bind: '{theBoard.name}',
                 //msgTarget: 'side'
                 //hideLabel: true,
                 //labelWidth: 50,
-                //anchor: '100%'
+                //anchor: '100%',
+                listeners: {
+                    specialkey: function (f,e) {
+
+                    }
+                }
             },{
                 xtype: 'textarea',
                 name: 'desc',
                 fieldLabel: 'Description',
                 //height: 100,
                 //anchor: '100% 88%',
+                itemId: 'desc',
+                tabIndex: 2,
                 bind: '{theBoard.desc}',
                 grow: true,
                 growMax: 180

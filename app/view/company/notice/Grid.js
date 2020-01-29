@@ -145,7 +145,7 @@ Ext.define("Vega.view.company.notice.Grid", {
     },
 
     onCtxMnuRefreshClick:function(d,f){
-        console.log("CtxMnuRefreshClick",this);
+        //console.log("CtxMnuRefreshClick",this);
         var e = this.getSelectionModel().selected.items[0];
         this.fireEvent("ctxmnurefreshclick",e,d);
     },

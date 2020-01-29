@@ -7,14 +7,12 @@ Ext.define('Vega.view.company.board.TopBar',{
         'Vega.view.company.board.TopBarModel'
     ],
 
-    alias: 'widget.company-board-topbar',
+    alias: 'widget.board-topbar',
 
-    controller: 'company-board-topbar',
+    controller: 'board-topbar',
     viewModel: {
-        type: 'company-board-topbar'
+        type: 'board-topbar'
     },
-
-    //border: 1,
 
     initComponent: function(c){
         var me = this;
@@ -109,14 +107,14 @@ Ext.define('Vega.view.company.board.TopBar',{
 
         me.items = me.buildItems();
 
-        me.callParent(arguments);
+        me.callParent();
     },
 
     buildItems: function(){
         var me = this;
 
         return [
-            me.actions.add, me.actions.edit, me.actions.remove, me.actions.refresh//, me.actions.copy,  me.actions.save
+            me.actions.add, me.actions.refresh//, me.actions.edit, me.actions.remove, me.actions.copy,  me.actions.save
         ];
     }
 });

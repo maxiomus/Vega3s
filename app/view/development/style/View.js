@@ -27,8 +27,8 @@ Ext.define("Vega.view.development.style.View", {
     padding: '7 0 0 7',
 
     style: {
-        borderTop: '1px solid #cfcfcf',
-        borderBottom: '1px solid #cfcfcf'
+        //borderTop: '1px solid #cfcfcf',
+        //borderBottom: '1px solid #cfcfcf'
     },
 
     prepareData: function(f, d, e){
@@ -55,7 +55,8 @@ Ext.define("Vega.view.development.style.View", {
         var b = new Ext.XTemplate('<tpl for=".">',
             '<div class="thumb-wrap x-unselectable">',
                 '<div class="thumb">',
-                    '<tpl if="this.notNull(mp)">',
+                    //'<tpl if="this.notNull(mp)">',
+                    '<tpl if="this.notNull(name)">',
                         '<img class="x-unselectable" src="../{name}?w=174&h=232" />',
                     '</tpl>',
                 '</div>',

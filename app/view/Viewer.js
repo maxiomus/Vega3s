@@ -61,6 +61,6 @@ Ext.define("Vega.view.Viewer",{
     initComponent: function() {
         var me = this;
 
-        me.callParent(arguments);
+        me.callParent();
     }
 });

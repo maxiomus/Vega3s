@@ -5,14 +5,18 @@ Ext.define('Vega.model.company.Topic', {
     extend: 'Vega.model.Base',
 
     fields: [
-        { name: 'topicId' },
-        { name: 'name', mapping: 'subject' },
-        { name: 'desc', mapping: 'content' },
+        { name: 'topicId', type: 'int' },
+        { name: 'subject', type: 'string' },
+        { name: 'content', type: 'string' },
+        //{ name: 'name', mapping: 'subject', persist: false },
+        //{ name: 'desc', mapping: 'content', persist: false },
         { name: 'userId', type: 'string' },
-        { name: 'created' },
+        { name: 'created', type: 'date', dateFormat: 'c' },
         { name: 'status', type: 'int' },
         { name: 'boardId', type: 'int' },
-        { name: 'categoryId', type: 'int' }
+        { name: 'categoryId', type: 'int' },
+        { name: 'postTotal', persist: false },
+        { name: 'files', type: 'auto', persist: false }
     ],
 
     idProperty: 'topicId',
@@ -32,7 +36,7 @@ Ext.define('Vega.model.company.Topic', {
     */
     proxy: {
         type: 'rest',
-        url: "/api/Topic",
+        url: "/api/BoardTopic",
 
         reader: {
             type: "json",

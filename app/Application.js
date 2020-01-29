@@ -8,7 +8,7 @@ Ext.define('Vega.Application', {
 
     stores: [
         // TODO: add global / shared stores here
-        'NavigationTree', 'Styles', 'Components', 'StyleColors', 'RawColors', 'Colors', 'Bodies', 'RawMatTypes', 'Bomnos', 'Lotnos', 'Vendors', 'Customers', 'Warehouses', 'Settings'
+        'NavigationTree', 'Styles', 'Components', 'StyleColors', 'RawColors', 'Colors', 'Bodies', 'RawMatTypes', 'Bomnos', 'Lotnos', 'Vendors', 'Customers', 'Warehouses', 'Settings', 'board.Categories'
     ],
 
     controllers: [

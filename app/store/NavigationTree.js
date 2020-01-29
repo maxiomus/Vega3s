@@ -36,12 +36,12 @@ Ext.define('Vega.store.NavigationTree', {
                     iconCls: 'x-fa fa-group',
                     routeId: 'board'
                 },{
-                    text: 'Approvals',
-                    view: 'company.Approval',
+                    text: 'Tasks',
+                    view: 'company.work.Default',
                     leaf: true,
                     read: true,
-                    iconCls: 'x-fa fa-edit',
-                    routeId: 'approval'
+                    iconCls: 'x-fa fa-tasks',
+                    routeId: 'work'
                 }]
             },
             {
@@ -96,7 +96,7 @@ Ext.define('Vega.store.NavigationTree', {
                 text: 'Development',
                 expanded: false,
                 selectable: false,
-                iconCls: 'x-fa fa-tasks',
+                iconCls: 'x-fa fa-cogs',
                 routeId:'development',
                 id: 'development',
                 children: [

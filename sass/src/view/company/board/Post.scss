@@ -1,105 +1,28 @@
 .post-view {
-  background: white;
-  font: 12px Arial, Helvetica, sans-serif;
+
 }
 
-.post-view .thumb-wrap {
-  //float: left;
+.topic-view .post-body-wrap {
+  max-width: 1400px;
   margin: auto;
-  width: 80%;
-  border-bottom: 1px solid #dadadb;
-  font-size: 18px;
 }
 
-.post-view .thumb-wrap span
-{
-  display: block;
-  overflow: hidden;
-  text-align: left;
-  //padding: 4px;
+.post-view .body {
+  border: 1px solid #cfcfcf;
+  padding: 30px 0 40px 0;
 }
 
-.post-view .head {
-  //background: #fff;
-  //margin: 0 5px 0 5px;
-  display: flex;
-  padding: 1px;
-  color: #1A4D8F;
-  height: 65px;
-  min-width: 440px;
-  //max-width: 440px;
-  cursor: pointer;
+.post-view .body div.content {
+  font-size: 14px;
+  line-height: 1.5em;
+  border-bottom: 1px solid #cfcfcf;
+  margin: 36px 20px 20px 44px;
+  padding: 0 0 30px 0;
 }
 
-.post-view .head img
-{
-  padding: 3px 5px 2px 3px;
-  margin: 2px 5px 0 2px;
-  float:left;
-  width: 64px;
-  height: 64px;
-}
-
-.post-view .head .true
-{
+.post-view .body .dataview-button {
   float: right;
-  color: #ff0000;
-  font-size: 1.0em;
-  padding-top: 2px;
-  font-weight: bolder;
-  z-index: 7;
-  opacity:0.4;
-  -moz-opacity:0.4;
-  -khtml-opacity:0.4;
-  filter:alpha(opacity=40); /* For IE8 and earlier */
-}
-
-.post-view .head .false
-{
-  visibility: hidden;
-  position: absolute;
-  top: 25px; left: 7px;
-  z-index: 7;
-}
-
-.post-view div.post-data {
-  margin: auto;
-  text-align: center;
-  font-size: 14px;
-  width: 60px;
-}
-
-.post-view div.post-title
-{
-  margin: auto;
-  padding-left: 10px;
-  width: 70%;
-}
-
-.post-view div.post-content
-{
-  margin: auto;
-  text-align: center;
-  font-size: 14px;
-}
-
-.post-view div.post-author {
-  font-weight:lighter;
-  color:#555;
-  padding-left: 2px;
-  font-size:11px;
-}
-
-.post-view div.post-date {
-  margin: auto;
-  text-align: center;
-  font-size: 14px;
-  width: 180px;
-}
-
-.post-view .footer
-{
-  float: right;
+  margin: 0 6px 0 0;
 }
 
 .post-view hr
@@ -114,6 +37,7 @@
   border-width: 1px;
 }
 
+/*
 .post-view .x-item-over {
   border: 0px solid #6593cf;
   background: #DFEDFF;
@@ -151,3 +75,5 @@
   padding-left:20px;
   margin:10px;
 }
+
+*/
